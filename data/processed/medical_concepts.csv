@@ -1,0 +1,75 @@
+concept_id,canonical_name_zh,canonical_name_en,category,parent_concept_id,synonyms_zh,synonyms_en,lay_terms_zh,description_zh,is_patient_facing,source
+ORTHO_ACL_INJURY,前十字韌帶損傷,ACL injury,disease_or_condition,ORTHO_LIGAMENT_INJURY,前十字韌帶斷裂;ACL injury,,前十字韌帶受傷,膝關節前十字韌帶受傷，常見於運動傷害。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_ARTHROPLASTY,人工關節置換,Arthroplasty,procedure,ORTHO_JOINT_RECONSTRUCTION,人工關節置換手術;人工關節重建手術,,換人工關節,以人工關節取代嚴重損壞的關節。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_ARTHROSCOPIC_SURGERY,關節鏡手術,Arthroscopic surgery,procedure,,微創關節鏡手術;關節鏡,,關節內視鏡手術,以關節鏡檢查或治療關節內問題。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_BONE_INFECTION,骨科感染,Orthopedic infection,disease_or_condition,,骨科感染學;感染性髖關節,,骨科感染,骨、關節或人工植入物相關感染。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_BONE_SPUR,骨刺,Bone spur,disease_or_condition,,脊椎骨刺,,長骨刺,骨頭邊緣增生，可能造成疼痛或神經壓迫。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_BONE_TUMOR,骨骼腫瘤,Bone tumor,disease_or_condition,,肌肉及骨骼腫瘤;骨骼及軟組織腫瘤,,骨頭或軟組織腫瘤,骨骼或軟組織腫瘤相關診療。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_CEREBRAL_PALSY,腦性麻痺,Cerebral palsy,disease_or_condition,ORTHO_PEDIATRIC_ORTHOPEDICS,,,腦麻,腦性麻痺造成的肌肉張力、步態或骨骼關節問題。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_CERVICAL_SPINE,頸椎,Cervical spine,anatomy,ORTHO_SPINE,上頸椎,,脖子的脊椎,位於頸部的脊椎。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_COMPLEX_FRACTURE,複雜骨折,Complex fracture,disease_or_condition,ORTHO_FRACTURE,複雜性骨折;四肢複雜骨折;爆裂性骨折,,嚴重骨折,較複雜或嚴重的骨折，常需重建或固定手術。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_DDH,兒童髖關節發育不良,Developmental dysplasia of the hip,disease_or_condition,ORTHO_PEDIATRIC_ORTHOPEDICS,髖關節發育不良,,小孩髖關節發育問題,兒童髖關節發育異常造成不穩或脫位風險。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_DIABETIC_FOOT,糖尿病足,Diabetic foot,disease_or_condition,ORTHO_FOOT_ANKLE,,,糖尿病腳傷口,糖尿病造成足部傷口、感染或循環神經問題。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_ELBOW,肘關節,Elbow,anatomy,,肘;肘部,,手肘,上臂與前臂之間的關節。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_ENDOSCOPIC_SURGERY,內視鏡手術,Endoscopic surgery,procedure,,脊椎內視鏡手術;脊椎微創內視鏡手術,,內視鏡手術,使用內視鏡輔助進行的手術。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_FEMORAL_HEAD_AVN,股骨頭缺血性壞死,Avascular necrosis of femoral head,disease_or_condition,ORTHO_HIP_OSTEOARTHRITIS,股骨頭骨壞死,,股骨頭壞死,股骨頭血流不足造成骨壞死與髖關節疼痛。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_FOOT_ANKLE,足踝疾病,Foot and ankle disorders,subspecialty,,足踝病變;足踝疾患;足踝關節重建,,腳踝問題;足踝問題,足部與踝關節疾病、變形或外傷。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_FOOT_ANKLE_ANATOMY,足踝,Foot and ankle,anatomy,,足;踝;腳部足踝,,腳踝;腳,足部與踝關節。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_FRACTURE,骨折,Fracture,disease_or_condition,ORTHO_TRAUMA,一般骨折;骨折外傷;一般骨折外傷;外傷骨折,,骨頭斷掉,骨頭因外力或骨質脆弱而斷裂。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_FRACTURE_FIXATION,骨折固定手術,Fracture fixation,procedure,ORTHO_FRACTURE,骨折重建手術;骨折外傷手術;骨折外傷微創手術,,骨折開刀固定,使用鋼板、鋼釘、螺絲或其他方式固定骨折。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_HALLUX_VALGUS,大姆趾外翻,Hallux valgus,disease_or_condition,ORTHO_FOOT_ANKLE,拇趾外翻,,大腳趾外翻,大腳趾向外偏斜造成疼痛或穿鞋困難。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_HAND,手,Hand,anatomy,,手部;上肢,,手,手掌、手指與相關肌腱骨骼。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_HAND_DISORDERS,手部疾病,Hand disorders,subspecialty,,手部病變;手外科;手部外科,,手部問題,手部疾病、外傷或功能障礙。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_HIP,髖關節,Hip,anatomy,,髖;髖部,,髖部;胯下關節,骨盆與大腿骨之間的關節。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_HIP_ARTHROPLASTY,人工髖關節置換,Total hip arthroplasty,procedure,ORTHO_JOINT_RECONSTRUCTION,人工髖關節置換手術;人工髖關節表面置換,,換人工髖關節,以人工關節取代嚴重退化、壞死或損壞的髖關節。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_HIP_OSTEOARTHRITIS,髖關節退化,Hip osteoarthritis,disease_or_condition,ORTHO_OSTEOARTHRITIS,髖部疾患,,髖關節退化,髖關節退化造成鼠蹊或髖部疼痛。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_HYPERBARIC_OXYGEN,高壓氧治療,Hyperbaric oxygen therapy,procedure,,高壓氧醫學;高壓氧醫療,,高壓氧,利用高壓氧輔助傷口、感染或組織修復。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_INJECTION_THERAPY,注射治療,Injection therapy,procedure,,超音波導引注射;超音波檢查與注射治療;玻尿酸;PRP;神經阻斷,,打針治療,以藥物、玻尿酸、PRP或神經阻斷等注射方式治療疼痛或關節問題。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_JOINT_RECONSTRUCTION,關節重建,Joint reconstruction,subspecialty,,關節重建手術;髖關節與膝關節重建手術,,關節重建,針對關節退化、損傷或人工關節問題的重建治療。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_KNEE,膝關節,Knee,anatomy,,膝;膝部,,膝蓋,大腿與小腿之間的關節。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_KNEE_ARTHROPLASTY,人工膝關節置換,Total knee arthroplasty,procedure,ORTHO_JOINT_RECONSTRUCTION,膝人工關節置換;人工膝關節置換手術,,換人工膝關節,以人工關節取代嚴重退化或損壞的膝關節。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_KNEE_OSTEOARTHRITIS,膝關節退化,Knee osteoarthritis,disease_or_condition,ORTHO_OSTEOARTHRITIS,膝部疾患,,膝蓋退化,膝關節退化造成疼痛、變形或行走困難。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_LIGAMENT_INJURY,韌帶損傷,Ligament injury,disease_or_condition,ORTHO_SPORTS_MEDICINE,韌帶重建;膝韌帶重建,,韌帶受傷,韌帶拉傷、斷裂或不穩定。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_LOWER_LIMB_FRACTURE,下肢骨折,Lower limb fracture,disease_or_condition,ORTHO_FRACTURE,四肢骨折,,腿部骨折,髖、膝、踝、足等下肢骨折或外傷。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_LUMBAR_SPINE,腰椎,Lumbar spine,anatomy,ORTHO_SPINE,胸腰椎,,腰部脊椎,位於腰部的脊椎。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_MENISCUS_INJURY,半月板損傷,Meniscus injury,disease_or_condition,ORTHO_SPORTS_MEDICINE,半月軟骨損傷,,膝蓋半月板受傷,膝關節半月板撕裂或退化。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_MINIMALLY_INVASIVE_SURGERY,微創手術,Minimally invasive surgery,procedure_modifier,,微創脊椎手術;骨折微創手術,,傷口較小的手術,以較小傷口或較少組織破壞完成治療。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_ORTHOPEDICS,骨科,Orthopedics,subspecialty,,,,骨科一般疾病,骨骼、關節、肌肉與韌帶相關疾病與外傷。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_OSTEOARTHRITIS,退化性關節炎,Osteoarthritis,disease_or_condition,ORTHO_JOINT_RECONSTRUCTION,骨關節退化;關節炎,,關節退化;關節磨損,關節軟骨退化造成疼痛與活動受限。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_OSTEOMYELITIS,骨髓炎,Osteomyelitis,disease_or_condition,ORTHO_TRAUMA,,,骨頭感染,骨頭感染造成疼痛、發炎或傷口問題。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_OSTEOPOROSIS,骨質疏鬆,Osteoporosis,disease_or_condition,,骨質疏鬆症;骨鬆,,骨頭變脆;骨鬆,骨密度下降，增加骨折風險。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_PEDIATRIC_FRACTURE,小兒骨折,Pediatric fracture,disease_or_condition,ORTHO_PEDIATRIC_ORTHOPEDICS,,,兒童骨折,兒童或青少年骨折。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_PEDIATRIC_ORTHOPEDICS,小兒骨科,Pediatric orthopedics,subspecialty,,兒童先天疾患,,兒童骨科問題,兒童骨骼、關節、脊椎與先天問題。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_PELVIC_FRACTURE,骨盆骨折,Pelvic fracture,disease_or_condition,ORTHO_FRACTURE,骨盆外傷,,骨盆斷裂,骨盆環或髖臼相關骨折。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_PELVIS,骨盆,Pelvis,anatomy,,骨盆,,骨盆,連接脊椎與下肢的骨盆結構。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_PERIPROSTHETIC_JOINT_INFECTION,人工關節感染,Periprosthetic joint infection,disease_or_condition,ORTHO_JOINT_RECONSTRUCTION,人工關節感染治療,,人工關節發炎感染,人工關節周圍感染，需要抗生素或手術處理。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_PROSTHESIS_LOOSENING,人工關節鬆脫,Prosthesis loosening,disease_or_condition,ORTHO_REVISION_ARTHROPLASTY,人工關節毀損,,人工關節鬆掉,人工關節固定不穩或磨損導致疼痛與功能受限。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_REGENERATIVE_MEDICINE,再生醫學,Regenerative medicine,procedure_modifier,,幹細胞;PRP;自體高濃縮血小板;組織工程,,再生治療,使用細胞、血小板或生物材料輔助修復的治療方向。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_REVISION_ARTHROPLASTY,人工關節翻修,Revision arthroplasty,procedure,ORTHO_JOINT_RECONSTRUCTION,人工關節再置換;人工膝關節及人工髖關節再置換;膝人工關節毀損後再置換,,人工關節重做,針對既有人工關節鬆脫、感染或磨損進行重新手術。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_ROTATOR_CUFF_INJURY,肩旋轉肌袖損傷,Rotator cuff injury,disease_or_condition,ORTHO_SPORTS_MEDICINE,旋轉肌袖損傷,,肩膀肌腱受傷,肩部旋轉肌袖肌腱受傷造成疼痛或無力。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SHOULDER,肩關節,Shoulder,anatomy,,肩,,肩膀,肩部關節與周邊肌腱韌帶。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SHOULDER_INSTABILITY,肩關節不穩定,Shoulder instability,disease_or_condition,ORTHO_SPORTS_MEDICINE,肩關節不穩,,肩膀容易脫臼,肩關節穩定度不足，可能反覆脫臼或疼痛。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE,脊椎疾病,Spine disorders,subspecialty,,脊椎病變;脊椎退化;脊椎退化性病變;脊椎外科,,脊椎問題;背骨問題,脊椎退化、外傷、感染、腫瘤或神經壓迫相關問題。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_COMPRESSION_FRACTURE,壓迫性骨折,Compression fracture,disease_or_condition,ORTHO_SPINE_FRACTURE,壓迫骨折;骨鬆性壓迫骨折;胸腰椎壓迫性骨折,,脊椎壓扁;骨鬆壓迫性骨折,常見於骨質疏鬆或外傷造成的脊椎椎體壓扁。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_DECOMPRESSION,脊椎減壓手術,Spinal decompression,procedure,ORTHO_SPINE,減壓手術;減壓與融合手術,,神經減壓手術,解除脊椎神經受壓。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_DEGENERATIVE_DISEASE,脊椎退化性疾病,Degenerative spine disease,disease_or_condition,ORTHO_SPINE,脊椎退化性病變;頸椎退化性疾病;腰椎退化性疾病;退化性疾患,,脊椎退化;脊椎老化,脊椎因退化造成疼痛、狹窄、滑脫或神經壓迫。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_DISC_HERNIATION,椎間盤突出,Disc herniation,disease_or_condition,ORTHO_SPINE,椎間盤軟骨突出;椎間盤病變,,椎間盤突出;椎間盤壓到神經,椎間盤突出造成疼痛、麻木或神經壓迫症狀。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_ENDOSCOPIC_SURGERY,脊椎內視鏡手術,Endoscopic spine surgery,procedure,ORTHO_ENDOSCOPIC_SURGERY,微創脊椎內視鏡;內視鏡椎間盤手術,,脊椎內視鏡手術,使用內視鏡進行脊椎減壓、椎間盤或相關治療。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_FRACTURE,脊椎骨折,Spinal fracture,disease_or_condition,ORTHO_SPINE,胸腰椎外傷;脊椎外傷,,脊椎骨斷掉,脊椎骨因外傷或骨質疏鬆造成骨折。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_FUSION,脊椎融合手術,Spinal fusion,procedure,ORTHO_SPINE,脊椎融合;融合固定術;脊椎微創減壓融合術,,脊椎固定手術,將不穩定或病變脊椎節段固定融合。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_INFECTION,脊椎感染,Spinal infection,disease_or_condition,ORTHO_SPINE,脊椎感染性疾病,,脊椎發炎感染,脊椎骨或周邊組織感染。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_KYPHOSIS,駝背,Kyphosis,disease_or_condition,ORTHO_SPINE,駝背畸形,,駝背,脊椎向後彎曲增加造成背部外觀或功能問題。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_LOW_BACK_PAIN,下背痛,Low back pain,symptom,ORTHO_SPINE,腰痛;背痛,,腰痠背痛;腰痛,腰背部疼痛，可與肌肉、關節或神經壓迫相關。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_NECK_SHOULDER_PAIN,肩頸痛,Neck and shoulder pain,symptom,ORTHO_SPINE,頸痛;頸部疼痛,,肩頸痠痛;脖子痛,頸部或肩頸區域疼痛。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_SCIATICA,坐骨神經痛,Sciatica,symptom,ORTHO_SPINE,,,屁股痛到腳麻;坐骨神經痛,坐骨神經受到刺激或壓迫造成臀腿疼痛或麻木。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_SCOLIOSIS,脊椎側彎,Scoliosis,disease_or_condition,ORTHO_SPINE,腰椎側彎,,脊椎歪斜,脊椎向側面彎曲的變形。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_SPONDYLOLISTHESIS,脊椎滑脫,Spondylolisthesis,disease_or_condition,ORTHO_SPINE,腰椎滑脫;頸椎滑脫,,脊椎位移,上下脊椎骨位置滑移，可能造成疼痛或神經壓迫。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_STENOSIS,脊椎管狹窄,Spinal stenosis,disease_or_condition,ORTHO_SPINE,椎管狹窄,,脊椎神經通道變窄,脊椎管變窄造成神經壓迫。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_TUMOR,脊椎腫瘤,Spinal tumor,disease_or_condition,ORTHO_SPINE,脊椎骨骼及神經腫瘤;轉移性脊椎腫瘤;Metastatic spine disease,,脊椎長腫瘤,脊椎原發或轉移性腫瘤。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPORTS_MEDICINE,運動傷害,Sports injury,subspecialty,,運動醫學;腳部足踝運動傷害,,運動受傷,運動造成的肌肉、韌帶、關節或骨骼傷害。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_TRAUMA,骨科外傷,Orthopedic trauma,subspecialty,,骨外傷科;重大外傷;骨科外傷重建,,骨科外傷,骨折、脫臼或嚴重肢體外傷照護。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_ULTRASOUND,超音波檢查,Ultrasound,imaging_or_test,,超音波檢查;超音波導引;超音波引導,,超音波,使用超音波評估軟組織、關節或引導注射。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_UPPER_LIMB_FRACTURE,上肢骨折,Upper limb fracture,disease_or_condition,ORTHO_FRACTURE,上肢疾患;四肢骨折,,手臂骨折,肩、肘、腕、手等上肢骨折或外傷。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_VERTEBROPLASTY,骨水泥灌注治療,Vertebroplasty,procedure,ORTHO_SPINE_COMPRESSION_FRACTURE,骨水泥;脊椎灌漿手術;Vertebroplasty;脊椎骨折骨水泥手術,,灌骨水泥,以骨水泥穩定脊椎壓迫性骨折。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_WRIST,腕關節,Wrist,anatomy,,腕,,手腕,前臂與手之間的關節。,true,cgmh_orthopedics_scrape_manual_v1
+ORTHO_WRIST_DISORDERS,腕關節疾病,Wrist disorders,subspecialty,,腕關節重建;腕部病變,,手腕問題,腕關節疼痛、退化、外傷或重建問題。,true,cgmh_orthopedics_scrape_manual_v1
