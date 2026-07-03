@@ -1,0 +1,25 @@
+[project]
+name = "doctor-matching-agent-api"
+version = "0.1.0"
+description = "FastAPI backend for Doctor Matching Agent"
+requires-python = ">=3.11"
+dependencies = [
+    "alembic>=1.13.0",
+    "fastapi>=0.115.0",
+    "psycopg[binary]>=3.2.0",
+    "python-dotenv>=1.0.0",
+    "sqlalchemy>=2.0.0",
+    "uvicorn[standard]>=0.30.0",
+]
+
+[dependency-groups]
+dev = [
+    "httpx2>=0.28.0",
+    "pytest>=8.0.0,<9.0.0",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+pythonpath = ["."]

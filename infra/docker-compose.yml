@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: doctor_matching_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: doctor_matching
+      POSTGRES_USER: doctor_user
+      POSTGRES_PASSWORD: doctor_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/001-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U doctor_user -d doctor_matching"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+
