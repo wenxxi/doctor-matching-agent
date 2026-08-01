@@ -8,7 +8,7 @@ This scaffold includes:
 - FastAPI backend in `apps/api`
 - PostgreSQL 16 with pgvector in `infra/docker-compose.yml`
 - Basic health check endpoint
-- Alembic migrations and a first doctor data layer
+- Alembic migrations and a sample PostgreSQL doctor data layer
 - CSV-backed MVP doctor recommendation endpoint with optional GPT-4o-mini concept extraction and explanation writing
 
 No embeddings, chat history, authentication, scraping workflow, or direct GPT doctor search is implemented yet.
@@ -115,7 +115,7 @@ cd apps/api
 uv run alembic upgrade head
 ```
 
-### 6. Import sample doctors
+### 6. Import sample doctors into PostgreSQL
 
 ```bash
 cd apps/api
@@ -123,6 +123,8 @@ uv run python scripts/import_doctors.py
 ```
 
 The importer reads `data/sample_doctors.csv`, inserts sample doctors, splits `raw_expertise` into `doctor_expertise` rows, and is safe to run more than once.
+
+This PostgreSQL dataset is demo/sample data for the `/api/doctors` endpoint. The recommendation endpoint uses the processed CSV files under `data/processed/` as its current source of doctor matching data.
 
 ### 7. Run frontend
 
@@ -171,6 +173,8 @@ If `DATABASE_URL` is missing or PostgreSQL is unavailable, the endpoint returns 
 
 ### 9. Call the doctors endpoint
 
+This endpoint reads from PostgreSQL.
+
 List doctors:
 
 ```bash
@@ -206,6 +210,8 @@ The response includes matched medical concepts and basic diagnostic metadata.
 ### 11. Call the recommendation endpoint
 
 The recommendation endpoint accepts a symptom query and returns matched concepts plus recommended doctors. If `OPENAI_API_KEY` is configured, the backend can use GPT-4o-mini for concept extraction and explanation writing. If OpenAI is not configured or a request fails, the app uses the local fallback path.
+
+Current data source: this endpoint reads from `data/processed/doctors_normalized.csv`, `data/processed/medical_concepts.csv`, and `data/processed/doctor_concept_map.csv`. It does not read the PostgreSQL `doctors` table yet.
 
 ```bash
 curl -X POST "http://localhost:8000/api/recommendations" \
