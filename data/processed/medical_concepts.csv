@@ -1,75 +1,247 @@
-concept_id,canonical_name_zh,canonical_name_en,category,parent_concept_id,synonyms_zh,synonyms_en,lay_terms_zh,description_zh,is_patient_facing,source
-ORTHO_ACL_INJURY,前十字韌帶損傷,ACL injury,disease_or_condition,ORTHO_LIGAMENT_INJURY,前十字韌帶斷裂;ACL injury,,前十字韌帶受傷,膝關節前十字韌帶受傷，常見於運動傷害。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_ARTHROPLASTY,人工關節置換,Arthroplasty,procedure,ORTHO_JOINT_RECONSTRUCTION,人工關節置換手術;人工關節重建手術,,換人工關節,以人工關節取代嚴重損壞的關節。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_ARTHROSCOPIC_SURGERY,關節鏡手術,Arthroscopic surgery,procedure,,微創關節鏡手術;關節鏡,,關節內視鏡手術,以關節鏡檢查或治療關節內問題。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_BONE_INFECTION,骨科感染,Orthopedic infection,disease_or_condition,,骨科感染學;感染性髖關節,,骨科感染,骨、關節或人工植入物相關感染。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_BONE_SPUR,骨刺,Bone spur,disease_or_condition,,脊椎骨刺,,長骨刺,骨頭邊緣增生，可能造成疼痛或神經壓迫。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_BONE_TUMOR,骨骼腫瘤,Bone tumor,disease_or_condition,,肌肉及骨骼腫瘤;骨骼及軟組織腫瘤,,骨頭或軟組織腫瘤,骨骼或軟組織腫瘤相關診療。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_CEREBRAL_PALSY,腦性麻痺,Cerebral palsy,disease_or_condition,ORTHO_PEDIATRIC_ORTHOPEDICS,,,腦麻,腦性麻痺造成的肌肉張力、步態或骨骼關節問題。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_CERVICAL_SPINE,頸椎,Cervical spine,anatomy,ORTHO_SPINE,上頸椎,,脖子的脊椎,位於頸部的脊椎。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_COMPLEX_FRACTURE,複雜骨折,Complex fracture,disease_or_condition,ORTHO_FRACTURE,複雜性骨折;四肢複雜骨折;爆裂性骨折,,嚴重骨折,較複雜或嚴重的骨折，常需重建或固定手術。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_DDH,兒童髖關節發育不良,Developmental dysplasia of the hip,disease_or_condition,ORTHO_PEDIATRIC_ORTHOPEDICS,髖關節發育不良,,小孩髖關節發育問題,兒童髖關節發育異常造成不穩或脫位風險。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_DIABETIC_FOOT,糖尿病足,Diabetic foot,disease_or_condition,ORTHO_FOOT_ANKLE,,,糖尿病腳傷口,糖尿病造成足部傷口、感染或循環神經問題。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_ELBOW,肘關節,Elbow,anatomy,,肘;肘部,,手肘,上臂與前臂之間的關節。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_ENDOSCOPIC_SURGERY,內視鏡手術,Endoscopic surgery,procedure,,脊椎內視鏡手術;脊椎微創內視鏡手術,,內視鏡手術,使用內視鏡輔助進行的手術。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_FEMORAL_HEAD_AVN,股骨頭缺血性壞死,Avascular necrosis of femoral head,disease_or_condition,ORTHO_HIP_OSTEOARTHRITIS,股骨頭骨壞死,,股骨頭壞死,股骨頭血流不足造成骨壞死與髖關節疼痛。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_FOOT_ANKLE,足踝疾病,Foot and ankle disorders,subspecialty,,足踝病變;足踝疾患;足踝關節重建,,腳踝問題;足踝問題,足部與踝關節疾病、變形或外傷。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_FOOT_ANKLE_ANATOMY,足踝,Foot and ankle,anatomy,,足;踝;腳部足踝,,腳踝;腳,足部與踝關節。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_FRACTURE,骨折,Fracture,disease_or_condition,ORTHO_TRAUMA,一般骨折;骨折外傷;一般骨折外傷;外傷骨折,,骨頭斷掉,骨頭因外力或骨質脆弱而斷裂。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_FRACTURE_FIXATION,骨折固定手術,Fracture fixation,procedure,ORTHO_FRACTURE,骨折重建手術;骨折外傷手術;骨折外傷微創手術,,骨折開刀固定,使用鋼板、鋼釘、螺絲或其他方式固定骨折。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_HALLUX_VALGUS,大姆趾外翻,Hallux valgus,disease_or_condition,ORTHO_FOOT_ANKLE,拇趾外翻,,大腳趾外翻,大腳趾向外偏斜造成疼痛或穿鞋困難。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_HAND,手,Hand,anatomy,,手部;上肢,,手,手掌、手指與相關肌腱骨骼。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_HAND_DISORDERS,手部疾病,Hand disorders,subspecialty,,手部病變;手外科;手部外科,,手部問題,手部疾病、外傷或功能障礙。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_HIP,髖關節,Hip,anatomy,,髖;髖部,,髖部;胯下關節,骨盆與大腿骨之間的關節。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_HIP_ARTHROPLASTY,人工髖關節置換,Total hip arthroplasty,procedure,ORTHO_JOINT_RECONSTRUCTION,人工髖關節置換手術;人工髖關節表面置換,,換人工髖關節,以人工關節取代嚴重退化、壞死或損壞的髖關節。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_HIP_OSTEOARTHRITIS,髖關節退化,Hip osteoarthritis,disease_or_condition,ORTHO_OSTEOARTHRITIS,髖部疾患,,髖關節退化,髖關節退化造成鼠蹊或髖部疼痛。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_HYPERBARIC_OXYGEN,高壓氧治療,Hyperbaric oxygen therapy,procedure,,高壓氧醫學;高壓氧醫療,,高壓氧,利用高壓氧輔助傷口、感染或組織修復。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_INJECTION_THERAPY,注射治療,Injection therapy,procedure,,超音波導引注射;超音波檢查與注射治療;玻尿酸;PRP;神經阻斷,,打針治療,以藥物、玻尿酸、PRP或神經阻斷等注射方式治療疼痛或關節問題。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_JOINT_RECONSTRUCTION,關節重建,Joint reconstruction,subspecialty,,關節重建手術;髖關節與膝關節重建手術,,關節重建,針對關節退化、損傷或人工關節問題的重建治療。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_KNEE,膝關節,Knee,anatomy,,膝;膝部,,膝蓋,大腿與小腿之間的關節。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_KNEE_ARTHROPLASTY,人工膝關節置換,Total knee arthroplasty,procedure,ORTHO_JOINT_RECONSTRUCTION,膝人工關節置換;人工膝關節置換手術,,換人工膝關節,以人工關節取代嚴重退化或損壞的膝關節。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_KNEE_OSTEOARTHRITIS,膝關節退化,Knee osteoarthritis,disease_or_condition,ORTHO_OSTEOARTHRITIS,膝部疾患,,膝蓋退化,膝關節退化造成疼痛、變形或行走困難。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_LIGAMENT_INJURY,韌帶損傷,Ligament injury,disease_or_condition,ORTHO_SPORTS_MEDICINE,韌帶重建;膝韌帶重建,,韌帶受傷,韌帶拉傷、斷裂或不穩定。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_LOWER_LIMB_FRACTURE,下肢骨折,Lower limb fracture,disease_or_condition,ORTHO_FRACTURE,四肢骨折,,腿部骨折,髖、膝、踝、足等下肢骨折或外傷。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_LUMBAR_SPINE,腰椎,Lumbar spine,anatomy,ORTHO_SPINE,胸腰椎,,腰部脊椎,位於腰部的脊椎。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_MENISCUS_INJURY,半月板損傷,Meniscus injury,disease_or_condition,ORTHO_SPORTS_MEDICINE,半月軟骨損傷,,膝蓋半月板受傷,膝關節半月板撕裂或退化。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_MINIMALLY_INVASIVE_SURGERY,微創手術,Minimally invasive surgery,procedure_modifier,,微創脊椎手術;骨折微創手術,,傷口較小的手術,以較小傷口或較少組織破壞完成治療。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_ORTHOPEDICS,骨科,Orthopedics,subspecialty,,,,骨科一般疾病,骨骼、關節、肌肉與韌帶相關疾病與外傷。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_OSTEOARTHRITIS,退化性關節炎,Osteoarthritis,disease_or_condition,ORTHO_JOINT_RECONSTRUCTION,骨關節退化;關節炎,,關節退化;關節磨損,關節軟骨退化造成疼痛與活動受限。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_OSTEOMYELITIS,骨髓炎,Osteomyelitis,disease_or_condition,ORTHO_TRAUMA,,,骨頭感染,骨頭感染造成疼痛、發炎或傷口問題。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_OSTEOPOROSIS,骨質疏鬆,Osteoporosis,disease_or_condition,,骨質疏鬆症;骨鬆,,骨頭變脆;骨鬆,骨密度下降，增加骨折風險。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_PEDIATRIC_FRACTURE,小兒骨折,Pediatric fracture,disease_or_condition,ORTHO_PEDIATRIC_ORTHOPEDICS,,,兒童骨折,兒童或青少年骨折。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_PEDIATRIC_ORTHOPEDICS,小兒骨科,Pediatric orthopedics,subspecialty,,兒童先天疾患,,兒童骨科問題,兒童骨骼、關節、脊椎與先天問題。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_PELVIC_FRACTURE,骨盆骨折,Pelvic fracture,disease_or_condition,ORTHO_FRACTURE,骨盆外傷,,骨盆斷裂,骨盆環或髖臼相關骨折。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_PELVIS,骨盆,Pelvis,anatomy,,骨盆,,骨盆,連接脊椎與下肢的骨盆結構。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_PERIPROSTHETIC_JOINT_INFECTION,人工關節感染,Periprosthetic joint infection,disease_or_condition,ORTHO_JOINT_RECONSTRUCTION,人工關節感染治療,,人工關節發炎感染,人工關節周圍感染，需要抗生素或手術處理。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_PROSTHESIS_LOOSENING,人工關節鬆脫,Prosthesis loosening,disease_or_condition,ORTHO_REVISION_ARTHROPLASTY,人工關節毀損,,人工關節鬆掉,人工關節固定不穩或磨損導致疼痛與功能受限。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_REGENERATIVE_MEDICINE,再生醫學,Regenerative medicine,procedure_modifier,,幹細胞;PRP;自體高濃縮血小板;組織工程,,再生治療,使用細胞、血小板或生物材料輔助修復的治療方向。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_REVISION_ARTHROPLASTY,人工關節翻修,Revision arthroplasty,procedure,ORTHO_JOINT_RECONSTRUCTION,人工關節再置換;人工膝關節及人工髖關節再置換;膝人工關節毀損後再置換,,人工關節重做,針對既有人工關節鬆脫、感染或磨損進行重新手術。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_ROTATOR_CUFF_INJURY,肩旋轉肌袖損傷,Rotator cuff injury,disease_or_condition,ORTHO_SPORTS_MEDICINE,旋轉肌袖損傷,,肩膀肌腱受傷,肩部旋轉肌袖肌腱受傷造成疼痛或無力。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_SHOULDER,肩關節,Shoulder,anatomy,,肩,,肩膀,肩部關節與周邊肌腱韌帶。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_SHOULDER_INSTABILITY,肩關節不穩定,Shoulder instability,disease_or_condition,ORTHO_SPORTS_MEDICINE,肩關節不穩,,肩膀容易脫臼,肩關節穩定度不足，可能反覆脫臼或疼痛。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_SPINE,脊椎疾病,Spine disorders,subspecialty,,脊椎病變;脊椎退化;脊椎退化性病變;脊椎外科,,脊椎問題;背骨問題,脊椎退化、外傷、感染、腫瘤或神經壓迫相關問題。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_SPINE_COMPRESSION_FRACTURE,壓迫性骨折,Compression fracture,disease_or_condition,ORTHO_SPINE_FRACTURE,壓迫骨折;骨鬆性壓迫骨折;胸腰椎壓迫性骨折,,脊椎壓扁;骨鬆壓迫性骨折,常見於骨質疏鬆或外傷造成的脊椎椎體壓扁。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_SPINE_DECOMPRESSION,脊椎減壓手術,Spinal decompression,procedure,ORTHO_SPINE,減壓手術;減壓與融合手術,,神經減壓手術,解除脊椎神經受壓。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_SPINE_DEGENERATIVE_DISEASE,脊椎退化性疾病,Degenerative spine disease,disease_or_condition,ORTHO_SPINE,脊椎退化性病變;頸椎退化性疾病;腰椎退化性疾病;退化性疾患,,脊椎退化;脊椎老化,脊椎因退化造成疼痛、狹窄、滑脫或神經壓迫。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_SPINE_DISC_HERNIATION,椎間盤突出,Disc herniation,disease_or_condition,ORTHO_SPINE,椎間盤軟骨突出;椎間盤病變,,椎間盤突出;椎間盤壓到神經,椎間盤突出造成疼痛、麻木或神經壓迫症狀。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_SPINE_ENDOSCOPIC_SURGERY,脊椎內視鏡手術,Endoscopic spine surgery,procedure,ORTHO_ENDOSCOPIC_SURGERY,微創脊椎內視鏡;內視鏡椎間盤手術,,脊椎內視鏡手術,使用內視鏡進行脊椎減壓、椎間盤或相關治療。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_SPINE_FRACTURE,脊椎骨折,Spinal fracture,disease_or_condition,ORTHO_SPINE,胸腰椎外傷;脊椎外傷,,脊椎骨斷掉,脊椎骨因外傷或骨質疏鬆造成骨折。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_SPINE_FUSION,脊椎融合手術,Spinal fusion,procedure,ORTHO_SPINE,脊椎融合;融合固定術;脊椎微創減壓融合術,,脊椎固定手術,將不穩定或病變脊椎節段固定融合。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_SPINE_INFECTION,脊椎感染,Spinal infection,disease_or_condition,ORTHO_SPINE,脊椎感染性疾病,,脊椎發炎感染,脊椎骨或周邊組織感染。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_SPINE_KYPHOSIS,駝背,Kyphosis,disease_or_condition,ORTHO_SPINE,駝背畸形,,駝背,脊椎向後彎曲增加造成背部外觀或功能問題。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_SPINE_LOW_BACK_PAIN,下背痛,Low back pain,symptom,ORTHO_SPINE,腰痛;背痛,,腰痠背痛;腰痛,腰背部疼痛，可與肌肉、關節或神經壓迫相關。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_SPINE_NECK_SHOULDER_PAIN,肩頸痛,Neck and shoulder pain,symptom,ORTHO_SPINE,頸痛;頸部疼痛,,肩頸痠痛;脖子痛,頸部或肩頸區域疼痛。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_SPINE_SCIATICA,坐骨神經痛,Sciatica,symptom,ORTHO_SPINE,,,屁股痛到腳麻;坐骨神經痛,坐骨神經受到刺激或壓迫造成臀腿疼痛或麻木。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_SPINE_SCOLIOSIS,脊椎側彎,Scoliosis,disease_or_condition,ORTHO_SPINE,腰椎側彎,,脊椎歪斜,脊椎向側面彎曲的變形。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_SPINE_SPONDYLOLISTHESIS,脊椎滑脫,Spondylolisthesis,disease_or_condition,ORTHO_SPINE,腰椎滑脫;頸椎滑脫,,脊椎位移,上下脊椎骨位置滑移，可能造成疼痛或神經壓迫。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_SPINE_STENOSIS,脊椎管狹窄,Spinal stenosis,disease_or_condition,ORTHO_SPINE,椎管狹窄,,脊椎神經通道變窄,脊椎管變窄造成神經壓迫。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_SPINE_TUMOR,脊椎腫瘤,Spinal tumor,disease_or_condition,ORTHO_SPINE,脊椎骨骼及神經腫瘤;轉移性脊椎腫瘤;Metastatic spine disease,,脊椎長腫瘤,脊椎原發或轉移性腫瘤。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_SPORTS_MEDICINE,運動傷害,Sports injury,subspecialty,,運動醫學;腳部足踝運動傷害,,運動受傷,運動造成的肌肉、韌帶、關節或骨骼傷害。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_TRAUMA,骨科外傷,Orthopedic trauma,subspecialty,,骨外傷科;重大外傷;骨科外傷重建,,骨科外傷,骨折、脫臼或嚴重肢體外傷照護。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_ULTRASOUND,超音波檢查,Ultrasound,imaging_or_test,,超音波檢查;超音波導引;超音波引導,,超音波,使用超音波評估軟組織、關節或引導注射。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_UPPER_LIMB_FRACTURE,上肢骨折,Upper limb fracture,disease_or_condition,ORTHO_FRACTURE,上肢疾患;四肢骨折,,手臂骨折,肩、肘、腕、手等上肢骨折或外傷。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_VERTEBROPLASTY,骨水泥灌注治療,Vertebroplasty,procedure,ORTHO_SPINE_COMPRESSION_FRACTURE,骨水泥;脊椎灌漿手術;Vertebroplasty;脊椎骨折骨水泥手術,,灌骨水泥,以骨水泥穩定脊椎壓迫性骨折。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_WRIST,腕關節,Wrist,anatomy,,腕,,手腕,前臂與手之間的關節。,true,cgmh_orthopedics_scrape_manual_v1
-ORTHO_WRIST_DISORDERS,腕關節疾病,Wrist disorders,subspecialty,,腕關節重建;腕部病變,,手腕問題,腕關節疼痛、退化、外傷或重建問題。,true,cgmh_orthopedics_scrape_manual_v1
+﻿concept_id,canonical_name_zh,canonical_name_en,category,parent_concept_id,synonyms_zh,synonyms_en,lay_terms_zh,description_zh,source
+CARDIO_ARRHYTHMIA,心律不整,Arrhythmia,disease_or_condition,CARDIO_CARDIOLOGY,心律不整,,心跳不規則;心悸,心跳節律異常，可能造成心悸、暈眩或其他症狀。,cgmh_cardiology_scrape_manual_v1
+CARDIO_CARDIOLOGY,心臟內科,Cardiology,subspecialty,,一般心臟學;心臟內科學;心臟血管疾病;心血管疾病,,心臟問題,心臟與血管疾病的內科診療。,cgmh_cardiology_scrape_manual_v1
+CARDIO_CARDIOVASCULAR_DISEASE,心臟血管疾病,Cardiovascular disease,disease_or_condition,CARDIO_CARDIOLOGY,心血管疾病;冠心病,,心血管問題,心臟與血管相關疾病的總稱。,cgmh_cardiology_scrape_manual_v1
+CARDIO_CATHETERIZATION,心導管檢查,Cardiac catheterization,procedure,CARDIO_CARDIOLOGY,心導管檢查;心導管,,心導管檢查,以導管檢查心臟血管或心臟結構。,cgmh_cardiology_scrape_manual_v1
+CARDIO_CORONARY_ARTERY_DISEASE,冠狀動脈疾病,Coronary artery disease,disease_or_condition,CARDIO_CARDIOVASCULAR_DISEASE,冠心病;冠狀動脈,,心臟血管阻塞,供應心臟的冠狀動脈狹窄或阻塞。,cgmh_cardiology_scrape_manual_v1
+CARDIO_CRITICAL_CARE,重症醫療照護,Critical care,subspecialty,,重症醫療照護,,重症照護,重症病患照護與心臟相關重症處置。,cgmh_cardiology_scrape_manual_v1
+CARDIO_ECHOCARDIOGRAPHY,心臟超音波,Echocardiography,imaging_or_test,CARDIO_CARDIOLOGY,心臟血管超音波;心血管超音波;心臟超音波檢查,,心臟超音波,以超音波評估心臟結構與功能。,cgmh_cardiology_scrape_manual_v1
+CARDIO_ELECTROPHYSIOLOGY,心臟電氣生理檢查及治療,Cardiac electrophysiology,procedure,CARDIO_ARRHYTHMIA,心臟電氣生理檢查;電生理學檢查;電燒手術,,心律檢查;電燒治療,評估與治療心律不整的電生理檢查或介入治療。,cgmh_cardiology_scrape_manual_v1
+CARDIO_GENERAL_INTERNAL_MEDICINE,一般內科,General internal medicine,subspecialty,,一般內科學;內科,,一般內科,一般內科疾病評估與照護。,cgmh_cardiology_scrape_manual_v1
+CARDIO_HEART_FAILURE,心臟衰竭,Heart failure,disease_or_condition,CARDIO_CARDIOLOGY,心衰竭;心臟衰竭,,心臟無力,心臟無法有效供應身體所需血流。,cgmh_cardiology_scrape_manual_v1
+CARDIO_HYPERLIPIDEMIA,高血脂,Hyperlipidemia,disease_or_condition,CARDIO_CARDIOVASCULAR_DISEASE,高血脂,,血脂高;膽固醇高,血脂或膽固醇異常，與心血管風險相關。,cgmh_cardiology_scrape_manual_v1
+CARDIO_HYPERTENSION,高血壓,Hypertension,disease_or_condition,CARDIO_CARDIOVASCULAR_DISEASE,高血壓疾病,,血壓高,血壓長期偏高，與心血管風險相關。,cgmh_cardiology_scrape_manual_v1
+CARDIO_INTERVENTIONAL_CARDIOLOGY,介入性心導管治療,Interventional cardiology,procedure,CARDIO_CATHETERIZATION,介入性心導管治療;心導管介入治療;心導管介入性治療;介入型心導管治療;介入性治療,,心導管治療,使用心導管進行血管或結構性心臟病介入治療。,cgmh_cardiology_scrape_manual_v1
+CARDIO_OBESITY,肥胖,Obesity,disease_or_condition,CARDIO_CARDIOVASCULAR_DISEASE,肥胖治療,,體重過重,體重過重或肥胖，可能增加心血管風險。,cgmh_cardiology_scrape_manual_v1
+CARDIO_PACEMAKER,心律調節器植入,Pacemaker implantation,procedure,CARDIO_ARRHYTHMIA,心律調節器植入;心臟節律器治療;心律調節器,,裝心律調節器,植入裝置協助心跳節律控制。,cgmh_cardiology_scrape_manual_v1
+CARDIO_PERIPHERAL_VASCULAR_DISEASE,周邊血管疾病,Peripheral vascular disease,disease_or_condition,CARDIO_CARDIOVASCULAR_DISEASE,週邊血管;周邊血管;週邊血管超音波;周邊血流超音波,,周邊血管問題;腳血管問題,四肢或周邊血管循環相關疾病。,cgmh_cardiology_scrape_manual_v1
+CARDIO_PULMONARY_HYPERTENSION,肺高壓,Pulmonary hypertension,disease_or_condition,CARDIO_CARDIOLOGY,肺高壓,,肺部血壓高,肺循環壓力升高，可造成喘或心臟負擔。,cgmh_cardiology_scrape_manual_v1
+CARDIO_STENT,血管支架置放,Vascular stent placement,procedure,CARDIO_INTERVENTIONAL_CARDIOLOGY,支架置放;血管支架;支架之裝設;頸動脈血管支架,,放支架,以支架維持血管暢通的介入治療。,cgmh_cardiology_scrape_manual_v1
+CARDIO_STRUCTURAL_HEART_DISEASE,結構性心臟病,Structural heart disease,disease_or_condition,CARDIO_CARDIOLOGY,結構性心臟病,,心臟結構問題,心臟結構異常或需介入治療的疾病。,cgmh_cardiology_scrape_manual_v1
+CARDIO_VALVULAR_HEART_DISEASE,心臟瓣膜疾病,Valvular heart disease,disease_or_condition,CARDIO_CARDIOLOGY,心臟瓣膜疾病;二尖瓣;三尖瓣膜,,心臟瓣膜問題,心臟瓣膜狹窄或閉鎖不全等疾病。,cgmh_cardiology_scrape_manual_v1
+CHEST_ASTHMA,氣喘,Asthma,disease_or_condition,CHEST_PULMONOLOGY,過敏性氣喘,,喘;氣喘,慢性呼吸道發炎造成喘鳴、胸悶或咳嗽。,cgmh_chest_scrape_manual_v1
+CHEST_CHRONIC_COUGH,慢性咳嗽,Chronic cough,symptom,CHEST_PULMONOLOGY,久咳;咳嗽,,咳很久;一直咳;一直咳嗽,持續或反覆咳嗽的症狀。,cgmh_chest_scrape_manual_v1
+CHEST_COPD,慢性阻塞性肺疾病,Chronic obstructive pulmonary disease,disease_or_condition,CHEST_PULMONOLOGY,肺阻塞;慢性阻塞性肺疾;慢性阻塞性肺病;COPD,,慢性肺阻塞;容易喘,慢性呼吸道阻塞造成喘、咳嗽或活動耐受下降。,cgmh_chest_scrape_manual_v1
+CHEST_LUNG_CANCER,肺癌,Lung cancer,disease_or_condition,CHEST_PULMONOLOGY,肺部腫瘤;肺腫瘤,,肺癌,肺部惡性腫瘤相關診療。,cgmh_chest_scrape_manual_v1
+CHEST_PULMONARY_INFECTION,肺部感染,Pulmonary infection,disease_or_condition,CHEST_PULMONOLOGY,感染性疾病;肺炎;呼吸道感染;呼吸道感染症,,肺部發炎感染;黃痰;咳痰;有痰;喉嚨痛,肺部或呼吸道感染相關疾病。,cgmh_chest_scrape_manual_v1
+CHEST_PULMONOLOGY,胸腔內科,Pulmonology,subspecialty,,胸腔科;肺部疾病;呼吸道疾病,,肺部問題;呼吸問題,肺部、呼吸道與胸腔相關疾病診療。,cgmh_chest_scrape_manual_v1
+CHEST_SLEEP_APNEA,睡眠呼吸中止症,Sleep apnea,disease_or_condition,CHEST_PULMONOLOGY,睡眠呼吸中止,,睡覺打呼會停呼吸,睡眠期間反覆呼吸暫停或低通氣。,cgmh_chest_scrape_manual_v1
+CHEST_SMOKING_CESSATION,戒菸,Smoking cessation,procedure_modifier,CHEST_PULMONOLOGY,戒菸門診,,戒菸,協助戒除菸品使用以降低肺部與心血管風險。,cgmh_chest_scrape_manual_v1
+CHEST_TUBERCULOSIS,結核病,Tuberculosis,disease_or_condition,CHEST_PULMONOLOGY,結核;肺結核,,肺結核,結核菌感染，可影響肺部或其他器官。,cgmh_chest_scrape_manual_v1
+ENDO_DIABETES,糖尿病,Diabetes mellitus,disease_or_condition,ENDO_ENDOCRINOLOGY,血糖;血糖高,,血糖高;糖尿病,血糖調控異常造成的慢性代謝疾病。,cgmh_endocrinology_scrape_manual_v1
+ENDO_DIABETIC_FOOT,糖尿病足病變,Diabetic foot disease,disease_or_condition,ENDO_DIABETES,糖尿病足,,糖尿病腳傷口,糖尿病造成足部傷口、感染或神經血管問題。,cgmh_endocrinology_scrape_manual_v1
+ENDO_ENDOCRINOLOGY,新陳代謝科,Endocrinology and metabolism,subspecialty,,內分泌科;新陳代謝;內分泌疾病,,內分泌問題;代謝問題,內分泌、糖尿病與代謝疾病診療。,cgmh_endocrinology_scrape_manual_v1
+ENDO_HYPERLIPIDEMIA,高血脂,Hyperlipidemia,disease_or_condition,ENDO_ENDOCRINOLOGY,血脂異常,,膽固醇高;血脂高,血脂或膽固醇異常。,cgmh_endocrinology_scrape_manual_v1
+ENDO_HYPERTHYROIDISM,甲狀腺亢進,Hyperthyroidism,disease_or_condition,ENDO_THYROID_DISEASE,甲亢,,甲狀腺太亢進,甲狀腺荷爾蒙分泌過多。,cgmh_endocrinology_scrape_manual_v1
+ENDO_HYPOTHYROIDISM,甲狀腺低下,Hypothyroidism,disease_or_condition,ENDO_THYROID_DISEASE,甲低,,甲狀腺不足,甲狀腺荷爾蒙不足。,cgmh_endocrinology_scrape_manual_v1
+ENDO_METABOLIC_SYNDROME,代謝症候群,Metabolic syndrome,disease_or_condition,ENDO_ENDOCRINOLOGY,代;謝;症;候;群,,代謝異常,血糖、血壓、血脂與腹部肥胖等代謝風險聚集。,cgmh_endocrinology_scrape_manual_v1
+ENDO_OBESITY,肥胖與減重,Obesity and weight management,disease_or_condition,ENDO_ENDOCRINOLOGY,肥胖;減重,,體重過重;想減重,肥胖、體重控制與代謝風險管理。,cgmh_endocrinology_scrape_manual_v1
+ENDO_THYROID_DISEASE,甲狀腺疾病,Thyroid disease,disease_or_condition,ENDO_ENDOCRINOLOGY,甲狀腺;甲狀腺及內分泌疾病,,甲狀腺問題,甲狀腺功能或結構異常相關疾病。,cgmh_endocrinology_scrape_manual_v1
+ENDO_THYROID_NODULE,甲狀腺結節,Thyroid nodule,disease_or_condition,ENDO_THYROID_DISEASE,甲狀腺腫瘤,,甲狀腺長結節,甲狀腺結節或腫塊評估。,cgmh_endocrinology_scrape_manual_v1
+GERI_CHRONIC_DISEASE_CARE,老年慢性病照護,Geriatric chronic disease care,subspecialty,GERI_GERIATRICS,常見老年慢性病;慢性病診治,,長輩慢性病,高齡者常見慢性病整合照護。,cgmh_geriatrics_scrape_manual_v1
+GERI_COMPREHENSIVE_GERIATRIC_ASSESSMENT,周全性老年整合評估,Comprehensive geriatric assessment,procedure,GERI_GERIATRICS,周全性老年整合評估;老年整合評估,,長輩整體評估,針對高齡者醫療、功能、心理與社會需求的整體評估。,cgmh_geriatrics_scrape_manual_v1
+GERI_GERIATRICS,高齡醫學,Geriatrics,subspecialty,,老年醫學;高齡醫學,,老人醫學;長輩照護,高齡者慢性病、功能、用藥與整合照護。,cgmh_geriatrics_scrape_manual_v1
+GERI_POLYPHARMACY,藥物整合,Medication reconciliation,procedure,GERI_GERIATRICS,藥物整合;多重用藥,,整理藥物;藥太多,檢視與整合高齡者多重用藥。,cgmh_geriatrics_scrape_manual_v1
+GERI_PREVENTIVE_MEDICINE,預防醫學,Preventive medicine,subspecialty,GERI_GERIATRICS,預防醫學,,健康預防,疾病預防與健康促進。,cgmh_geriatrics_scrape_manual_v1
+GI_ABDOMINAL_ULTRASOUND_INTERVENTION,腹部超音波介入治療,Abdominal ultrasound-guided intervention,procedure,GI_GASTROENTEROLOGY,腹部超音波介入治療;肝膽超音波檢查,,腹部超音波治療,以腹部或肝膽超音波進行檢查或介入治療。,cgmh_gastroenterology_scrape_manual_v1
+GI_BILIARY_PANCREATIC_DISEASE,膽胰疾病,Biliary and pancreatic disease,disease_or_condition,GI_GASTROENTEROLOGY,膽道;胰臟;膽胰,,膽囊膽管胰臟問題,膽道、膽囊與胰臟相關疾病。,cgmh_gastroenterology_scrape_manual_v1
+GI_BLOATING,腹脹與胃脹氣,Abdominal bloating,symptom,GI_GASTROENTEROLOGY,腹脹;胃脹;胃脹氣;脹氣,,肚子脹;胃很脹;一直脹氣,腹部或胃部脹氣、脹滿感等常見腸胃症狀。,cgmh_gastroenterology_scrape_manual_v1
+GI_CHRONIC_HEPATITIS,慢性肝炎,Chronic hepatitis,disease_or_condition,GI_LIVER_DISEASE,慢性肝炎;Chronic hepatitis,,慢性肝發炎,長期肝臟發炎與相關併發症。,cgmh_gastroenterology_scrape_manual_v1
+GI_CIRRHOSIS,肝硬化,Cirrhosis,disease_or_condition,GI_LIVER_DISEASE,肝;硬;化,,肝變硬,慢性肝病造成肝臟纖維化與功能受損。,cgmh_gastroenterology_scrape_manual_v1
+GI_ENDOSCOPIC_ULTRASOUND,內視鏡超音波,Endoscopic ultrasound,procedure,GI_ENDOSCOPY,內;視;鏡;超;音;波,,內;視;鏡;超;音;波,結合內視鏡與超音波評估消化道與周邊器官。,cgmh_gastroenterology_scrape_manual_v1
+GI_ENDOSCOPY,胃腸道內視鏡,Gastrointestinal endoscopy,procedure,GI_GASTROENTEROLOGY,內視鏡;胃鏡;腸鏡;大腸鏡;胃腸道內視鏡治療,,胃鏡;大腸鏡,以內視鏡檢查或治療消化道疾病。,cgmh_gastroenterology_scrape_manual_v1
+GI_FATTY_LIVER,脂肪肝,Fatty liver,disease_or_condition,GI_LIVER_DISEASE,脂;肪;肝,,肝包油,肝臟脂肪堆積相關疾病。,cgmh_gastroenterology_scrape_manual_v1
+GI_GASTROENTEROLOGY,胃腸肝膽科,Gastroenterology and hepatology,subspecialty,,胃腸科;腸胃科;肝膽腸胃科;胃腸疾病,,腸胃問題;肝膽腸胃問題,胃腸、肝膽胰與消化道疾病診療。,cgmh_gastroenterology_scrape_manual_v1
+GI_GASTROINTESTINAL_CANCER,消化道癌症,Gastrointestinal cancer,disease_or_condition,GI_GASTROENTEROLOGY,消化道癌症;腸胃道腫瘤;胃癌;大腸癌;大腸直腸癌,,腸胃道癌症,胃腸道相關惡性腫瘤。,cgmh_gastroenterology_scrape_manual_v1
+GI_GERD,胃食道逆流,Gastroesophageal reflux disease,disease_or_condition,GI_GASTROENTEROLOGY,逆流性食道炎;胃酸逆流,,火燒心;胃酸逆流,胃酸或胃內容物逆流造成食道症狀。,cgmh_gastroenterology_scrape_manual_v1
+GI_HEPATITIS_B,B型肝炎,Hepatitis B,disease_or_condition,GI_LIVER_DISEASE,B型肝炎病毒;B肝,,B肝,B型肝炎病毒感染與追蹤治療。,cgmh_gastroenterology_scrape_manual_v1
+GI_HEPATITIS_C,C型肝炎,Hepatitis C,disease_or_condition,GI_LIVER_DISEASE,C型肝炎;C肝,,C肝,C型肝炎病毒感染與治療。,cgmh_gastroenterology_scrape_manual_v1
+GI_INFLAMMATORY_BOWEL_DISEASE,發炎性腸道疾病,Inflammatory bowel disease,disease_or_condition,GI_GASTROENTEROLOGY,發炎性腸道疾病;IBD,,腸道慢性發炎,包含克隆氏症、潰瘍性結腸炎等慢性腸道發炎疾病。,cgmh_gastroenterology_scrape_manual_v1
+GI_LIVER_CANCER,肝癌,Liver cancer,disease_or_condition,GI_LIVER_DISEASE,肝癌;肝細胞癌;hepatocarcinogenesis;hepatocellular carcinoma,,肝癌,肝臟惡性腫瘤。,cgmh_gastroenterology_scrape_manual_v1
+GI_LIVER_DISEASE,肝臟疾病,Liver disease,disease_or_condition,GI_GASTROENTEROLOGY,肝臟學;肝病;肝膽,,肝臟問題,肝炎、脂肪肝、肝硬化或其他肝臟疾病。,cgmh_gastroenterology_scrape_manual_v1
+GYN_ADENOMYOSIS,子宮肌腺症,Adenomyosis,disease_or_condition,GYN_GENERAL_GYNECOLOGY,子宮肌腺症;子宮肌腺瘤;腺瘤;肌腺瘤,,子宮腺肌症,子宮內膜組織進入子宮肌層，可能造成經痛或經血過多。,cgmh_gynecology_scrape_manual_v1
+GYN_ASSISTED_REPRODUCTION,人工生殖,Assisted reproduction,procedure,GYN_INFERTILITY,人工生殖科技;人工受孕;人工授精;胚胎植入;取卵;排卵誘導,,人工受孕;做人工生殖,排卵誘導、人工授精、胚胎植入等生殖治療。,cgmh_gynecology_scrape_manual_v1
+GYN_CERVICAL_CANCER,子宮頸癌,Cervical cancer,disease_or_condition,GYN_GYNECOLOGIC_ONCOLOGY,子宮頸癌;子宮頸癌前期,,子宮頸癌,子宮頸惡性腫瘤或癌前病變。,cgmh_gynecology_scrape_manual_v1
+GYN_CHEMOTHERAPY,婦癌化學治療,Gynecologic cancer chemotherapy,procedure,GYN_GYNECOLOGIC_ONCOLOGY,化療;化學治療;熱化學治療,,婦癌化療,婦科癌症相關化學治療。,cgmh_gynecology_scrape_manual_v1
+GYN_CONTRACEPTION,避孕諮詢,Contraception counseling,procedure,GYN_GENERAL_GYNECOLOGY,避孕諮詢;優生保健,,避孕;想避孕,避孕方式與生育規劃諮詢。,cgmh_gynecology_scrape_manual_v1
+GYN_ENDOMETRIAL_CANCER,子宮內膜癌,Endometrial cancer,disease_or_condition,GYN_GYNECOLOGIC_ONCOLOGY,子宮內膜癌;子宮內膜癌症,,子宮內膜癌,子宮內膜惡性腫瘤。,cgmh_gynecology_scrape_manual_v1
+GYN_ENDOMETRIOSIS,子宮內膜異位症,Endometriosis,disease_or_condition,GYN_GENERAL_GYNECOLOGY,子宮內膜異位症;巧克力囊腫,,經痛很嚴重;巧克力囊腫,子宮內膜組織出現在子宮外造成疼痛、不孕或囊腫。,cgmh_gynecology_scrape_manual_v1
+GYN_FETAL_ULTRASOUND,胎兒高層次超音波,Detailed fetal ultrasound,imaging_or_test,GYN_PREGNANCY_CARE,高層次超音波;胎兒高層次超音波;胎兒心臟超音波;3D;4D,,胎兒超音波;高層次產檢,以超音波評估胎兒結構與發育。,cgmh_gynecology_scrape_manual_v1
+GYN_FREQUENT_URINATION,頻尿急尿,Urinary frequency and urgency,symptom,GYN_UROGYNECOLOGY,頻尿;急尿,,一直想尿尿;尿急,排尿頻率增加或突然強烈尿意。,cgmh_gynecology_scrape_manual_v1
+GYN_GENERAL_GYNECOLOGY,一般婦科疾病,General gynecology,subspecialty,GYN_OBSTETRICS_GYNECOLOGY,一般婦科疾病;一般婦科疾患;婦科疾病,,婦科問題,常見婦科疾病的診斷與治療。,cgmh_gynecology_scrape_manual_v1
+GYN_GYNECOLOGIC_ONCOLOGY,婦科癌症,Gynecologic oncology,subspecialty,GYN_OBSTETRICS_GYNECOLOGY,婦科癌症;婦癌;婦科腫瘤;婦科癌症手術,,婦科癌症;婦癌,子宮頸、子宮內膜、卵巢等婦科癌症診療。,cgmh_gynecology_scrape_manual_v1
+GYN_HIFU,海扶刀治療,High-intensity focused ultrasound,procedure,GYN_MINIMALLY_INVASIVE_SURGERY,海扶刀;海扶刀無創手術;消融手術;微波消融,,無傷口肌瘤治療,以聚焦超音波或消融方式治療特定子宮肌瘤或腺瘤。,cgmh_gynecology_scrape_manual_v1
+GYN_HIGH_RISK_PREGNANCY,高危險妊娠,High-risk pregnancy,disease_or_condition,GYN_PREGNANCY_CARE,高危險妊娠;高危妊娠,,高風險懷孕,需較密切追蹤的高風險孕產照護。,cgmh_gynecology_scrape_manual_v1
+GYN_HPV,人類乳突病毒,Human papillomavirus,disease_or_condition,GYN_CERVICAL_CANCER,人類乳突病毒;人類乳狀病毒;HPV,,HPV;子宮頸病毒,與子宮頸癌及癌前病變相關的病毒感染與篩檢。,cgmh_gynecology_scrape_manual_v1
+GYN_HYSTEROSCOPY,子宮鏡手術,Hysteroscopy,procedure,GYN_MINIMALLY_INVASIVE_SURGERY,子宮鏡;子宮鏡手術;子宮腔鏡;子宮鏡檢查;速潔刀,,子宮鏡,以子宮鏡檢查或治療子宮腔病灶。,cgmh_gynecology_scrape_manual_v1
+GYN_IMMUNOTHERAPY,婦癌免疫治療,Gynecologic cancer immunotherapy,procedure,GYN_GYNECOLOGIC_ONCOLOGY,免疫治療;免疫療法;免疫檢查抑制,,婦癌免疫治療,婦科癌症相關免疫治療策略。,cgmh_gynecology_scrape_manual_v1
+GYN_INFERTILITY,不孕症,Infertility,disease_or_condition,GYN_OBSTETRICS_GYNECOLOGY,不孕症;不孕症之診斷及治療,,想懷孕懷不上;不容易懷孕,受孕困難相關評估與治療。,cgmh_gynecology_scrape_manual_v1
+GYN_INTERSTITIAL_CYSTITIS,間質性膀胱炎,Interstitial cystitis,disease_or_condition,GYN_UROGYNECOLOGY,間質性膀胱炎,,膀胱反覆疼痛,慢性膀胱疼痛與頻尿急尿相關症候群。,cgmh_gynecology_scrape_manual_v1
+GYN_IVF,試管嬰兒,In vitro fertilization,procedure,GYN_INFERTILITY,試管嬰兒;IVF,,做試管,體外受精與胚胎植入治療。,cgmh_gynecology_scrape_manual_v1
+GYN_LAPAROSCOPIC_SURGERY,婦科腹腔鏡手術,Gynecologic laparoscopic surgery,procedure,GYN_MINIMALLY_INVASIVE_SURGERY,腹腔鏡;腹腔鏡手術;腹腔鏡微創手術,,婦科腹腔鏡,以腹腔鏡進行婦科診斷或手術。,cgmh_gynecology_scrape_manual_v1
+GYN_MENOPAUSE,更年期症狀,Menopausal symptoms,disease_or_condition,GYN_OBSTETRICS_GYNECOLOGY,更年期症狀;更年期症候群;更年期生殖泌尿道徵候群,,更年期不舒服;停經後不適,更年期相關身心、泌尿生殖或骨質變化。,cgmh_gynecology_scrape_manual_v1
+GYN_MENSTRUAL_DISORDER,月經失調,Menstrual disorder,symptom,GYN_REPRODUCTIVE_ENDOCRINOLOGY,月經失調,,月經不規則;經期亂,月經週期、出血量或規律性異常。,cgmh_gynecology_scrape_manual_v1
+GYN_MINIMALLY_INVASIVE_SURGERY,婦科微創手術,Gynecologic minimally invasive surgery,procedure,GYN_OBSTETRICS_GYNECOLOGY,微創手術;內視鏡微創手術;微創式;微創,,婦科微創手術,婦科以較小傷口或內視鏡方式進行手術。,cgmh_gynecology_scrape_manual_v1
+GYN_OBSTETRICS_GYNECOLOGY,婦產科,Obstetrics and gynecology,subspecialty,,婦產科學;一般婦產科,,婦產科問題;婦科或產科問題,婦科、產科與女性生殖健康相關診療。,cgmh_gynecology_scrape_manual_v1
+GYN_OVARIAN_CANCER,卵巢癌,Ovarian cancer,disease_or_condition,GYN_GYNECOLOGIC_ONCOLOGY,卵巢癌,,卵巢癌,卵巢惡性腫瘤。,cgmh_gynecology_scrape_manual_v1
+GYN_OVARIAN_TUMOR,卵巢腫瘤,Ovarian tumor,disease_or_condition,GYN_GENERAL_GYNECOLOGY,卵巢腫瘤;卵巢瘤;卵巢囊腫,,卵巢長腫瘤;卵巢囊腫,卵巢囊腫、良性或惡性腫瘤評估與治療。,cgmh_gynecology_scrape_manual_v1
+GYN_PCOS,多囊性卵巢症候群,Polycystic ovary syndrome,disease_or_condition,GYN_REPRODUCTIVE_ENDOCRINOLOGY,多囊性卵巢症候群;多囊性卵囊症候群;多囊性卵巢,,多囊,排卵、月經與代謝相關的生殖內分泌疾病。,cgmh_gynecology_scrape_manual_v1
+GYN_PELVIC_FLOOR_DYSFUNCTION,骨盆底肌功能異常,Pelvic floor dysfunction,disease_or_condition,GYN_UROGYNECOLOGY,骨盆底肌功能異常;骨盆重建;骨盆腔重建,,骨盆底無力,骨盆底肌肉或支撐功能異常。,cgmh_gynecology_scrape_manual_v1
+GYN_PELVIC_ORGAN_PROLAPSE,骨盆器官脫垂,Pelvic organ prolapse,disease_or_condition,GYN_UROGYNECOLOGY,骨盆底脫垂;子宮脫垂;膀胱脫垂;直腸脫出;子宮膀胱直腸脫出;盆底鬆弛脫垂,,子宮掉下來;陰道有東西掉出來,子宮、膀胱或直腸等骨盆器官支撐不足造成脫垂。,cgmh_gynecology_scrape_manual_v1
+GYN_PREGNANCY_CARE,產前檢查,Prenatal care,procedure,GYN_OBSTETRICS_GYNECOLOGY,產前檢查;一般產檢;產檢;自然生產;剖腹生產,,懷孕產檢;懷孕檢查,懷孕期間例行追蹤、自然產或剖腹產相關照護。,cgmh_gynecology_scrape_manual_v1
+GYN_PRENATAL_GENETIC_COUNSELING,產前遺傳諮詢,Prenatal genetic counseling,procedure,GYN_PREGNANCY_CARE,產前遺傳諮詢;產前基因遺傳諮詢;產前優生遺傳諮詢;羊膜穿刺;絨毛膜取樣;唐氏症篩檢,,胎兒基因檢查;唐氏症檢查,懷孕期間胎兒染色體、基因或遺傳風險評估。,cgmh_gynecology_scrape_manual_v1
+GYN_REPRODUCTIVE_ENDOCRINOLOGY,生殖內分泌,Reproductive endocrinology,subspecialty,GYN_INFERTILITY,生殖內分泌;內分泌異常,,女性荷爾蒙問題,生殖相關荷爾蒙與排卵問題。,cgmh_gynecology_scrape_manual_v1
+GYN_ROBOTIC_SURGERY,達文西婦科手術,Robotic gynecologic surgery,procedure,GYN_MINIMALLY_INVASIVE_SURGERY,達文西;達文西手術;達文西機械手臂手術,,機器手臂手術,使用達文西機械手臂輔助婦科手術。,cgmh_gynecology_scrape_manual_v1
+GYN_URINARY_INCONTINENCE,女性尿失禁,Female urinary incontinence,disease_or_condition,GYN_UROGYNECOLOGY,尿失禁;婦女尿失禁,,漏尿;咳嗽會漏尿,女性漏尿或尿液控制困難。,cgmh_gynecology_scrape_manual_v1
+GYN_URINARY_TRACT_INFECTION,婦女尿路感染,Female urinary tract infection,disease_or_condition,GYN_UROGYNECOLOGY,婦女尿路感染;尿路感染;泌尿道感染,,女生尿道感染;尿道發炎,女性泌尿道感染相關問題。,cgmh_gynecology_scrape_manual_v1
+GYN_UROGYNECOLOGY,婦女泌尿及骨盆醫學,Urogynecology,subspecialty,GYN_OBSTETRICS_GYNECOLOGY,婦女泌尿;婦女骨盆疾病;生殖泌尿道,,婦女泌尿問題;骨盆底問題,女性泌尿、骨盆底與骨盆器官脫垂相關診療。,cgmh_gynecology_scrape_manual_v1
+GYN_UTERINE_FIBROIDS,子宮肌瘤,Uterine fibroids,disease_or_condition,GYN_GENERAL_GYNECOLOGY,子宮肌瘤;肌瘤,,子宮長肌瘤,子宮平滑肌良性腫瘤，可造成經血多或壓迫症狀。,cgmh_gynecology_scrape_manual_v1
+HEME_ANEMIA,貧血,Anemia,disease_or_condition,HEME_HEMATOLOGY,貧;血,,血紅素低,紅血球或血紅素不足。,cgmh_hematology_scrape_manual_v1
+HEME_GENERAL_INTERNAL_MEDICINE,血液科一般內科,General internal medicine in hematology,subspecialty,HEME_HEMATOLOGY,內科,,一般內科問題,血液科門診中的一般內科評估。,cgmh_hematology_scrape_manual_v1
+HEME_HEMATOLOGY,血液科,Hematology,subspecialty,,血液病;血液疾病,,血液問題,血液疾病、血球異常與血液腫瘤診療。,cgmh_hematology_scrape_manual_v1
+HEME_HEMOPHILIA,血友病,Hemophilia,disease_or_condition,HEME_HEMATOLOGY,血;友;病,,凝血異常,先天性凝血因子缺乏造成出血傾向。,cgmh_hematology_scrape_manual_v1
+HEME_LEUKEMIA,白血病,Leukemia,disease_or_condition,HEME_HEMATOLOGY,白血病;血癌,,血癌,造血系統惡性疾病。,cgmh_hematology_scrape_manual_v1
+HEME_LYMPHOMA,淋巴瘤,Lymphoma,disease_or_condition,HEME_HEMATOLOGY,淋;巴;瘤,,淋巴癌,淋巴系統惡性腫瘤。,cgmh_hematology_scrape_manual_v1
+HEME_STEM_CELL_TRANSPLANT,血液幹細胞移植,Hematopoietic stem cell transplant,procedure,HEME_HEMATOLOGY,血液幹細胞移植;骨髓移植,,造血幹細胞移植,以造血幹細胞重建血液與免疫系統的治療。,cgmh_hematology_scrape_manual_v1
+ID_FEVER,發燒,Fever,symptom,ID_INFECTIOUS_DISEASE,發熱,,發燒,體溫升高，常與感染或發炎相關。,cgmh_infectious_disease_scrape_manual_v1
+ID_GENERAL_INTERNAL_MEDICINE,內科疾病,General internal medicine,subspecialty,ID_INFECTIOUS_DISEASE,內科疾病,,一般內科問題,一般內科疾病評估。,cgmh_infectious_disease_scrape_manual_v1
+ID_HIV,愛滋病,HIV infection,disease_or_condition,ID_INFECTIOUS_DISEASE,HIV;愛滋,,愛滋病,人類免疫缺乏病毒感染照護。,cgmh_infectious_disease_scrape_manual_v1
+ID_INFECTIOUS_DISEASE,感染醫學,Infectious disease,subspecialty,,感染科;感染管制;感染症,,感染問題,感染性疾病診斷、治療與感染管制。,cgmh_infectious_disease_scrape_manual_v1
+ID_LIVER_ABSCESS,肝膿瘍,Liver abscess,disease_or_condition,ID_INFECTIOUS_DISEASE,肝膿瘍;克雷白氏菌肝膿瘍,,肝臟化膿感染,肝臟膿瘍或相關細菌感染。,cgmh_infectious_disease_scrape_manual_v1
+ID_MICROBIAL_INFECTION,微生物感染,Microbial infection,disease_or_condition,ID_INFECTIOUS_DISEASE,微生物感染,,細菌病毒感染,微生物造成的感染性疾病。,cgmh_infectious_disease_scrape_manual_v1
+ID_MYCOBACTERIAL_INFECTION,分枝桿菌感染,Mycobacterial infection,disease_or_condition,ID_INFECTIOUS_DISEASE,分枝桿菌,,分枝桿菌感染,分枝桿菌相關感染診治。,cgmh_infectious_disease_scrape_manual_v1
+ID_URINARY_TRACT_INFECTION,泌尿道感染,Urinary tract infection,disease_or_condition,ID_INFECTIOUS_DISEASE,尿路感染;泌尿道感染,,尿道感染,泌尿系統感染。,cgmh_infectious_disease_scrape_manual_v1
+NEPHRO_AKI,急性腎損傷,Acute kidney injury,disease_or_condition,NEPHRO_NEPHROLOGY,急性腎臟疾病;急性腎衰竭,,腎功能突然變差,短時間內腎功能急速惡化。,cgmh_nephrology_scrape_manual_v1
+NEPHRO_CKD,慢性腎臟病,Chronic kidney disease,disease_or_condition,NEPHRO_NEPHROLOGY,慢性腎臟疾病;急慢性腎臟疾病;腎臟病,,腎功能不好,慢性腎功能下降與相關併發症。,cgmh_nephrology_scrape_manual_v1
+NEPHRO_DIABETIC_KIDNEY_DISEASE,糖尿病腎臟病變,Diabetic kidney disease,disease_or_condition,NEPHRO_CKD,糖尿病腎病變,,糖尿病影響腎臟,糖尿病造成的腎臟損傷。,cgmh_nephrology_scrape_manual_v1
+NEPHRO_HEMODIALYSIS,血液透析,Hemodialysis,procedure,NEPHRO_NEPHROLOGY,洗腎;血液透析,,洗腎,以血液透析替代部分腎臟功能。,cgmh_nephrology_scrape_manual_v1
+NEPHRO_HYPERTENSION_KIDNEY_DISEASE,高血壓腎臟病變,Hypertensive kidney disease,disease_or_condition,NEPHRO_CKD,高血壓腎病變,,高血壓影響腎臟,高血壓相關腎臟損傷。,cgmh_nephrology_scrape_manual_v1
+NEPHRO_KIDNEY_FIBROSIS,腎纖維化,Kidney fibrosis,disease_or_condition,NEPHRO_CKD,腎纖維化研究,,腎臟纖維化,腎臟慢性損傷後纖維化變化。,cgmh_nephrology_scrape_manual_v1
+NEPHRO_KIDNEY_TRANSPLANT,腎臟移植,Kidney transplant,procedure,NEPHRO_NEPHROLOGY,腎;臟;移;植,,換腎,腎臟移植評估與追蹤。,cgmh_nephrology_scrape_manual_v1
+NEPHRO_NEPHROLOGY,腎臟科,Nephrology,subspecialty,,腎臟疾病;腎臟病,,腎臟問題,腎臟疾病、透析與腎臟移植相關診療。,cgmh_nephrology_scrape_manual_v1
+NEPHRO_PERITONEAL_DIALYSIS,腹膜透析,Peritoneal dialysis,procedure,NEPHRO_NEPHROLOGY,腹;膜;透;析,,腹膜洗腎,以腹膜透析替代部分腎臟功能。,cgmh_nephrology_scrape_manual_v1
+NEURO_ALZHEIMER_DISEASE,阿茲海默症,Alzheimer disease,disease_or_condition,NEURO_DEMENTIA,阿茲海默症,,阿茲海默,常見退化性失智症原因。,cgmh_neurology_scrape_manual_v1
+NEURO_ATAXIA,共濟失調,Ataxia,disease_or_condition,NEURO_MOVEMENT_DISORDERS,共濟失調;脊髓小腦共濟失調症;小腦萎縮;脊髓小腦萎縮症,,走路不穩;平衡不好,協調和平衡能力異常。,cgmh_neurology_scrape_manual_v1
+NEURO_AUTOIMMUNE_ENCEPHALITIS,自體免疫性腦炎,Autoimmune encephalitis,disease_or_condition,NEURO_NEUROLOGY,自體免疫性腦炎;神經免疫疾病,,免疫造成腦部發炎,免疫系統攻擊腦部造成的神經症狀。,cgmh_neurology_scrape_manual_v1
+NEURO_BOTULINUM_TOXIN_INJECTION,肉毒桿菌素注射治療,Botulinum toxin injection,procedure,NEURO_MOVEMENT_DISORDERS,肉毒桿菌素注射;肉毒桿菌注射;肉毒桿菌治療,,肉毒注射,用於特定肌張力、動作障礙或疼痛相關治療。,cgmh_neurology_scrape_manual_v1
+NEURO_BRAIN_TUMOR,腦部腫瘤,Brain tumor,disease_or_condition,NEURO_NEUROLOGY,腦部腫瘤,,腦部長腫瘤,腦部腫瘤相關神經症狀與照護。,cgmh_neurology_scrape_manual_v1
+NEURO_CEREBROVASCULAR_DISEASE,腦血管疾病,Cerebrovascular disease,disease_or_condition,NEURO_NEUROLOGY,腦血管疾病,,腦血管問題,腦部血管相關疾病，包含中風風險與相關照護。,cgmh_neurology_scrape_manual_v1
+NEURO_DEEP_BRAIN_STIMULATION,深層腦部刺激術,Deep brain stimulation,procedure,NEURO_MOVEMENT_DISORDERS,深部腦刺激術;深層腦部刺激術,,腦部刺激治療,以植入刺激裝置治療特定動作障礙疾病。,cgmh_neurology_scrape_manual_v1
+NEURO_DEMENTIA,失智症,Dementia,disease_or_condition,NEURO_NEUROLOGY,年輕型失智症;認知功能障礙;退化性腦部疾病,,記憶變差;認知退化,記憶、語言、判斷或日常功能退化。,cgmh_neurology_scrape_manual_v1
+NEURO_DIZZINESS_VERTIGO,頭暈與眩暈,Dizziness and vertigo,symptom,NEURO_NEUROLOGY,頭暈;眩暈;眩暈症,,會暈;天旋地轉,頭暈、平衡感異常或旋轉感。,cgmh_neurology_scrape_manual_v1
+NEURO_DYSTONIA,肌張力不全,Dystonia,disease_or_condition,NEURO_MOVEMENT_DISORDERS,肌張力不全,,肌肉不自主收縮,肌肉不自主收縮造成姿勢或動作異常。,cgmh_neurology_scrape_manual_v1
+NEURO_EPILEPSY,癲癇症,Epilepsy,disease_or_condition,NEURO_NEUROLOGY,癲癇;麻將癲癇;音樂癲癇;反射性癲癇,,抽搐;癲癇發作,反覆癲癇發作或腦部異常放電相關疾病。,cgmh_neurology_scrape_manual_v1
+NEURO_EPILEPSY_SURGERY_EVALUATION,癲癇手術評估,Epilepsy surgery evaluation,procedure,NEURO_EPILEPSY,癲癇外科手術評估;癲癇外科手術定位;癲癇外科手術立體定位;癲癇手術術前評估,,癲癇手術評估,針對癲癇是否適合手術或定位治療的評估。,cgmh_neurology_scrape_manual_v1
+NEURO_HEADACHE,頭痛,Headache,symptom,NEURO_NEUROLOGY,急/慢性頭痛;慢性頭痛,,頭痛;頭很痛,頭部疼痛，可包含急性、慢性或其他神經相關頭痛。,cgmh_neurology_scrape_manual_v1
+NEURO_HYDROCEPHALUS,水腦症,Hydrocephalus,disease_or_condition,NEURO_NEUROLOGY,水腦症,,腦積水,腦脊髓液循環異常造成腦室擴大。,cgmh_neurology_scrape_manual_v1
+NEURO_MIGRAINE,偏頭痛,Migraine,disease_or_condition,NEURO_HEADACHE,偏頭痛,,偏頭痛;單側頭痛,反覆發作的頭痛型態，可能伴隨噁心、怕光或其他症狀。,cgmh_neurology_scrape_manual_v1
+NEURO_MOVEMENT_DISORDERS,動作障礙疾病,Movement disorders,subspecialty,NEURO_NEUROLOGY,動作障礙;顫抖症,,動作不順;手抖,影響動作控制的神經疾病。,cgmh_neurology_scrape_manual_v1
+NEURO_MULTIPLE_SCLEROSIS,多發性硬化症,Multiple sclerosis,disease_or_condition,NEURO_NEUROLOGY,多發性硬化症,,多發性硬化,中樞神經免疫相關脫髓鞘疾病。,cgmh_neurology_scrape_manual_v1
+NEURO_MYASTHENIA_GRAVIS,重症肌無力症,Myasthenia gravis,disease_or_condition,NEURO_NEUROMUSCULAR_DISEASE,重症肌無力症,,容易肌肉無力,自體免疫相關神經肌肉接合處疾病，造成易疲勞無力。,cgmh_neurology_scrape_manual_v1
+NEURO_MYOCONUS,肌躍症,Myoclonus,disease_or_condition,NEURO_MOVEMENT_DISORDERS,肌躍症;肌躍動症;肌抽躍,,肌肉突然抽動,短暫、快速的不自主肌肉抽動。,cgmh_neurology_scrape_manual_v1
+NEURO_NEUROGENETICS,神經遺傳疾病,Neurogenetic disorders,disease_or_condition,NEURO_NEUROLOGY,神經遺傳學;神經遺傳性疾病;遺傳性神經退化疾病;遺傳性神經性疾病;亨丁頓氏舞蹈症;亨丁頓舞蹈症,,遺傳性神經疾病,與遺傳相關的神經退化或動作障礙疾病。,cgmh_neurology_scrape_manual_v1
+NEURO_NEUROLOGY,神經內科,Neurology,subspecialty,,一般神經科;一般神經疾病;神經科,,神經問題,神經系統疾病與症狀的內科診療。,cgmh_neurology_scrape_manual_v1
+NEURO_NEUROMUSCULAR_DISEASE,神經肌肉疾病,Neuromuscular disease,disease_or_condition,NEURO_NEUROLOGY,神經肌肉疾病;肌肉病變,,肌肉無力;神經肌肉問題,影響神經與肌肉功能的疾病。,cgmh_neurology_scrape_manual_v1
+NEURO_NEUROPATHIC_PAIN,神經性疼痛,Neuropathic pain,symptom,NEURO_NEUROLOGY,病態性神經疼痛,,麻痛刺痛,神經病變造成的疼痛、灼熱、麻刺或異常感覺。,cgmh_neurology_scrape_manual_v1
+NEURO_NMOSD,視神經脊髓炎,Neuromyelitis optica spectrum disorder,disease_or_condition,NEURO_NEUROLOGY,泛視神經脊髓炎;視神經脊髓炎,,視神經脊髓發炎,影響視神經與脊髓的自體免疫疾病。,cgmh_neurology_scrape_manual_v1
+NEURO_PARKINSON_DISEASE,巴金森氏症,Parkinson disease,disease_or_condition,NEURO_MOVEMENT_DISORDERS,巴金森症;帕金森病;帕金森症;巴金森氏病,,巴金森;手抖動作變慢,常見動作障礙疾病，可能造成顫抖、僵硬、動作變慢或步態問題。,cgmh_neurology_scrape_manual_v1
+NEURO_PERIPHERAL_NERVE_DISEASE,周邊神經疾病,Peripheral nerve disease,disease_or_condition,NEURO_NEUROLOGY,週邊神經疾病;周邊神經肌肉疾病;遺傳性神經病變,,周邊神經問題;手腳麻,周邊神經病變或神經肌肉相關問題。,cgmh_neurology_scrape_manual_v1
+NEURO_REFRACTORY_EPILEPSY,頑固型癲癇,Refractory epilepsy,disease_or_condition,NEURO_EPILEPSY,頑固型癲癇藥物;頑固型癲癇治療,,藥物控制不好的癲癇,藥物治療仍難以控制的癲癇。,cgmh_neurology_scrape_manual_v1
+NEURO_SLEEP_DISORDERS,睡眠障礙,Sleep disorders,disease_or_condition,NEURO_NEUROLOGY,神經性睡眠障礙;夜間不自主運動;睡眠不足,,睡不好;睡覺會亂動,睡眠品質、睡眠行為或夜間動作異常相關問題。,cgmh_neurology_scrape_manual_v1
+NEURO_STROKE,腦中風,Stroke,disease_or_condition,NEURO_CEREBROVASCULAR_DISEASE,中風;脊髓中風,,中風,腦部或脊髓血流異常造成的急性神經功能缺損。,cgmh_neurology_scrape_manual_v1
+NEURO_TMS,經顱磁刺激術,Transcranial magnetic stimulation,procedure,NEURO_NEUROLOGY,經顱磁刺激術;穿顱磁刺激術,,磁刺激治療,非侵入性腦部磁刺激治療或評估。,cgmh_neurology_scrape_manual_v1
+NEURO_TREMOR,震顫,Tremor,symptom,NEURO_MOVEMENT_DISORDERS,震顫;顫抖症,,手抖;發抖,身體部位不自主規律抖動。,cgmh_neurology_scrape_manual_v1
+NEURO_VASCULAR_DEMENTIA,血管性失智症,Vascular dementia,disease_or_condition,NEURO_DEMENTIA,血管性失智症,,中風後記憶退化,與腦血管疾病相關的認知退化。,cgmh_neurology_scrape_manual_v1
+ONCO_BREAST_CANCER,乳癌,Breast cancer,disease_or_condition,ONCO_ONCOLOGY,乳癌,,乳房癌症,乳房惡性腫瘤。,cgmh_oncology_scrape_manual_v1
+ONCO_ESOPHAGEAL_CANCER,食道癌,Esophageal cancer,disease_or_condition,ONCO_ONCOLOGY,食道癌,,食道癌,食道惡性腫瘤。,cgmh_oncology_scrape_manual_v1
+ONCO_GENERAL_INTERNAL_MEDICINE,腫瘤科一般內科,General internal medicine in oncology,subspecialty,ONCO_ONCOLOGY,內科,,一般內科問題,腫瘤科門診中的一般內科評估。,cgmh_oncology_scrape_manual_v1
+ONCO_GI_CANCER,腸胃道腫瘤,Gastrointestinal cancer,disease_or_condition,ONCO_ONCOLOGY,腸胃道腫瘤;大腸直腸癌;大腸癌;胃癌,,腸胃道癌症,胃腸道相關癌症。,cgmh_oncology_scrape_manual_v1
+ONCO_HEAD_AND_NECK_CANCER,頭頸癌,Head and neck cancer,disease_or_condition,ONCO_ONCOLOGY,頭頸癌,,頭頸部癌症,頭頸部惡性腫瘤。,cgmh_oncology_scrape_manual_v1
+ONCO_IMMUNO_ONCOLOGY,免疫腫瘤治療,Immuno-oncology,procedure,ONCO_ONCOLOGY,免疫腫瘤;免疫治療,,癌症免疫治療,使用免疫相關治療策略治療癌症。,cgmh_oncology_scrape_manual_v1
+ONCO_LIVER_CANCER,肝癌,Liver cancer,disease_or_condition,ONCO_ONCOLOGY,肝癌,,肝癌,肝臟惡性腫瘤。,cgmh_oncology_scrape_manual_v1
+ONCO_LUNG_CANCER,肺癌,Lung cancer,disease_or_condition,ONCO_ONCOLOGY,肺癌,,肺癌,肺部惡性腫瘤。,cgmh_oncology_scrape_manual_v1
+ONCO_MELANOMA,黑色素癌,Melanoma,disease_or_condition,ONCO_ONCOLOGY,黑色素癌;黑色素瘤,,黑色素癌,黑色素細胞惡性腫瘤。,cgmh_oncology_scrape_manual_v1
+ONCO_NEUROENDOCRINE_TUMOR,神經內分泌瘤,Neuroendocrine tumor,disease_or_condition,ONCO_ONCOLOGY,神經內分泌瘤,,神經內分泌腫瘤,神經內分泌細胞來源的腫瘤。,cgmh_oncology_scrape_manual_v1
+ONCO_ONCOLOGY,腫瘤科,Oncology,subspecialty,,癌症治療;固體腫瘤;腫瘤學,,癌症;腫瘤問題,惡性腫瘤與癌症治療諮詢。,cgmh_oncology_scrape_manual_v1
+ONCO_PALLIATIVE_CARE,安寧療護,Palliative care,subspecialty,ONCO_ONCOLOGY,安寧療護,,安寧照護,針對嚴重疾病或癌症病人的症狀緩和與照護。,cgmh_oncology_scrape_manual_v1
+ONCO_UROLOGIC_CANCER,泌尿道腫瘤,Urologic cancer,disease_or_condition,ONCO_ONCOLOGY,泌尿道腫瘤;泌尿道癌,,泌尿系統癌症,泌尿系統相關癌症。,cgmh_oncology_scrape_manual_v1
+ORTHO_ACL_INJURY,前十字韌帶損傷,ACL injury,disease_or_condition,ORTHO_LIGAMENT_INJURY,前十字韌帶斷裂;ACL injury,,前十字韌帶受傷,膝關節前十字韌帶受傷，常見於運動傷害。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_ARTHROPLASTY,人工關節置換,Arthroplasty,procedure,ORTHO_JOINT_RECONSTRUCTION,人工關節置換手術;人工關節重建手術,,換人工關節,以人工關節取代嚴重損壞的關節。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_ARTHROSCOPIC_SURGERY,關節鏡手術,Arthroscopic surgery,procedure,,微創關節鏡手術;關節鏡,,關節內視鏡手術,以關節鏡檢查或治療關節內問題。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_BONE_INFECTION,骨科感染,Orthopedic infection,disease_or_condition,,骨科感染學;感染性髖關節,,骨科感染,骨、關節或人工植入物相關感染。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_BONE_SPUR,骨刺,Bone spur,disease_or_condition,,脊椎骨刺,,長骨刺,骨頭邊緣增生，可能造成疼痛或神經壓迫。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_BONE_TUMOR,骨骼腫瘤,Bone tumor,disease_or_condition,,肌肉及骨骼腫瘤;骨骼及軟組織腫瘤,,骨頭或軟組織腫瘤,骨骼或軟組織腫瘤相關診療。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_CEREBRAL_PALSY,腦性麻痺,Cerebral palsy,disease_or_condition,ORTHO_PEDIATRIC_ORTHOPEDICS,,,腦麻,腦性麻痺造成的肌肉張力、步態或骨骼關節問題。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_CERVICAL_SPINE,頸椎,Cervical spine,anatomy,ORTHO_SPINE,上頸椎,,脖子的脊椎,位於頸部的脊椎。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_COMPLEX_FRACTURE,複雜骨折,Complex fracture,disease_or_condition,ORTHO_FRACTURE,複雜性骨折;四肢複雜骨折;爆裂性骨折,,嚴重骨折,較複雜或嚴重的骨折，常需重建或固定手術。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_DDH,兒童髖關節發育不良,Developmental dysplasia of the hip,disease_or_condition,ORTHO_PEDIATRIC_ORTHOPEDICS,髖關節發育不良,,小孩髖關節發育問題,兒童髖關節發育異常造成不穩或脫位風險。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_DIABETIC_FOOT,糖尿病足,Diabetic foot,disease_or_condition,ORTHO_FOOT_ANKLE,,,糖尿病腳傷口,糖尿病造成足部傷口、感染或循環神經問題。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_ELBOW,肘關節,Elbow,anatomy,,肘;肘部,,手肘,上臂與前臂之間的關節。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_ENDOSCOPIC_SURGERY,內視鏡手術,Endoscopic surgery,procedure,,脊椎內視鏡手術;脊椎微創內視鏡手術,,內視鏡手術,使用內視鏡輔助進行的手術。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_FEMORAL_HEAD_AVN,股骨頭缺血性壞死,Avascular necrosis of femoral head,disease_or_condition,ORTHO_HIP_OSTEOARTHRITIS,股骨頭骨壞死,,股骨頭壞死,股骨頭血流不足造成骨壞死與髖關節疼痛。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_FOOT_ANKLE,足踝疾病,Foot and ankle disorders,subspecialty,,足踝;足踝病變;足踝疾患;足踝關節重建,,腳踝問題;足踝問題;足踝疼痛,足部與踝關節疾病、變形或外傷。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_FOOT_ANKLE_ANATOMY,足踝,Foot and ankle,anatomy,,足;踝;腳部足踝,,腳踝;腳,足部與踝關節。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_FRACTURE,骨折,Fracture,disease_or_condition,ORTHO_TRAUMA,一般骨折;骨折外傷;一般骨折外傷;外傷骨折,,骨頭斷掉,骨頭因外力或骨質脆弱而斷裂。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_HALLUX_VALGUS,大姆趾外翻,Hallux valgus,disease_or_condition,ORTHO_FOOT_ANKLE,拇趾外翻,,大腳趾外翻,大腳趾向外偏斜造成疼痛或穿鞋困難。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_HAND,手,Hand,anatomy,,手部;上肢,,手,手掌、手指與相關肌腱骨骼。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_HAND_DISORDERS,手部疾病,Hand disorders,subspecialty,,手部病變;手外科;手部外科,,手部問題,手部疾病、外傷或功能障礙。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_HIP,髖關節,Hip,anatomy,,髖;髖部,,髖部;胯下關節,骨盆與大腿骨之間的關節。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_HIP_ARTHROPLASTY,人工髖關節置換,Total hip arthroplasty,procedure,ORTHO_JOINT_RECONSTRUCTION,人工髖關節置換手術;人工髖關節表面置換,,換人工髖關節,以人工關節取代嚴重退化、壞死或損壞的髖關節。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_HIP_OSTEOARTHRITIS,髖關節退化,Hip osteoarthritis,disease_or_condition,ORTHO_OSTEOARTHRITIS,髖部疾患,,髖關節退化,髖關節退化造成鼠蹊或髖部疼痛。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_HYPERBARIC_OXYGEN,高壓氧治療,Hyperbaric oxygen therapy,procedure,,高壓氧醫學;高壓氧醫療,,高壓氧,利用高壓氧輔助傷口、感染或組織修復。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_INJECTION_THERAPY,注射治療,Injection therapy,procedure,,超音波導引注射;超音波檢查與注射治療;玻尿酸;PRP;神經阻斷,,打針治療,以藥物、玻尿酸、PRP或神經阻斷等注射方式治療疼痛或關節問題。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_JOINT_RECONSTRUCTION,關節重建,Joint reconstruction,subspecialty,,關節重建手術;髖關節與膝關節重建手術,,關節重建,針對關節退化、損傷或人工關節問題的重建治療。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_KNEE,膝關節,Knee,anatomy,,膝;膝部,,膝蓋,大腿與小腿之間的關節。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_KNEE_ARTHROPLASTY,人工膝關節置換,Total knee arthroplasty,procedure,ORTHO_JOINT_RECONSTRUCTION,膝人工關節置換;人工膝關節置換手術,,換人工膝關節,以人工關節取代嚴重退化或損壞的膝關節。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_KNEE_OSTEOARTHRITIS,膝關節退化,Knee osteoarthritis,disease_or_condition,ORTHO_OSTEOARTHRITIS,膝部疾患,,膝蓋退化,膝關節退化造成疼痛、變形或行走困難。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_LIGAMENT_INJURY,韌帶損傷,Ligament injury,disease_or_condition,ORTHO_SPORTS_MEDICINE,韌帶重建;膝韌帶重建,,韌帶受傷,韌帶拉傷、斷裂或不穩定。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_LOWER_LIMB_FRACTURE,下肢骨折,Lower limb fracture,disease_or_condition,ORTHO_FRACTURE,四肢骨折,,腿部骨折,髖、膝、踝、足等下肢骨折或外傷。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_LUMBAR_SPINE,腰椎,Lumbar spine,anatomy,ORTHO_SPINE,胸腰椎,,腰部脊椎,位於腰部的脊椎。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_MENISCUS_INJURY,半月板損傷,Meniscus injury,disease_or_condition,ORTHO_SPORTS_MEDICINE,半月軟骨損傷;半月板受傷;半月板,,膝蓋半月板受傷,膝關節半月板撕裂或退化。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_MINIMALLY_INVASIVE_SURGERY,微創手術,Minimally invasive surgery,procedure_modifier,,微創脊椎手術;骨折微創手術,,傷口較小的手術,以較小傷口或較少組織破壞完成治療。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_OSTEOARTHRITIS,退化性關節炎,Osteoarthritis,disease_or_condition,ORTHO_JOINT_RECONSTRUCTION,骨關節退化;關節炎,,關節退化;關節磨損,關節軟骨退化造成疼痛與活動受限。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_OSTEOMYELITIS,骨髓炎,Osteomyelitis,disease_or_condition,ORTHO_TRAUMA,,,骨頭感染,骨頭感染造成疼痛、發炎或傷口問題。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_OSTEOPOROSIS,骨質疏鬆,Osteoporosis,disease_or_condition,,骨質疏鬆症;骨鬆,,骨頭變脆;骨鬆,骨密度下降，增加骨折風險。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_PEDIATRIC_FRACTURE,小兒骨折,Pediatric fracture,disease_or_condition,ORTHO_PEDIATRIC_ORTHOPEDICS,,,兒童骨折,兒童或青少年骨折。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_PEDIATRIC_ORTHOPEDICS,小兒骨科,Pediatric orthopedics,subspecialty,,兒童先天疾患,,兒童骨科問題,兒童骨骼、關節、脊椎與先天問題。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_PELVIC_FRACTURE,骨盆骨折,Pelvic fracture,disease_or_condition,ORTHO_FRACTURE,骨盆外傷,,骨盆斷裂,骨盆環或髖臼相關骨折。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_PELVIS,骨盆,Pelvis,anatomy,,骨盆,,骨盆,連接脊椎與下肢的骨盆結構。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_PERIPROSTHETIC_JOINT_INFECTION,人工關節感染,Periprosthetic joint infection,disease_or_condition,ORTHO_JOINT_RECONSTRUCTION,人工關節感染治療,,人工關節發炎感染,人工關節周圍感染，需要抗生素或手術處理。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_PROSTHESIS_LOOSENING,人工關節鬆脫,Prosthesis loosening,disease_or_condition,ORTHO_REVISION_ARTHROPLASTY,人工關節毀損,,人工關節鬆掉,人工關節固定不穩或磨損導致疼痛與功能受限。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_REGENERATIVE_MEDICINE,再生醫學,Regenerative medicine,procedure_modifier,,幹細胞;PRP;自體高濃縮血小板;組織工程,,再生治療,使用細胞、血小板或生物材料輔助修復的治療方向。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_REVISION_ARTHROPLASTY,人工關節翻修,Revision arthroplasty,procedure,ORTHO_JOINT_RECONSTRUCTION,人工關節再置換;人工膝關節及人工髖關節再置換;膝人工關節毀損後再置換,,人工關節重做,針對既有人工關節鬆脫、感染或磨損進行重新手術。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_ROTATOR_CUFF_INJURY,肩旋轉肌袖損傷,Rotator cuff injury,disease_or_condition,ORTHO_SPORTS_MEDICINE,旋轉肌袖損傷,,肩膀肌腱受傷,肩部旋轉肌袖肌腱受傷造成疼痛或無力。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SHOULDER,肩關節,Shoulder,anatomy,,肩,,肩膀,肩部關節與周邊肌腱韌帶。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SHOULDER_INSTABILITY,肩關節不穩定,Shoulder instability,disease_or_condition,ORTHO_SPORTS_MEDICINE,肩關節不穩,,肩膀容易脫臼,肩關節穩定度不足，可能反覆脫臼或疼痛。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE,脊椎疾病,Spine disorders,subspecialty,,脊椎病變;脊椎退化;脊椎退化性病變;脊椎外科,,脊椎問題;背骨問題,脊椎退化、外傷、感染、腫瘤或神經壓迫相關問題。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_COMPRESSION_FRACTURE,壓迫性骨折,Compression fracture,disease_or_condition,ORTHO_SPINE_FRACTURE,壓迫骨折;骨鬆性壓迫骨折;胸腰椎壓迫性骨折,,脊椎壓扁;骨鬆壓迫性骨折,常見於骨質疏鬆或外傷造成的脊椎椎體壓扁。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_DECOMPRESSION,脊椎減壓手術,Spinal decompression,procedure,ORTHO_SPINE,減壓手術;減壓與融合手術,,神經減壓手術,解除脊椎神經受壓。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_DEGENERATIVE_DISEASE,脊椎退化性疾病,Degenerative spine disease,disease_or_condition,ORTHO_SPINE,脊椎退化性病變;頸椎退化性疾病;腰椎退化性疾病;退化性疾患,,脊椎退化;脊椎老化,脊椎因退化造成疼痛、狹窄、滑脫或神經壓迫。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_DISC_HERNIATION,椎間盤突出,Disc herniation,disease_or_condition,ORTHO_SPINE,椎間盤軟骨突出;椎間盤病變,,椎間盤突出;椎間盤壓到神經,椎間盤突出造成疼痛、麻木或神經壓迫症狀。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_ENDOSCOPIC_SURGERY,脊椎內視鏡手術,Endoscopic spine surgery,procedure,ORTHO_ENDOSCOPIC_SURGERY,微創脊椎內視鏡;內視鏡椎間盤手術,,脊椎內視鏡手術,使用內視鏡進行脊椎減壓、椎間盤或相關治療。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_FRACTURE,脊椎骨折,Spinal fracture,disease_or_condition,ORTHO_SPINE,胸腰椎外傷;脊椎外傷,,脊椎骨斷掉,脊椎骨因外傷或骨質疏鬆造成骨折。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_FUSION,脊椎融合手術,Spinal fusion,procedure,ORTHO_SPINE,脊椎融合;融合固定術;脊椎微創減壓融合術,,脊椎固定手術,將不穩定或病變脊椎節段固定融合。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_INFECTION,脊椎感染,Spinal infection,disease_or_condition,ORTHO_SPINE,脊椎感染性疾病,,脊椎發炎感染,脊椎骨或周邊組織感染。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_KYPHOSIS,駝背,Kyphosis,disease_or_condition,ORTHO_SPINE,駝背畸形,,駝背,脊椎向後彎曲增加造成背部外觀或功能問題。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_LOW_BACK_PAIN,下背痛,Low back pain,symptom,ORTHO_SPINE,腰痛;背痛,,腰痠背痛;腰痛,腰背部疼痛，可與肌肉、關節或神經壓迫相關。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_NECK_SHOULDER_PAIN,肩頸痛,Neck and shoulder pain,symptom,ORTHO_SPINE,頸痛;頸部疼痛,,肩頸痠痛;脖子痛,頸部或肩頸區域疼痛。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_SCIATICA,坐骨神經痛,Sciatica,symptom,ORTHO_SPINE,,,屁股痛到腳麻;坐骨神經痛,坐骨神經受到刺激或壓迫造成臀腿疼痛或麻木。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_SCOLIOSIS,脊椎側彎,Scoliosis,disease_or_condition,ORTHO_SPINE,腰椎側彎,,脊椎歪斜,脊椎向側面彎曲的變形。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_SPONDYLOLISTHESIS,脊椎滑脫,Spondylolisthesis,disease_or_condition,ORTHO_SPINE,腰椎滑脫;頸椎滑脫,,脊椎位移,上下脊椎骨位置滑移，可能造成疼痛或神經壓迫。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_STENOSIS,脊椎管狹窄,Spinal stenosis,disease_or_condition,ORTHO_SPINE,椎管狹窄,,脊椎神經通道變窄,脊椎管變窄造成神經壓迫。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPINE_TUMOR,脊椎腫瘤,Spinal tumor,disease_or_condition,ORTHO_SPINE,脊椎骨骼及神經腫瘤;轉移性脊椎腫瘤;Metastatic spine disease,,脊椎長腫瘤,脊椎原發或轉移性腫瘤。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_SPORTS_MEDICINE,運動傷害,Sports injury,subspecialty,,運動醫學;腳部足踝運動傷害,,運動受傷,運動造成的肌肉、韌帶、關節或骨骼傷害。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_TRAUMA,骨科外傷,Orthopedic trauma,subspecialty,,骨外傷科;重大外傷;骨科外傷重建,,骨科外傷,骨折、脫臼或嚴重肢體外傷照護。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_ULTRASOUND,超音波檢查,Ultrasound,imaging_or_test,,超音波檢查;超音波導引;超音波引導,,超音波,使用超音波評估軟組織、關節或引導注射。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_UPPER_LIMB_FRACTURE,上肢骨折,Upper limb fracture,disease_or_condition,ORTHO_FRACTURE,上肢疾患;四肢骨折,,手臂骨折,肩、肘、腕、手等上肢骨折或外傷。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_VERTEBROPLASTY,骨水泥灌注治療,Vertebroplasty,procedure,ORTHO_SPINE_COMPRESSION_FRACTURE,骨水泥;脊椎灌漿手術;Vertebroplasty;脊椎骨折骨水泥手術,,灌骨水泥,以骨水泥穩定脊椎壓迫性骨折。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_WRIST,腕關節,Wrist,anatomy,,腕,,手腕,前臂與手之間的關節。,cgmh_orthopedics_scrape_manual_v1
+ORTHO_WRIST_DISORDERS,腕關節疾病,Wrist disorders,subspecialty,,腕關節重建;腕部病變,,手腕問題,腕關節疼痛、退化、外傷或重建問題。,cgmh_orthopedics_scrape_manual_v1
+RHEUM_ALLERGY,過敏,Allergy,disease_or_condition,RHEUM_RHEUMATOLOGY,過敏;氣喘及過敏,,過敏問題,免疫系統對特定物質過度反應造成的症狀。,cgmh_rheumatology_scrape_manual_v1
+RHEUM_ANKYLOSING_SPONDYLITIS,僵直性脊椎炎,Ankylosing spondylitis,disease_or_condition,RHEUM_RHEUMATOLOGY,下背痛脊椎炎;僵直性脊椎炎門診,,僵直性脊椎炎;發炎性下背痛,以脊椎與薦腸關節發炎為主的風濕免疫疾病。,cgmh_rheumatology_scrape_manual_v1
+RHEUM_AUTOIMMUNE_DISEASE,自體免疫疾病,Autoimmune disease,disease_or_condition,RHEUM_RHEUMATOLOGY,自體免疫疾病,,免疫系統攻擊自己,免疫系統攻擊自身組織造成的疾病。,cgmh_rheumatology_scrape_manual_v1
+RHEUM_GENERAL_INTERNAL_MEDICINE,風濕免疫科一般內科,General internal medicine in rheumatology,subspecialty,RHEUM_RHEUMATOLOGY,內科,,一般內科問題,風濕免疫科門診中的一般內科評估。,cgmh_rheumatology_scrape_manual_v1
+RHEUM_GOUT,痛風及高尿酸血症,Gout and hyperuricemia,disease_or_condition,RHEUM_RHEUMATOLOGY,痛風;高尿酸;痛風關節炎,,尿酸高;痛風,尿酸過高造成痛風發作或關節炎。,cgmh_rheumatology_scrape_manual_v1
+RHEUM_LUPUS,紅斑性狼瘡,Systemic lupus erythematosus,disease_or_condition,RHEUM_RHEUMATOLOGY,紅斑性狼瘡,,狼瘡,全身性自體免疫疾病，可影響皮膚、關節、腎臟等器官。,cgmh_rheumatology_scrape_manual_v1
+RHEUM_RHEUMATOID_ARTHRITIS,類風濕關節炎,Rheumatoid arthritis,disease_or_condition,RHEUM_RHEUMATOLOGY,類風濕性關節炎;類風濕關節炎門診,,類風濕,自體免疫造成慢性關節發炎。,cgmh_rheumatology_scrape_manual_v1
+RHEUM_RHEUMATOLOGY,風濕免疫科,Rheumatology and immunology,subspecialty,,風濕科;免疫風濕;自體免疫疾病,,免疫風濕問題,自體免疫、風濕與過敏相關疾病診療。,cgmh_rheumatology_scrape_manual_v1

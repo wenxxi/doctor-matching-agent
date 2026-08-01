@@ -9,8 +9,9 @@ This scaffold includes:
 - PostgreSQL 16 with pgvector in `infra/docker-compose.yml`
 - Basic health check endpoint
 - Alembic migrations and a first doctor data layer
+- CSV-backed MVP doctor recommendation endpoint with optional GPT-4o-mini concept extraction and explanation writing
 
-No doctor matching logic, OpenAI integration, scraping, or authentication is implemented yet.
+No embeddings, chat history, authentication, scraping workflow, or direct GPT doctor search is implemented yet.
 
 ## Prerequisites
 
@@ -180,6 +181,40 @@ curl "http://localhost:8000/api/doctors?keyword=stroke"
 
 Supported optional filters are `hospital`, `campus`, `department`, and `keyword`.
 
+### 10. Debug concept extraction
+
+Use this endpoint to inspect whether concept extraction used GPT-4o-mini or the keyword fallback.
+
+```bash
+curl -X POST "http://localhost:8000/api/concepts/extract" \
+  -H "Content-Type: application/json" \
+  -d '{"query":"我跑步後膝蓋卡卡的，蹲下會痛"}'
+```
+
+The response includes `extractor`, `fallback_used`, `candidate_concepts_count`, `input_tokens`, and `output_tokens`:
+
+- `extractor="openai"` means GPT-4o-mini returned the matched concepts.
+- `extractor="keyword"` means deterministic keyword extraction was used.
+- `fallback_used=true` means OpenAI was configured but failed, so the backend used keyword extraction.
+- `candidate_concepts_count` shows how many concepts were sent to GPT-4o-mini after prefiltering.
+- `input_tokens` and `output_tokens` are copied from OpenAI response usage metadata when available. The backend does not make an extra call or estimate tokens.
+
+### 11. Call the recommendation endpoint
+
+The current MVP recommendation endpoint uses GPT-4o-mini to extract medical concept IDs when `OPENAI_API_KEY` is configured. Before calling GPT-4o-mini, the backend prefilters the ontology to a compact candidate concept list to reduce token usage. If OpenAI is not configured or the call fails, it falls back to deterministic keyword extraction from `data/processed/*.csv`.
+
+Doctor search and ranking remain deterministic and CSV-backed. When OpenAI is configured, GPT-4o-mini may add `llm_reason_zh` to each recommended doctor using only the matched concepts, doctor specialty text, and deterministic evidence already selected by the backend. If explanation generation fails, `llm_reason_zh` remains `null` and the deterministic `reasons` list is still returned.
+
+```bash
+curl -X POST "http://localhost:8000/api/recommendations" \
+  -H "Content-Type: application/json" \
+  -d '{"query":"我膝蓋運動後疼痛，可能韌帶受傷","limit":3}'
+```
+
+The response is capped at 3 doctors. It includes `concept_extraction_method`, `fallback_used`, `candidate_concepts_count`, `input_tokens`, `output_tokens`, `reason_input_tokens`, `reason_output_tokens`, matched medical concepts, ranked doctors, deterministic evidence-based `reasons`, and optional GPT-written `llm_reason_zh`.
+
+`input_tokens` and `output_tokens` refer to concept extraction. `reason_input_tokens` and `reason_output_tokens` refer to GPT-written reason generation. These fields are `null` when OpenAI does not return usage metadata or the backend uses deterministic fallback.
+
 ## Local Verification Checklist
 
 Run these commands from the repository root after setup.
@@ -215,6 +250,8 @@ curl http://localhost:8000/db/health
 curl "http://localhost:8000/api/doctors"
 curl "http://localhost:8000/api/doctors?department=Cardiology"
 curl "http://localhost:8000/api/doctors?keyword=stroke"
+curl -X POST "http://localhost:8000/api/concepts/extract" -H "Content-Type: application/json" -d '{"query":"我跑步後膝蓋卡卡的，蹲下會痛"}'
+curl -X POST "http://localhost:8000/api/recommendations" -H "Content-Type: application/json" -d '{"query":"我膝蓋運動後疼痛，可能韌帶受傷","limit":3}'
 ```
 
 Check frontend:

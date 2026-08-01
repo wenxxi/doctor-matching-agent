@@ -5,16 +5,25 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import DatabaseHealthError, check_database_connection
+from app.routers.concepts import router as concepts_router
 from app.routers.doctors import router as doctors_router
+from app.routers.recommendations import router as recommendations_router
 
 
 def create_app() -> FastAPI:
     app = FastAPI(title="Doctor Matching Agent API", version="0.1.0")
 
-    frontend_origin = os.getenv("FRONTEND_ORIGIN", "http://localhost:3000")
+    frontend_origins = [
+        origin.strip()
+        for origin in os.getenv(
+            "FRONTEND_ORIGINS",
+            "http://localhost:3000,http://localhost:3001,http://127.0.0.1:3000,http://127.0.0.1:3001",
+        ).split(",")
+        if origin.strip()
+    ]
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=[frontend_origin],
+        allow_origins=frontend_origins,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -35,6 +44,8 @@ def create_app() -> FastAPI:
             )
 
     app.include_router(doctors_router)
+    app.include_router(concepts_router)
+    app.include_router(recommendations_router)
 
     return app
 

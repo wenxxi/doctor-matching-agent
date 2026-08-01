@@ -4,6 +4,7 @@ node_modules/
 
 # Build outputs
 .next/
+.next.broken-*/
 out/
 dist/
 build/
@@ -27,4 +28,3 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-
