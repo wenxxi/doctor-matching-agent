@@ -93,6 +93,8 @@ PostgreSQL runs on `localhost:5432` with:
 - User: `doctor_user`
 - Password: `doctor_password`
 
+These are local development credentials from `infra/docker-compose.yml`; do not reuse them in production.
+
 The backend uses this SQLAlchemy URL from `apps/api/.env`:
 
 ```bash
@@ -130,6 +132,14 @@ npm run dev
 ```
 
 The frontend runs at `http://localhost:3000`.
+
+Open `http://localhost:3000` in a browser to use the recommendation UI. Enter a symptom or health concern, for example:
+
+```text
+我膝蓋運動後疼痛，可能韌帶受傷
+```
+
+Submit the form to see matched concepts and recommended doctors. The frontend calls the backend at `http://localhost:8000` by default; change `NEXT_PUBLIC_API_BASE_URL` in `apps/web/.env.local` if your backend runs somewhere else.
 
 ### 8. Test the health endpoints
 
@@ -181,9 +191,9 @@ curl "http://localhost:8000/api/doctors?keyword=stroke"
 
 Supported optional filters are `hospital`, `campus`, `department`, and `keyword`.
 
-### 10. Debug concept extraction
+### 10. Test concept extraction
 
-Use this endpoint to inspect whether concept extraction used GPT-4o-mini or the keyword fallback.
+Use this endpoint to test concept extraction from a symptom query.
 
 ```bash
 curl -X POST "http://localhost:8000/api/concepts/extract" \
@@ -191,19 +201,11 @@ curl -X POST "http://localhost:8000/api/concepts/extract" \
   -d '{"query":"我跑步後膝蓋卡卡的，蹲下會痛"}'
 ```
 
-The response includes `extractor`, `fallback_used`, `candidate_concepts_count`, `input_tokens`, and `output_tokens`:
-
-- `extractor="openai"` means GPT-4o-mini returned the matched concepts.
-- `extractor="keyword"` means deterministic keyword extraction was used.
-- `fallback_used=true` means OpenAI was configured but failed, so the backend used keyword extraction.
-- `candidate_concepts_count` shows how many concepts were sent to GPT-4o-mini after prefiltering.
-- `input_tokens` and `output_tokens` are copied from OpenAI response usage metadata when available. The backend does not make an extra call or estimate tokens.
+The response includes matched medical concepts and basic diagnostic metadata.
 
 ### 11. Call the recommendation endpoint
 
-The current MVP recommendation endpoint uses GPT-4o-mini to extract medical concept IDs when `OPENAI_API_KEY` is configured. Before calling GPT-4o-mini, the backend prefilters the ontology to a compact candidate concept list to reduce token usage. If OpenAI is not configured or the call fails, it falls back to deterministic keyword extraction from `data/processed/*.csv`.
-
-Doctor search and ranking remain deterministic and CSV-backed. When OpenAI is configured, GPT-4o-mini may add `llm_reason_zh` to each recommended doctor using only the matched concepts, doctor specialty text, and deterministic evidence already selected by the backend. If explanation generation fails, `llm_reason_zh` remains `null` and the deterministic `reasons` list is still returned.
+The recommendation endpoint accepts a symptom query and returns matched concepts plus recommended doctors. If `OPENAI_API_KEY` is configured, the backend can use GPT-4o-mini for concept extraction and explanation writing. If OpenAI is not configured or a request fails, the app uses the local fallback path.
 
 ```bash
 curl -X POST "http://localhost:8000/api/recommendations" \
@@ -211,9 +213,7 @@ curl -X POST "http://localhost:8000/api/recommendations" \
   -d '{"query":"我膝蓋運動後疼痛，可能韌帶受傷","limit":3}'
 ```
 
-The response is capped at 3 doctors. It includes `concept_extraction_method`, `fallback_used`, `candidate_concepts_count`, `input_tokens`, `output_tokens`, `reason_input_tokens`, `reason_output_tokens`, matched medical concepts, ranked doctors, deterministic evidence-based `reasons`, and optional GPT-written `llm_reason_zh`.
-
-`input_tokens` and `output_tokens` refer to concept extraction. `reason_input_tokens` and `reason_output_tokens` refer to GPT-written reason generation. These fields are `null` when OpenAI does not return usage metadata or the backend uses deterministic fallback.
+The response is capped by `limit` and includes matched medical concepts, recommended doctors, reasons, and optional diagnostic metadata.
 
 ## Local Verification Checklist
 
