@@ -38,6 +38,18 @@ CVS_HEART_FAILURE_SURGERY,心衰竭外科治療,Surgical treatment for heart fai
 CVS_PERIPHERAL_ARTERIAL_DISEASE,下肢動脈阻塞,Peripheral arterial disease,disease_or_condition,CVS_CARDIOVASCULAR_SURGERY,下肢動脈阻塞;糖尿病足血管病變,,腳血管阻塞,下肢動脈阻塞與糖尿病足血管病變。,cgmh_cardiovascular_surgery_scrape_manual_v1
 CVS_VALVE_SURGERY,心臟瓣膜手術,Heart valve surgery,procedure,CVS_CARDIOVASCULAR_SURGERY,瓣膜修補;瓣膜置換;瓣膜手術;經導管瓣膜治療,,心臟瓣膜手術,心臟瓣膜修補、置換與經導管瓣膜治療。,cgmh_cardiovascular_surgery_scrape_manual_v1
 CVS_VARICOSE_VEINS,靜脈曲張,Varicose veins,disease_or_condition,CVS_CARDIOVASCULAR_SURGERY,靜脈曲張,,腳靜脈浮出來,靜脈曲張微創治療。,cgmh_cardiovascular_surgery_scrape_manual_v1
+DERM_ACNE_ROSACEA_SCAR,青春痘酒糟與痘疤,Acne rosacea and acne scar,disease_or_condition,DERM_DERMATOLOGY,青春痘;痘疤;酒糟;玫瑰斑,,痘痘痘疤,青春痘、酒糟與痘疤治療。,cgmh_dermatology_scrape_manual_v1
+DERM_AESTHETIC_LASER_INJECTION,皮膚雷射與醫學美容,Dermatologic laser and aesthetic injection,procedure,DERM_DERMATOLOGY,皮膚雷射;雷射;皮秒雷射;飛梭雷射;脈衝光;淨膚雷射;除斑;除痣;除毛;除刺青;果酸換膚;醫學美容;微整形;肉毒桿菌;玻尿酸;電波拉皮;音波拉提,,雷射美容微整形,雷射、脈衝光、換膚、注射與非侵入性拉提等醫學美容。,cgmh_dermatology_scrape_manual_v1
+DERM_DERMATOLOGY,皮膚科,Dermatology,subspecialty,,皮膚科;一般皮膚病;一般皮膚病症;皮膚病症;皮膚科學,,皮膚問題,一般皮膚疾病、皮膚感染、免疫皮膚病、皮膚外科與醫學美容。,cgmh_dermatology_scrape_manual_v1
+DERM_ECZEMA_ATOPIC_DERMATITIS,濕疹與異位性皮膚炎,Eczema and atopic dermatitis,disease_or_condition,DERM_DERMATOLOGY,濕疹;溼疹;異位性皮膚炎;接觸性皮膚炎,,皮膚過敏濕疹,濕疹、異位性皮膚炎與接觸性皮膚炎。,cgmh_dermatology_scrape_manual_v1
+DERM_FUNGAL_VIRAL_INFECTION,皮膚黴菌與病毒感染,Fungal and viral skin infection,disease_or_condition,DERM_DERMATOLOGY,黴菌感染;皮膚黴菌;體癬;頭癬;股癬;足癬;汗斑;念珠菌感染;病毒疣;帶狀皰疹;帶狀泡疹;皮膚感染症,,皮膚感染,黴菌、病毒疣、帶狀皰疹與其他皮膚感染。,cgmh_dermatology_scrape_manual_v1
+DERM_HAIR_NAIL_DISORDERS,毛髮與指甲疾病,Hair and nail disorders,disease_or_condition,DERM_DERMATOLOGY,落髮;圓禿;禿頭;灰指甲;甲溝炎;指甲矯正;捲甲,,掉髮指甲問題,落髮、圓禿、灰指甲、甲溝炎與指甲矯正。,cgmh_dermatology_scrape_manual_v1
+DERM_HYPERHIDROSIS_OSMIDROSIS,狐臭與多汗症,Osmidrosis and hyperhidrosis,disease_or_condition,DERM_DERMATOLOGY,狐臭;多汗症;腋下多汗;Miradry;微波除汗,,狐臭多汗,腋下狐臭、多汗症與微波熱能治療。,cgmh_dermatology_scrape_manual_v1
+DERM_PIGMENT_VASCULAR_LESION,色素斑白斑與血管瘤,Pigment and vascular skin lesions,disease_or_condition,DERM_DERMATOLOGY,黑斑;白斑;色素異常;老人斑;胎記;血管瘤;血管病灶,,斑點胎記血管瘤,色素斑、白斑、胎記與血管瘤。,cgmh_dermatology_scrape_manual_v1
+DERM_PSORIASIS_AUTOIMMUNE,乾癬與皮膚免疫疾病,Psoriasis and autoimmune skin disease,disease_or_condition,DERM_DERMATOLOGY,乾癬;皮膚免疫疾病;免疫性皮膚病;自體免疫性疾病;類天皰瘡;自體免疫水泡病,,免疫皮膚病,乾癬、自體免疫與水泡性皮膚疾病。,cgmh_dermatology_scrape_manual_v1
+DERM_SKIN_TUMOR_CANCER_SURGERY,皮膚腫瘤與皮膚癌手術,Skin tumor and skin cancer surgery,procedure,DERM_DERMATOLOGY,皮膚腫瘤;皮膚癌;莫氏顯微手術;皮膚外科;粉瘤;脂肪瘤;皮膚鏡,,皮膚腫瘤皮膚癌,皮膚腫瘤、皮膚癌、粉瘤脂肪瘤與皮膚外科手術。,cgmh_dermatology_scrape_manual_v1
+DERM_URTICARIA_DRUG_ALLERGY,蕁麻疹與藥物過敏,Urticaria and drug allergy,disease_or_condition,DERM_DERMATOLOGY,蕁麻疹;蕁痲疹;藥物過敏;過敏,,起疹子過敏,蕁麻疹、藥物過敏與皮膚過敏反應。,cgmh_dermatology_scrape_manual_v1
+DERM_WOUND_SCAR_KELOID,傷口疤痕與蟹足腫,Wound scar and keloid,disease_or_condition,DERM_DERMATOLOGY,傷口;傷口處理;慢性傷口;慢性傷扣;疤痕;修疤;蟹足腫,,傷口疤痕,傷口照護、疤痕修復與蟹足腫治療。,cgmh_dermatology_scrape_manual_v1
 ENDO_DIABETES,糖尿病,Diabetes mellitus,disease_or_condition,ENDO_ENDOCRINOLOGY,血糖;血糖高,,血糖高;糖尿病,血糖調控異常造成的慢性代謝疾病。,cgmh_endocrinology_scrape_manual_v1
 ENDO_DIABETIC_FOOT,糖尿病足病變,Diabetic foot disease,disease_or_condition,ENDO_DIABETES,糖尿病足,,糖尿病腳傷口,糖尿病造成足部傷口、感染或神經血管問題。,cgmh_endocrinology_scrape_manual_v1
 ENDO_ENDOCRINOLOGY,新陳代謝科,Endocrinology and metabolism,subspecialty,,內分泌科;新陳代謝;內分泌疾病,,內分泌問題;代謝問題,內分泌、糖尿病與代謝疾病診療。,cgmh_endocrinology_scrape_manual_v1
@@ -201,6 +213,16 @@ ONCO_NEUROENDOCRINE_TUMOR,神經內分泌瘤,Neuroendocrine tumor,disease_or_con
 ONCO_ONCOLOGY,腫瘤科,Oncology,subspecialty,,癌症治療;固體腫瘤;腫瘤學,,癌症;腫瘤問題,惡性腫瘤與癌症治療諮詢。,cgmh_oncology_scrape_manual_v1
 ONCO_PALLIATIVE_CARE,安寧療護,Palliative care,subspecialty,ONCO_ONCOLOGY,安寧療護,,安寧照護,針對嚴重疾病或癌症病人的症狀緩和與照護。,cgmh_oncology_scrape_manual_v1
 ONCO_UROLOGIC_CANCER,泌尿道腫瘤,Urologic cancer,disease_or_condition,ONCO_ONCOLOGY,泌尿道腫瘤;泌尿道癌,,泌尿系統癌症,泌尿系統相關癌症。,cgmh_oncology_scrape_manual_v1
+OPH_CATARACT,白內障,Cataract,disease_or_condition,OPH_OPHTHALMOLOGY,白內障;白內障手術;白內障超音波乳化;飛秒雷射白內障,,白內障,白內障診斷與手術治療。,cgmh_ophthalmology_scrape_manual_v1
+OPH_CORNEA_OCULAR_SURFACE,角膜與眼表疾病,Cornea and ocular surface disease,disease_or_condition,OPH_OPHTHALMOLOGY,眼角膜;角膜;角結膜;外眼部疾病;眼表;角膜水腫,,角膜眼表問題,角膜、結膜、外眼部與眼表疾病。,cgmh_ophthalmology_scrape_manual_v1
+OPH_EYE_TUMOR_TRAUMA_INFECTION,眼部腫瘤外傷與感染,Eye tumor trauma and infection,disease_or_condition,OPH_OPHTHALMOLOGY,眼部腫瘤;眼腫瘤;眼部外傷;眼內炎;眼窩腫瘤;眼瞼及眼窩腫瘤,,眼睛腫瘤外傷感染,眼部與眼窩腫瘤、外傷與眼內炎。,cgmh_ophthalmology_scrape_manual_v1
+OPH_GLAUCOMA,青光眼,Glaucoma,disease_or_condition,OPH_OPHTHALMOLOGY,青光眼;小樑成型;虹膜切開;導管植入,,青光眼,青光眼診斷、雷射與手術治療。,cgmh_ophthalmology_scrape_manual_v1
+OPH_OCULOPLASTIC_ORBIT_LACRIMAL,眼整形眼窩與淚管疾病,Oculoplastic orbital and lacrimal disease,procedure,OPH_OPHTHALMOLOGY,眼瞼下垂;眼皮下垂;眼窩;眼瞼;睫毛倒插;溢淚;鼻淚管阻塞;淚管;雙眼皮;眼袋;義眼;甲狀腺眼疾,,眼皮眼窩淚管問題,眼瞼、眼窩、淚管、甲狀腺眼疾與眼整形手術。,cgmh_ophthalmology_scrape_manual_v1
+OPH_OPHTHALMOLOGY,眼科,Ophthalmology,subspecialty,,眼科;一般眼科疾病;一般眼疾;眼疾,,眼睛問題,一般眼科、角膜、視網膜、白內障、青光眼與眼整形。,cgmh_ophthalmology_scrape_manual_v1
+OPH_PEDIATRIC_VISION_STRABISMUS,兒童視力與斜弱視,Pediatric vision strabismus and amblyopia,disease_or_condition,OPH_OPHTHALMOLOGY,兒童視力保健;兒童眼疾;斜視;弱視;斜弱視,,小孩視力斜弱視,兒童視力保健、斜視手術與弱視訓練。,cgmh_ophthalmology_scrape_manual_v1
+OPH_REFRACTIVE_MYOPIA_SURGERY,近視雷射與屈光手術,Refractive and myopia surgery,procedure,OPH_OPHTHALMOLOGY,屈光手術;近視手術;近視雷射;SMILE;全飛秒;準分子雷射;角膜塑形片;高度近視,,近視雷射,近視雷射、屈光手術與角膜塑形片。,cgmh_ophthalmology_scrape_manual_v1
+OPH_RETINA_MACULA,視網膜與黃斑部疾病,Retina and macular disease,disease_or_condition,OPH_OPHTHALMOLOGY,視網膜;網膜;黃斑部;玻璃體;飛蚊症;黃斑部退化;黃斑部破孔;視網膜剝離;糖尿病視網膜病變;早產兒視網膜病變,,視網膜黃斑部問題,視網膜、黃斑部、玻璃體與糖尿病視網膜病變。,cgmh_ophthalmology_scrape_manual_v1
+OPH_UVEITIS_NEURO_OPHTH,葡萄膜炎與眼神經疾病,Uveitis and neuro-ophthalmic disease,disease_or_condition,OPH_OPHTHALMOLOGY,葡萄膜炎;虹彩炎;眼神經疾病;視神經,,眼睛發炎神經問題,葡萄膜炎、虹彩炎與眼神經疾病。,cgmh_ophthalmology_scrape_manual_v1
 ORTHO_ACL_INJURY,前十字韌帶損傷,ACL injury,disease_or_condition,ORTHO_LIGAMENT_INJURY,前十字韌帶斷裂;ACL injury,,前十字韌帶受傷,膝關節前十字韌帶受傷，常見於運動傷害。,cgmh_orthopedics_scrape_manual_v1
 ORTHO_ARTHROPLASTY,人工關節置換,Arthroplasty,procedure,ORTHO_JOINT_RECONSTRUCTION,人工關節置換手術;人工關節重建手術,,換人工關節,以人工關節取代嚴重損壞的關節。,cgmh_orthopedics_scrape_manual_v1
 ORTHO_ARTHROSCOPIC_SURGERY,關節鏡手術,Arthroscopic surgery,procedure,,微創關節鏡手術;關節鏡,,關節內視鏡手術,以關節鏡檢查或治療關節內問題。,cgmh_orthopedics_scrape_manual_v1
@@ -335,6 +357,15 @@ PROCTO_HIPEC,腹腔內溫熱化療,HIPEC,procedure,PROCTO_COLORECTAL_CANCER,腹�
 PROCTO_INFLAMMATORY_BOWEL_DISEASE,發炎性腸道疾病,Inflammatory bowel disease,disease_or_condition,PROCTO_COLORECTAL_SURGERY,發炎性腸道疾病;IBD;潰瘍性大腸炎,,腸道發炎,慢性腸道發炎疾病。,cgmh_colorectal_surgery_scrape_manual_v1
 PROCTO_MINIMALLY_INVASIVE_SURGERY,大腸直腸微創手術,Colorectal minimally invasive surgery,procedure,PROCTO_COLORECTAL_SURGERY,微創手術;腹腔鏡手術;達文西機械手臂手術;機器手臂微創手術,,微創大腸直腸手術,以腹腔鏡、內視鏡或機器手臂進行大腸直腸手術。,cgmh_colorectal_surgery_scrape_manual_v1
 PROCTO_STOMA,腸造口,Stoma surgery,procedure,PROCTO_COLORECTAL_SURGERY,大腸造口;腸造口;造口關閉,,人工肛門,腸造口建立或關閉相關手術。,cgmh_colorectal_surgery_scrape_manual_v1
+PSY_BIPOLAR_SCHIZOPHRENIA,躁鬱症與思覺失調症,Bipolar disorder and schizophrenia,disease_or_condition,PSY_PSYCHIATRY,躁鬱症;思覺失調症,,躁鬱思覺失調,躁鬱症、思覺失調症與嚴重精神疾病。,cgmh_psychiatry_scrape_manual_v1
+PSY_CHILD_ADOLESCENT,兒童青少年精神醫學,Child and adolescent psychiatry,subspecialty,PSY_PSYCHIATRY,兒童發展;早期療育;注意力不足過動症;自閉症;選擇性緘默;青少年情緒問題;親職,,兒童青少年身心問題,兒童發展、早期療育、ADHD、自閉症與青少年情緒問題。,cgmh_psychiatry_scrape_manual_v1
+PSY_DEPRESSION_ANXIETY,憂鬱症與焦慮症,Depression and anxiety disorders,disease_or_condition,PSY_PSYCHIATRY,憂鬱症;憂鬱;焦慮症;焦慮,,憂鬱焦慮,憂鬱症、焦慮症與相關身心症狀。,cgmh_psychiatry_scrape_manual_v1
+PSY_GERIATRIC_PSYCHIATRY,老人精神醫學,Geriatric psychiatry,subspecialty,PSY_PSYCHIATRY,老人精神醫學;老年精神疾病;老年憂鬱症;老人憂鬱症,,老人身心精神問題,老年精神疾病與老年憂鬱症。,cgmh_psychiatry_scrape_manual_v1
+PSY_PERINATAL_WOMENS_MENTAL_HEALTH,婦女與周產期身心健康,Women and perinatal mental health,subspecialty,PSY_PSYCHIATRY,婦女;周產期身心;婦女及周產期身心議題,,懷孕產後身心問題,婦女與周產期身心健康議題。,cgmh_psychiatry_scrape_manual_v1
+PSY_PSYCHIATRY,精神科,Psychiatry,subspecialty,,精神科;精神醫學;一般精神疾病;一般精神疾患;成人精神醫學;成人精神疾患,,身心科精神科,成人、老人、兒童青少年精神醫學與身心健康。,cgmh_psychiatry_scrape_manual_v1
+PSY_PSYCHOSOMATIC_COMMUNITY_OCCUPATIONAL,身心症與職業社區身心健康,Psychosomatic occupational and community mental health,subspecialty,PSY_PSYCHIATRY,身心症;心身症;職業身心健康;社區身心健康,,壓力身心症,身心症、職業身心健康與社區身心健康。,cgmh_psychiatry_scrape_manual_v1
+PSY_SLEEP_DISORDER,睡眠障礙,Sleep disorder,disease_or_condition,PSY_PSYCHIATRY,睡眠障礙,,睡不好失眠,睡眠障礙與相關精神身心問題。,cgmh_psychiatry_scrape_manual_v1
+PSY_SUICIDE_PTSD_ADDICTION,自殺創傷與藥癮戒治,Suicide PTSD and addiction treatment,disease_or_condition,PSY_PSYCHIATRY,自殺;創傷後壓力疾患;藥癮戒治,,創傷壓力藥癮,自殺風險、創傷後壓力疾患與藥癮戒治。,cgmh_psychiatry_scrape_manual_v1
 RHEUM_ALLERGY,過敏,Allergy,disease_or_condition,RHEUM_RHEUMATOLOGY,過敏;氣喘及過敏,,過敏問題,免疫系統對特定物質過度反應造成的症狀。,cgmh_rheumatology_scrape_manual_v1
 RHEUM_ANKYLOSING_SPONDYLITIS,僵直性脊椎炎,Ankylosing spondylitis,disease_or_condition,RHEUM_RHEUMATOLOGY,下背痛脊椎炎;僵直性脊椎炎門診,,僵直性脊椎炎;發炎性下背痛,以脊椎與薦腸關節發炎為主的風濕免疫疾病。,cgmh_rheumatology_scrape_manual_v1
 RHEUM_AUTOIMMUNE_DISEASE,自體免疫疾病,Autoimmune disease,disease_or_condition,RHEUM_RHEUMATOLOGY,自體免疫疾病,,免疫系統攻擊自己,免疫系統攻擊自身組織造成的疾病。,cgmh_rheumatology_scrape_manual_v1

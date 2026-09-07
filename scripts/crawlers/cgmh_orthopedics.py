@@ -2,8 +2,8 @@ from pathlib import Path
 
 import pandas as pd
 
-url = "https://www.cgmh.org.tw/tw/Services/DeptInfo/3/4A000/4AW00"
-output_path = Path("data/raw/cgmh_linkou_pediatric_doctors.csv")
+url = "https://www.cgmh.org.tw/tw/Services/DeptInfo/3/43400/43440"
+output_path = Path("data/raw/cgmh_linkou_ophthalmological_doctors.csv")
 
 tables = pd.read_html(url)
 df = None

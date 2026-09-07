@@ -84,6 +84,9 @@ def test_tied_concept_prefixes_have_no_single_intent():
         ("肝臟移植想找肝臟外科", "LT_LIVER_TRANSPLANT_SURGERY", "肝臟移植外科"),
         ("乳房外科追蹤乳房腫瘤", "GS_BREAST_CANCER_TUMOR", "一般外科"),
         ("小孩發燒想看兒科", "PED_FEVER", "兒科"),
+        ("青春痘和濕疹想看皮膚科", "DERM_ACNE_ROSACEA_SCAR", "皮膚科"),
+        ("白內障想看眼科", "OPH_CATARACT", "眼科"),
+        ("憂鬱焦慮想看精神科", "PSY_DEPRESSION_ANXIETY", "精神科"),
     ],
 )
 def test_detects_new_department_intents(query, concept_id, expected_department):
