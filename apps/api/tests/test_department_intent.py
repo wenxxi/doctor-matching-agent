@@ -83,6 +83,7 @@ def test_tied_concept_prefixes_have_no_single_intent():
         ("多重外傷需要外傷急重症", "TRAUMA_MULTIPLE_TRAUMA", "外傷急症外科"),
         ("肝臟移植想找肝臟外科", "LT_LIVER_TRANSPLANT_SURGERY", "肝臟移植外科"),
         ("乳房外科追蹤乳房腫瘤", "GS_BREAST_CANCER_TUMOR", "一般外科"),
+        ("小孩發燒想看兒科", "PED_FEVER", "兒科"),
     ],
 )
 def test_detects_new_department_intents(query, concept_id, expected_department):

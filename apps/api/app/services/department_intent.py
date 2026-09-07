@@ -26,6 +26,7 @@ CONCEPT_PREFIX_TO_DEPARTMENT = {
     "TRAUMA": "外傷急症外科",
     "LT": "肝臟移植外科",
     "GS": "一般外科",
+    "PED": "兒科",
 }
 
 DEPARTMENT_KEYWORDS = {
@@ -150,6 +151,13 @@ DEPARTMENT_KEYWORDS = {
         "乳房外科",
         "肝膽胰外科",
         "胃腸外科",
+    ),
+    "兒科": (
+        "兒科",
+        "小兒科",
+        "一般兒科",
+        "兒童醫學",
+        "新生兒科",
     ),
 }
 

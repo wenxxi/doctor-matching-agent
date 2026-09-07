@@ -273,6 +273,46 @@ ORTHO_UPPER_LIMB_FRACTURE,上肢骨折,Upper limb fracture,disease_or_condition,
 ORTHO_VERTEBROPLASTY,骨水泥灌注治療,Vertebroplasty,procedure,ORTHO_SPINE_COMPRESSION_FRACTURE,骨水泥;脊椎灌漿手術;Vertebroplasty;脊椎骨折骨水泥手術,,灌骨水泥,以骨水泥穩定脊椎壓迫性骨折。,cgmh_orthopedics_scrape_manual_v1
 ORTHO_WRIST,腕關節,Wrist,anatomy,,腕,,手腕,前臂與手之間的關節。,cgmh_orthopedics_scrape_manual_v1
 ORTHO_WRIST_DISORDERS,腕關節疾病,Wrist disorders,subspecialty,,腕關節重建;腕部病變,,手腕問題,腕關節疼痛、退化、外傷或重建問題。,cgmh_orthopedics_scrape_manual_v1
+PED_ALLERGY_IMMUNOLOGY_RHEUM,兒童過敏免疫風濕,Pediatric allergy immunology and rheumatology,subspecialty,PED_PEDIATRICS,小兒過敏免疫疾病;兒童過敏氣喘風濕;風濕性疾病;兒童風濕疾病;兒童風濕病,,小孩過敏免疫風濕,兒童過敏、氣喘、免疫缺損與風濕免疫疾病。,cgmh_pediatrics_scrape_manual_v1
+PED_ARRHYTHMIA_SYNCOPE_CHEST_PAIN,兒童心律不整與胸痛暈厥,Pediatric arrhythmia syncope and chest pain,disease_or_condition,PED_CARDIOLOGY,兒童心律不整;兒童胸痛;兒童胸悶;兒童暈厥;兒童昏倒;兒童心雜音,,小孩心悸胸痛昏倒,兒童心律不整、心雜音、胸痛與暈厥評估。,cgmh_pediatrics_scrape_manual_v1
+PED_ASTHMA_ALLERGIC_RHINITIS,兒童氣喘與過敏性鼻炎,Pediatric asthma and allergic rhinitis,disease_or_condition,PED_ALLERGY_IMMUNOLOGY_RHEUM,兒童氣喘;小兒過敏氣喘;兒童過敏性鼻炎;嬰幼兒喘鳴,,小孩氣喘鼻過敏,兒童氣喘、喘鳴與過敏性鼻炎。,cgmh_pediatrics_scrape_manual_v1
+PED_ATOPIC_DERMATITIS_URTICARIA,異位性皮膚炎與蕁麻疹,Atopic dermatitis and urticaria,disease_or_condition,PED_ALLERGY_IMMUNOLOGY_RHEUM,異位性皮膚炎;蕁麻疹;食物過敏,,小孩皮膚過敏;食物過敏,兒童異位性皮膚炎、蕁麻疹與食物過敏。,cgmh_pediatrics_scrape_manual_v1
+PED_BRONCHOSCOPY_PFT,兒童支氣管鏡與肺功能,Pediatric bronchoscopy and pulmonary function test,procedure,PED_PULMONOLOGY,氣管鏡;支氣管鏡;兒童肺功能檢查;胸腔超音波,,小孩支氣管鏡;小孩肺功能,兒童支氣管鏡、肺功能與胸腔超音波檢查。,cgmh_pediatrics_scrape_manual_v1
+PED_CARDIAC_CATH_ECHO,兒童心導管與心臟超音波,Pediatric cardiac catheterization and echocardiography,procedure,PED_CARDIOLOGY,兒童心導管;兒童心臟超音波;兒童心導管檢查,,小孩心導管和心臟超音波,兒童心導管檢查、介入治療與心臟超音波。,cgmh_pediatrics_scrape_manual_v1
+PED_CARDIOLOGY,兒童心臟科,Pediatric cardiology,subspecialty,PED_PEDIATRICS,兒童心臟科;小兒心臟科;小兒心臟學;兒童心臟病,,小孩心臟問題,兒童心臟病、先天性心臟病與心導管治療。,cgmh_pediatrics_scrape_manual_v1
+PED_CONGENITAL_HEART_DISEASE,先天性心臟病,Congenital heart disease,disease_or_condition,PED_CARDIOLOGY,先天性心臟病;ASD;VSD;PDA;肺動脈瓣狹窄;主動脈弓窄縮,,小孩先天心臟病,兒童及成人先天性心臟病診斷與追蹤治療。,cgmh_pediatrics_scrape_manual_v1
+PED_CRITICAL_CARE_EMERGENCY,兒童急重症與急診,Pediatric critical care and emergency medicine,subspecialty,PED_PEDIATRICS,兒童重症加護;兒童急重症;兒童急救加護;兒童急診;小兒急診;兒童急症;嬰幼兒急重症;腦重症兒童,,小孩急診重症,兒童急診、急症處理與重症加護。,cgmh_pediatrics_scrape_manual_v1
+PED_DIABETES_OBESITY,兒童糖尿病與肥胖,Pediatric diabetes and obesity,disease_or_condition,PED_ENDOCRINOLOGY_METABOLISM,兒童糖尿病;兒童肥胖;高血脂,,小孩糖尿病肥胖,兒童糖尿病、肥胖與血脂問題。,cgmh_pediatrics_scrape_manual_v1
+PED_DIALYSIS_KIDNEY_TRANSPLANT,兒童透析與腎臟移植,Pediatric dialysis and kidney transplant,procedure,PED_NEPHROLOGY,兒童洗腎;兒童透析;兒童腎臟移植,,小孩洗腎或換腎,兒童透析、洗腎與腎臟移植相關照護。,cgmh_pediatrics_scrape_manual_v1
+PED_ENDOCRINOLOGY_METABOLISM,兒童內分泌與新陳代謝,Pediatric endocrinology and metabolism,subspecialty,PED_PEDIATRICS,兒童青少年甲狀腺;內分泌相關疾病;兒童糖尿病;兒童生長;青春期發育,,小孩內分泌,兒童糖尿病、生長、青春期、肥胖與甲狀腺內分泌問題。,cgmh_pediatrics_scrape_manual_v1
+PED_ENDOSCOPY_ULTRASOUND,兒童內視鏡與腹部超音波,Pediatric endoscopy and abdominal ultrasound,procedure,PED_GI_HEPATOLOGY,兒童內視鏡;兒童消化道內視鏡;兒童腹部超音波;腹部超音波檢查,,小孩胃腸鏡和超音波,兒童胃腸內視鏡與腹部超音波檢查治療。,cgmh_pediatrics_scrape_manual_v1
+PED_ENTEROVIRUS_FLU,腸病毒與流感,Enterovirus and influenza,disease_or_condition,PED_INFECTIOUS_DISEASE,腸病毒;流感,,腸病毒;小孩流感,兒童腸病毒、流感與常見病毒感染。,cgmh_pediatrics_scrape_manual_v1
+PED_EPILEPSY,兒童癲癇,Pediatric epilepsy,disease_or_condition,PED_NEUROLOGY,兒童癲癇;小兒癲癇;兒童癲癇症,,小孩抽搐癲癇,兒童癲癇與用藥追蹤。,cgmh_pediatrics_scrape_manual_v1
+PED_FEVER,兒童發燒,Pediatric fever,symptom,PED_INFECTIOUS_DISEASE,兒童發燒,,小孩發燒,兒童發燒與感染相關評估。,cgmh_pediatrics_scrape_manual_v1
+PED_GENETICS_RARE_DISEASE,兒童遺傳代謝與罕見疾病,Pediatric genetics metabolism and rare disease,subspecialty,PED_PEDIATRICS,遺傳代謝醫學;遺傳學;罕見疾病;先天性代謝疾病;遺傳諮詢;基因診斷;染色體異常,,小孩遺傳或罕見疾病,兒童遺傳代謝、罕見疾病與基因診斷諮詢。,cgmh_pediatrics_scrape_manual_v1
+PED_GI_HEPATOLOGY,兒童胃腸肝膽,Pediatric gastroenterology and hepatology,subspecialty,PED_PEDIATRICS,兒童胃腸;兒童胃腸道;兒童胃腸肝臟;兒童肝臟疾病;兒童腸胃科,,小孩腸胃肝膽問題,兒童胃腸道、肝膽疾病與營養照護。,cgmh_pediatrics_scrape_manual_v1
+PED_GROWTH_PUBERTY_THYROID,兒童生長青春期與甲狀腺,Pediatric growth puberty and thyroid disorders,disease_or_condition,PED_ENDOCRINOLOGY_METABOLISM,兒童生長;兒童生長發育;兒童身材矮小;兒童性早熟;兒童青春期發育;兒童甲狀腺,,小孩長不高或性早熟,兒童生長發育、性早熟、青春期與甲狀腺相關問題。,cgmh_pediatrics_scrape_manual_v1
+PED_HEADACHE_NEUROIMMUNE,兒童頭痛與神經免疫疾病,Pediatric headache and neuroimmune disease,disease_or_condition,PED_NEUROLOGY,兒童頭痛;兒童多發性硬化症;兒童視神經脊髓炎;兒童腦炎;兒童自體免疫腦炎,,小孩頭痛或腦部發炎,兒童頭痛與神經免疫相關疾病。,cgmh_pediatrics_scrape_manual_v1
+PED_HEMATOLOGY_ONCOLOGY,兒童血液腫瘤,Pediatric hematology oncology,subspecialty,PED_PEDIATRICS,兒童血液學;兒童腫瘤學;兒童血液;腫瘤疾病,,小孩血液腫瘤,兒童血液疾病、腫瘤與造血幹細胞移植。,cgmh_pediatrics_scrape_manual_v1
+PED_IMMUNODEFICIENCY,兒童免疫缺損,Pediatric immunodeficiency,disease_or_condition,PED_ALLERGY_IMMUNOLOGY_RHEUM,免疫力不足;免疫力評估;反覆感染;免疫缺損,,小孩常感染;免疫不好,兒童免疫缺損、免疫力不足與反覆感染評估。,cgmh_pediatrics_scrape_manual_v1
+PED_INFECTIOUS_DISEASE,兒童感染症,Pediatric infectious disease,disease_or_condition,PED_PEDIATRICS,兒童感染症;小兒感染;嬰幼兒感染症;兒童病毒感染性疾病,,小孩感染,兒童感染、發燒、肺炎、腸病毒與其他感染性疾病。,cgmh_pediatrics_scrape_manual_v1
+PED_JUVENILE_RHEUM_AUTOIMMUNE,兒童風濕自體免疫疾病,Pediatric rheumatic autoimmune disease,disease_or_condition,PED_ALLERGY_IMMUNOLOGY_RHEUM,紅斑性狼瘡;兒童紅斑性狼瘡;幼年型類風濕性關節炎;關節炎;紫斑症,,小孩免疫風濕,兒童紅斑性狼瘡、幼年型關節炎與紫斑症等免疫風濕疾病。,cgmh_pediatrics_scrape_manual_v1
+PED_KAWASAKI_DISEASE,川崎症,Kawasaki disease,disease_or_condition,PED_ALLERGY_IMMUNOLOGY_RHEUM,川崎症;川崎病;川崎氏症,,川崎症,兒童川崎症診斷、治療與心臟追蹤。,cgmh_pediatrics_scrape_manual_v1
+PED_NEONATAL_RESPIRATORY_CARE,新生兒呼吸照護,Neonatal respiratory care,procedure,PED_NEONATOLOGY,新生兒呼吸照護;新生兒肺部疾病;新生兒肺動脈高壓;呼吸器,,新生兒呼吸問題,新生兒呼吸、肺部疾病與呼吸器相關照護。,cgmh_pediatrics_scrape_manual_v1
+PED_NEONATOLOGY,新生兒科,Neonatology,subspecialty,PED_PEDIATRICS,新生兒科;新生兒科學;一般新生兒科學,,新生兒照護,新生兒與早產兒照護、追蹤與重症加護。,cgmh_pediatrics_scrape_manual_v1
+PED_NEPHROLOGY,兒童腎臟科,Pediatric nephrology,subspecialty,PED_PEDIATRICS,兒童腎臟科;兒童腎臟學;腎臟專科;遺傳性腎臟病;急慢性腎臟病,,小孩腎臟問題,兒童腎臟疾病、血尿蛋白尿、透析與移植相關診療。,cgmh_pediatrics_scrape_manual_v1
+PED_NEPHROTIC_HEMATURIA_PROTEINURIA,兒童腎病症候群與血尿蛋白尿,Pediatric nephrotic syndrome hematuria and proteinuria,disease_or_condition,PED_NEPHROLOGY,腎病症候群;血尿;蛋白尿;腎絲球腎炎,,小孩尿有血或蛋白,兒童腎病症候群、腎絲球腎炎、血尿與蛋白尿。,cgmh_pediatrics_scrape_manual_v1
+PED_NEUROLOGY,兒童神經科,Pediatric neurology,subspecialty,PED_PEDIATRICS,兒童神經科;小兒神經疾病;兒童神經內科學;兒童神經科學,,小孩神經問題,兒童癲癇、頭痛、發展遲緩、妥瑞症與神經免疫疾病。,cgmh_pediatrics_scrape_manual_v1
+PED_NUTRITION,兒童營養,Pediatric nutrition,subspecialty,PED_GI_HEPATOLOGY,兒童營養;兒童營養學;新生兒營養,,小孩營養,兒童與新生兒營養評估。,cgmh_pediatrics_scrape_manual_v1
+PED_PEDIATRICS,兒科,Pediatrics,subspecialty,,兒科;小兒科;一般兒科;一般小兒科學;兒童一般醫學,,小孩看診;兒童疾病,兒童與青少年一般疾病、預防保健與次專科整合照護。,cgmh_pediatrics_scrape_manual_v1
+PED_PNEUMONIA_RESPIRATORY_INFECTION,兒童肺炎與呼吸道感染,Pediatric pneumonia and respiratory infection,disease_or_condition,PED_INFECTIOUS_DISEASE,兒童肺炎;兒童呼吸道感染;兒童咳嗽,,小孩咳嗽肺炎,兒童肺炎、呼吸道感染與咳嗽。,cgmh_pediatrics_scrape_manual_v1
+PED_PREMATURE_INFANT_CARE,早產兒照護,Premature infant care,subspecialty,PED_NEONATOLOGY,早產兒照護;早產兒追蹤;早產兒重症加護;早產兒加護治療,,早產寶寶照護,早產兒加護、一般疾病與出院後追蹤。,cgmh_pediatrics_scrape_manual_v1
+PED_PREVENTIVE_CARE_VACCINE,兒童疫苗與預防保健,Pediatric vaccines and preventive care,procedure,PED_PEDIATRICS,兒童疫苗;疫苗;疫苗接種;預防保健;嬰幼兒預防保健,,小孩打疫苗;健兒門診,兒童疫苗接種、嬰幼兒預防保健與追蹤。,cgmh_pediatrics_scrape_manual_v1
+PED_PULMONOLOGY,兒童胸腔,Pediatric pulmonology,subspecialty,PED_PEDIATRICS,兒童胸腔;兒童胸腔醫學;兒童呼吸胸腔學;胸腔疾病,,小孩肺部胸腔問題,兒童胸腔、呼吸道與肺功能相關診療。,cgmh_pediatrics_scrape_manual_v1
+PED_STEM_CELL_TRANSPLANT_PALLIATIVE,兒童造血幹細胞移植與安寧,Pediatric hematopoietic stem cell transplant and palliative care,procedure,PED_HEMATOLOGY_ONCOLOGY,兒童造血幹細胞移植;造血幹細胞移植;安寧緩和醫療,,小孩造血幹細胞移植,兒童造血幹細胞移植與安寧緩和醫療。,cgmh_pediatrics_scrape_manual_v1
+PED_TOURETTE_DEVELOPMENT_DELAY,妥瑞症與發展遲緩,Tourette syndrome and developmental delay,disease_or_condition,PED_NEUROLOGY,妥瑞症;發展遲緩;嬰兒動作異常,,妥瑞症;發展慢,兒童妥瑞症、發展遲緩與動作異常。,cgmh_pediatrics_scrape_manual_v1
+PED_TOXICOLOGY,兒童毒物學,Pediatric toxicology,subspecialty,PED_PEDIATRICS,兒童毒物學;毒物學,,小孩中毒,兒童毒物暴露與中毒相關評估。,cgmh_pediatrics_scrape_manual_v1
+PED_URINARY_TRACT_INFECTION_BEDWETTING,兒童泌尿道感染與尿床,Pediatric urinary tract infection and bedwetting,disease_or_condition,PED_NEPHROLOGY,泌尿道感染;兒童尿床;尿床;水腎,,小孩尿道感染或尿床,兒童泌尿道感染、水腎與尿床。,cgmh_pediatrics_scrape_manual_v1
 PLASTIC_AESTHETIC_SURGERY,美容整形,Aesthetic surgery,procedure,PLASTIC_PLASTIC_SURGERY,美容手術;微整形;抽脂;拉皮;雙眼皮;眼袋;隆鼻;雷射,,美容整形,臉部、身體雕塑與雷射美容處置。,cgmh_plastic_surgery_scrape_manual_v1
 PLASTIC_BREAST_RECONSTRUCTION,乳房重建與整形,Breast reconstruction and aesthetic surgery,procedure,PLASTIC_PLASTIC_SURGERY,乳房重建;乳房美容;隆乳;乳癌重建;縮乳,,乳房整形重建,乳癌術後乳房重建與乳房美容手術。,cgmh_plastic_surgery_scrape_manual_v1
 PLASTIC_BURN_RECONSTRUCTION,燒燙傷重建,Burn reconstruction,procedure,PLASTIC_PLASTIC_SURGERY,燒燙傷;燒燙傷整形重建,,燒燙傷修復,燒燙傷治療、疤痕與功能重建。,cgmh_plastic_surgery_scrape_manual_v1
