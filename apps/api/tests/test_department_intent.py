@@ -74,6 +74,15 @@ def test_tied_concept_prefixes_have_no_single_intent():
         ("慢性腎臟病想看腎臟科", "NEPHRO_CKD", "腎臟科"),
         ("乳癌想看腫瘤科", "ONCO_BREAST_CANCER", "腫瘤科"),
         ("類風濕想看風濕免疫科", "RHEUM_RHEUMATOID_ARTHRITIS", "風濕免疫科"),
+        ("痔瘡想看大腸直腸外科", "PROCTO_HEMORRHOIDS", "大腸直腸肛門外科"),
+        ("想做疤痕重建整形", "PLASTIC_SCAR_KELOID", "整形外科"),
+        ("腦瘤想看神經外科", "NS_BRAIN_TUMOR", "神經外科"),
+        ("泌尿道結石想看泌尿科", "URO_URINARY_STONES", "泌尿科"),
+        ("心臟瓣膜手術想看心臟外科", "CVS_VALVE_SURGERY", "心臟血管外科"),
+        ("肺癌手術想看胸腔外科", "TS_LUNG_CANCER_TUMOR", "胸腔外科"),
+        ("多重外傷需要外傷急重症", "TRAUMA_MULTIPLE_TRAUMA", "外傷急症外科"),
+        ("肝臟移植想找肝臟外科", "LT_LIVER_TRANSPLANT_SURGERY", "肝臟移植外科"),
+        ("乳房外科追蹤乳房腫瘤", "GS_BREAST_CANCER_TUMOR", "一般外科"),
     ],
 )
 def test_detects_new_department_intents(query, concept_id, expected_department):

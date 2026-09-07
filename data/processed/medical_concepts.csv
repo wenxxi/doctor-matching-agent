@@ -28,6 +28,16 @@ CHEST_PULMONOLOGY,胸腔內科,Pulmonology,subspecialty,,胸腔科;肺部疾病;
 CHEST_SLEEP_APNEA,睡眠呼吸中止症,Sleep apnea,disease_or_condition,CHEST_PULMONOLOGY,睡眠呼吸中止,,睡覺打呼會停呼吸,睡眠期間反覆呼吸暫停或低通氣。,cgmh_chest_scrape_manual_v1
 CHEST_SMOKING_CESSATION,戒菸,Smoking cessation,procedure_modifier,CHEST_PULMONOLOGY,戒菸門診,,戒菸,協助戒除菸品使用以降低肺部與心血管風險。,cgmh_chest_scrape_manual_v1
 CHEST_TUBERCULOSIS,結核病,Tuberculosis,disease_or_condition,CHEST_PULMONOLOGY,結核;肺結核,,肺結核,結核菌感染，可影響肺部或其他器官。,cgmh_chest_scrape_manual_v1
+CVS_AORTIC_DISEASE,主動脈疾病,Aortic disease,disease_or_condition,CVS_CARDIOVASCULAR_SURGERY,主動脈疾病;主動脈剝離;主動脈瘤;主動脈手術,,主動脈問題,主動脈剝離、主動脈瘤與支架治療。,cgmh_cardiovascular_surgery_scrape_manual_v1
+CVS_CARDIOVASCULAR_SURGERY,心臟血管外科,Cardiovascular surgery,subspecialty,,心臟血管外科;心臟外科;血管外科,,心臟血管手術,心臟、大血管與周邊血管外科診療。,cgmh_cardiovascular_surgery_scrape_manual_v1
+CVS_CORONARY_BYPASS,冠狀動脈繞道手術,Coronary artery bypass grafting,procedure,CVS_CARDIOVASCULAR_SURGERY,冠狀動脈繞道;繞道手術,,心臟繞道手術,冠狀動脈疾病外科繞道治療。,cgmh_cardiovascular_surgery_scrape_manual_v1
+CVS_DEEP_VEIN_THROMBOSIS,深層靜脈血栓,Deep vein thrombosis,disease_or_condition,CVS_CARDIOVASCULAR_SURGERY,深層靜脈血栓,,深部靜脈血栓,深層靜脈血栓診療。,cgmh_cardiovascular_surgery_scrape_manual_v1
+CVS_DIALYSIS_ACCESS,洗腎通路手術,Dialysis access surgery,procedure,CVS_CARDIOVASCULAR_SURGERY,洗腎廔管;血液透析通路;洗腎通路,,洗腎血管通路,血液透析血管通路建立與維護。,cgmh_cardiovascular_surgery_scrape_manual_v1
+CVS_ECMO_CRITICAL_CARE,葉克膜與重症照護,ECMO and critical care,procedure,CVS_CARDIOVASCULAR_SURGERY,葉克膜;重症照護,,葉克膜,葉克膜植入與心血管外科重症照護。,cgmh_cardiovascular_surgery_scrape_manual_v1
+CVS_HEART_FAILURE_SURGERY,心衰竭外科治療,Surgical treatment for heart failure,procedure,CVS_CARDIOVASCULAR_SURGERY,心衰竭;心臟移植;心室輔助器,,心臟衰竭手術,心衰竭外科、心臟移植與心室輔助器治療。,cgmh_cardiovascular_surgery_scrape_manual_v1
+CVS_PERIPHERAL_ARTERIAL_DISEASE,下肢動脈阻塞,Peripheral arterial disease,disease_or_condition,CVS_CARDIOVASCULAR_SURGERY,下肢動脈阻塞;糖尿病足血管病變,,腳血管阻塞,下肢動脈阻塞與糖尿病足血管病變。,cgmh_cardiovascular_surgery_scrape_manual_v1
+CVS_VALVE_SURGERY,心臟瓣膜手術,Heart valve surgery,procedure,CVS_CARDIOVASCULAR_SURGERY,瓣膜修補;瓣膜置換;瓣膜手術;經導管瓣膜治療,,心臟瓣膜手術,心臟瓣膜修補、置換與經導管瓣膜治療。,cgmh_cardiovascular_surgery_scrape_manual_v1
+CVS_VARICOSE_VEINS,靜脈曲張,Varicose veins,disease_or_condition,CVS_CARDIOVASCULAR_SURGERY,靜脈曲張,,腳靜脈浮出來,靜脈曲張微創治療。,cgmh_cardiovascular_surgery_scrape_manual_v1
 ENDO_DIABETES,糖尿病,Diabetes mellitus,disease_or_condition,ENDO_ENDOCRINOLOGY,血糖;血糖高,,血糖高;糖尿病,血糖調控異常造成的慢性代謝疾病。,cgmh_endocrinology_scrape_manual_v1
 ENDO_DIABETIC_FOOT,糖尿病足病變,Diabetic foot disease,disease_or_condition,ENDO_DIABETES,糖尿病足,,糖尿病腳傷口,糖尿病造成足部傷口、感染或神經血管問題。,cgmh_endocrinology_scrape_manual_v1
 ENDO_ENDOCRINOLOGY,新陳代謝科,Endocrinology and metabolism,subspecialty,,內分泌科;新陳代謝;內分泌疾病,,內分泌問題;代謝問題,內分泌、糖尿病與代謝疾病診療。,cgmh_endocrinology_scrape_manual_v1
@@ -59,6 +69,17 @@ GI_HEPATITIS_C,C型肝炎,Hepatitis C,disease_or_condition,GI_LIVER_DISEASE,C型
 GI_INFLAMMATORY_BOWEL_DISEASE,發炎性腸道疾病,Inflammatory bowel disease,disease_or_condition,GI_GASTROENTEROLOGY,發炎性腸道疾病;IBD,,腸道慢性發炎,包含克隆氏症、潰瘍性結腸炎等慢性腸道發炎疾病。,cgmh_gastroenterology_scrape_manual_v1
 GI_LIVER_CANCER,肝癌,Liver cancer,disease_or_condition,GI_LIVER_DISEASE,肝癌;肝細胞癌;hepatocarcinogenesis;hepatocellular carcinoma,,肝癌,肝臟惡性腫瘤。,cgmh_gastroenterology_scrape_manual_v1
 GI_LIVER_DISEASE,肝臟疾病,Liver disease,disease_or_condition,GI_GASTROENTEROLOGY,肝臟學;肝病;肝膽,,肝臟問題,肝炎、脂肪肝、肝硬化或其他肝臟疾病。,cgmh_gastroenterology_scrape_manual_v1
+GS_BARIATRIC_SURGERY,減重與肥胖手術,Bariatric surgery,procedure,GS_GENERAL_SURGERY,減重手術;肥胖手術,,減重手術,肥胖與代謝減重手術。,cgmh_general_surgery_scrape_manual_v1
+GS_BREAST_CANCER_TUMOR,乳癌與乳房腫瘤,Breast cancer and breast tumor,disease_or_condition,GS_BREAST_SURGERY,乳癌;乳房腫瘤;乳癌篩檢,,乳房腫塊;乳癌,乳癌、乳房腫瘤與篩檢診斷。,cgmh_general_surgery_scrape_manual_v1
+GS_BREAST_SURGERY,乳房外科,Breast surgery,subspecialty,GS_GENERAL_SURGERY,乳房外科;乳房手術;乳房疾病,,乳房手術,乳房疾病、乳房腫瘤與乳癌外科治療。,cgmh_general_surgery_scrape_manual_v1
+GS_GASTROINTESTINAL_SURGERY,胃腸外科,Gastrointestinal surgery,subspecialty,GS_GENERAL_SURGERY,胃腸外科;胃腸腫瘤;胃癌;胃腫瘤;胃食道逆流,,胃腸手術,胃腸疾病與腫瘤外科治療。,cgmh_general_surgery_scrape_manual_v1
+GS_GENERAL_SURGERY,一般外科,General surgery,subspecialty,,一般外科,,一般外科,乳房、肝膽胰、胃腸、甲狀腺、疝氣與減重等一般外科診療。,cgmh_general_surgery_scrape_manual_v1
+GS_HEPATOBILIARY_SURGERY,肝膽胰外科,Hepatobiliary and pancreatic surgery,subspecialty,GS_GENERAL_SURGERY,肝膽胰;肝膽胰手術;膽道外科;膽胰疾病,,肝膽胰手術,肝臟、膽道、膽囊與胰臟疾病手術。,cgmh_general_surgery_scrape_manual_v1
+GS_HERNIA_SURGERY,疝氣手術,Hernia surgery,procedure,GS_GENERAL_SURGERY,疝氣;腹股溝疝氣;腹壁疝氣;臍疝氣;橫膈裂孔疝氣,,疝氣手術,腹股溝、腹壁、臍疝氣與複雜性疝氣修補。,cgmh_general_surgery_scrape_manual_v1
+GS_MINIMALLY_INVASIVE_SURGERY,一般外科微創手術,General surgery minimally invasive surgery,procedure,GS_GENERAL_SURGERY,腹腔鏡;微創;達文西;機械人輔助;機械手臂,,一般外科微創手術,一般外科腹腔鏡、單孔或機器手臂微創手術。,cgmh_general_surgery_scrape_manual_v1
+GS_PANCREATIC_SURGERY,胰臟手術,Pancreatic surgery,procedure,GS_HEPATOBILIARY_SURGERY,胰臟外科;胰臟手術,,胰臟手術,胰臟疾病與腫瘤手術。,cgmh_general_surgery_scrape_manual_v1
+GS_PERITONEAL_DIALYSIS_CATHETER,腹膜透析導管,Peritoneal dialysis catheter,procedure,GS_GENERAL_SURGERY,腹膜透析導管,,腹膜洗腎管,腹膜透析導管植入與追蹤。,cgmh_general_surgery_scrape_manual_v1
+GS_THYROID_PARATHYROID_SURGERY,甲狀腺及副甲狀腺手術,Thyroid and parathyroid surgery,procedure,GS_GENERAL_SURGERY,甲狀腺手術;副甲狀腺手術;甲狀腺內視鏡;甲狀腺囊腫,,甲狀腺手術,甲狀腺與副甲狀腺疾病手術及檢查。,cgmh_general_surgery_scrape_manual_v1
 GYN_ADENOMYOSIS,子宮肌腺症,Adenomyosis,disease_or_condition,GYN_GENERAL_GYNECOLOGY,子宮肌腺症;子宮肌腺瘤;腺瘤;肌腺瘤,,子宮腺肌症,子宮內膜組織進入子宮肌層，可能造成經痛或經血過多。,cgmh_gynecology_scrape_manual_v1
 GYN_ASSISTED_REPRODUCTION,人工生殖,Assisted reproduction,procedure,GYN_INFERTILITY,人工生殖科技;人工受孕;人工授精;胚胎植入;取卵;排卵誘導,,人工受孕;做人工生殖,排卵誘導、人工授精、胚胎植入等生殖治療。,cgmh_gynecology_scrape_manual_v1
 GYN_CERVICAL_CANCER,子宮頸癌,Cervical cancer,disease_or_condition,GYN_GYNECOLOGIC_ONCOLOGY,子宮頸癌;子宮頸癌前期,,子宮頸癌,子宮頸惡性腫瘤或癌前病變。,cgmh_gynecology_scrape_manual_v1
@@ -111,6 +132,13 @@ ID_LIVER_ABSCESS,肝膿瘍,Liver abscess,disease_or_condition,ID_INFECTIOUS_DISE
 ID_MICROBIAL_INFECTION,微生物感染,Microbial infection,disease_or_condition,ID_INFECTIOUS_DISEASE,微生物感染,,細菌病毒感染,微生物造成的感染性疾病。,cgmh_infectious_disease_scrape_manual_v1
 ID_MYCOBACTERIAL_INFECTION,分枝桿菌感染,Mycobacterial infection,disease_or_condition,ID_INFECTIOUS_DISEASE,分枝桿菌,,分枝桿菌感染,分枝桿菌相關感染診治。,cgmh_infectious_disease_scrape_manual_v1
 ID_URINARY_TRACT_INFECTION,泌尿道感染,Urinary tract infection,disease_or_condition,ID_INFECTIOUS_DISEASE,尿路感染;泌尿道感染,,尿道感染,泌尿系統感染。,cgmh_infectious_disease_scrape_manual_v1
+LT_BILIARY_SURGERY,膽道外科,Biliary surgery,procedure,LT_LIVER_TRANSPLANT_SURGERY,膽道外科;膽道手術;肝膽外科,,膽道手術,膽道與肝膽相關外科手術。,cgmh_liver_transplant_surgery_scrape_manual_v1
+LT_GASTROINTESTINAL_SURGERY,胃腸外科,Gastrointestinal surgery,subspecialty,LT_LIVER_TRANSPLANT_SURGERY,胃腸外科;胃腸道手術,,胃腸手術,胃腸道疾病外科手術。,cgmh_liver_transplant_surgery_scrape_manual_v1
+LT_LIVER_CANCER,肝癌治療,Liver cancer treatment,disease_or_condition,LT_LIVER_SURGERY,肝癌;肝癌治療,,肝癌,肝癌外科與相關治療。,cgmh_liver_transplant_surgery_scrape_manual_v1
+LT_LIVER_SURGERY,肝臟外科,Liver surgery,subspecialty,LT_LIVER_TRANSPLANT_SURGERY,肝臟外科;肝臟手術,,肝臟手術,肝臟疾病與肝臟腫瘤外科手術。,cgmh_liver_transplant_surgery_scrape_manual_v1
+LT_LIVER_TRANSPLANT_SURGERY,肝臟移植外科,Liver transplant surgery,subspecialty,,肝臟移植外科;肝臟移植,,肝臟移植,肝臟移植與肝膽胰外科相關治療。,cgmh_liver_transplant_surgery_scrape_manual_v1
+LT_MINIMALLY_INVASIVE_SURGERY,肝膽胰微創手術,Minimally invasive hepatobiliary surgery,procedure,LT_LIVER_TRANSPLANT_SURGERY,腹腔鏡;微創;達文西,,肝膽胰微創手術,肝膽胰胃腸腹腔鏡或機器手臂微創手術。,cgmh_liver_transplant_surgery_scrape_manual_v1
+LT_PANCREATIC_SURGERY,胰臟外科,Pancreatic surgery,procedure,LT_LIVER_TRANSPLANT_SURGERY,胰臟外科;胰臟手術,,胰臟手術,胰臟疾病外科手術。,cgmh_liver_transplant_surgery_scrape_manual_v1
 NEPHRO_AKI,急性腎損傷,Acute kidney injury,disease_or_condition,NEPHRO_NEPHROLOGY,急性腎臟疾病;急性腎衰竭,,腎功能突然變差,短時間內腎功能急速惡化。,cgmh_nephrology_scrape_manual_v1
 NEPHRO_CKD,慢性腎臟病,Chronic kidney disease,disease_or_condition,NEPHRO_NEPHROLOGY,慢性腎臟疾病;急慢性腎臟疾病;腎臟病,,腎功能不好,慢性腎功能下降與相關併發症。,cgmh_nephrology_scrape_manual_v1
 NEPHRO_DIABETIC_KIDNEY_DISEASE,糖尿病腎臟病變,Diabetic kidney disease,disease_or_condition,NEPHRO_CKD,糖尿病腎病變,,糖尿病影響腎臟,糖尿病造成的腎臟損傷。,cgmh_nephrology_scrape_manual_v1
@@ -152,6 +180,14 @@ NEURO_STROKE,腦中風,Stroke,disease_or_condition,NEURO_CEREBROVASCULAR_DISEASE
 NEURO_TMS,經顱磁刺激術,Transcranial magnetic stimulation,procedure,NEURO_NEUROLOGY,經顱磁刺激術;穿顱磁刺激術,,磁刺激治療,非侵入性腦部磁刺激治療或評估。,cgmh_neurology_scrape_manual_v1
 NEURO_TREMOR,震顫,Tremor,symptom,NEURO_MOVEMENT_DISORDERS,震顫;顫抖症,,手抖;發抖,身體部位不自主規律抖動。,cgmh_neurology_scrape_manual_v1
 NEURO_VASCULAR_DEMENTIA,血管性失智症,Vascular dementia,disease_or_condition,NEURO_DEMENTIA,血管性失智症,,中風後記憶退化,與腦血管疾病相關的認知退化。,cgmh_neurology_scrape_manual_v1
+NS_BRAIN_TUMOR,腦瘤,Brain tumor,disease_or_condition,NS_NEUROSURGERY,腦瘤;腦下垂體腫瘤;顱底腫瘤,,腦部腫瘤,腦部、腦下垂體或顱底腫瘤手術。,cgmh_neurosurgery_scrape_manual_v1
+NS_CEREBROVASCULAR_SURGERY,腦血管手術,Cerebrovascular surgery,procedure,NS_NEUROSURGERY,腦血管;腦中風;神經介入;血管疾病手術,,腦血管手術,腦血管疾病、腦中風與介入治療。,cgmh_neurosurgery_scrape_manual_v1
+NS_FUNCTIONAL_NEUROSURGERY,功能性神經外科,Functional neurosurgery,subspecialty,NS_NEUROSURGERY,功能性神經外科;帕金森氏症;癲癇手術;三叉神經痛,,癲癇或巴金森手術,癲癇、動作障礙、疼痛等功能性神經外科治療。,cgmh_neurosurgery_scrape_manual_v1
+NS_HEAD_SPINE_TRAUMA,頭部及脊椎外傷,Head and spine trauma,disease_or_condition,NS_NEUROSURGERY,頭部外傷;脊椎外傷;腦及脊髓外傷;腦脊髓外傷,,頭部或脊椎受傷,頭部、腦、脊髓與脊椎外傷。,cgmh_neurosurgery_scrape_manual_v1
+NS_NEUROSURGERY,神經外科,Neurosurgery,subspecialty,,神經外科;急重症神經外科,,腦神經外科,腦、脊椎、神經外傷與功能性神經外科手術。,cgmh_neurosurgery_scrape_manual_v1
+NS_PEDIATRIC_NEUROSURGERY,兒童神經外科,Pediatric neurosurgery,subspecialty,NS_NEUROSURGERY,兒童神經外科;小兒神經外科,,兒童腦神經外科,兒童神經外科急重症與手術。,cgmh_neurosurgery_scrape_manual_v1
+NS_ROBOTIC_NEUROSURGERY,機器手臂輔助神經外科,Robotic neurosurgery,procedure,NS_NEUROSURGERY,機器手臂輔助;ROSA;導航,,機器手臂神經手術,機器手臂、導航或精準定位輔助神經外科手術。,cgmh_neurosurgery_scrape_manual_v1
+NS_SPINE_SURGERY,神經外科脊椎手術,Neurosurgical spine surgery,procedure,NS_NEUROSURGERY,脊椎手術;脊椎神經外科;微創脊椎;脊椎病變,,神經外科脊椎手術,脊椎退化、外傷或神經壓迫相關神經外科手術。,cgmh_neurosurgery_scrape_manual_v1
 ONCO_BREAST_CANCER,乳癌,Breast cancer,disease_or_condition,ONCO_ONCOLOGY,乳癌,,乳房癌症,乳房惡性腫瘤。,cgmh_oncology_scrape_manual_v1
 ONCO_ESOPHAGEAL_CANCER,食道癌,Esophageal cancer,disease_or_condition,ONCO_ONCOLOGY,食道癌,,食道癌,食道惡性腫瘤。,cgmh_oncology_scrape_manual_v1
 ONCO_GENERAL_INTERNAL_MEDICINE,腫瘤科一般內科,General internal medicine in oncology,subspecialty,ONCO_ONCOLOGY,內科,,一般內科問題,腫瘤科門診中的一般內科評估。,cgmh_oncology_scrape_manual_v1
@@ -237,6 +273,28 @@ ORTHO_UPPER_LIMB_FRACTURE,上肢骨折,Upper limb fracture,disease_or_condition,
 ORTHO_VERTEBROPLASTY,骨水泥灌注治療,Vertebroplasty,procedure,ORTHO_SPINE_COMPRESSION_FRACTURE,骨水泥;脊椎灌漿手術;Vertebroplasty;脊椎骨折骨水泥手術,,灌骨水泥,以骨水泥穩定脊椎壓迫性骨折。,cgmh_orthopedics_scrape_manual_v1
 ORTHO_WRIST,腕關節,Wrist,anatomy,,腕,,手腕,前臂與手之間的關節。,cgmh_orthopedics_scrape_manual_v1
 ORTHO_WRIST_DISORDERS,腕關節疾病,Wrist disorders,subspecialty,,腕關節重建;腕部病變,,手腕問題,腕關節疼痛、退化、外傷或重建問題。,cgmh_orthopedics_scrape_manual_v1
+PLASTIC_AESTHETIC_SURGERY,美容整形,Aesthetic surgery,procedure,PLASTIC_PLASTIC_SURGERY,美容手術;微整形;抽脂;拉皮;雙眼皮;眼袋;隆鼻;雷射,,美容整形,臉部、身體雕塑與雷射美容處置。,cgmh_plastic_surgery_scrape_manual_v1
+PLASTIC_BREAST_RECONSTRUCTION,乳房重建與整形,Breast reconstruction and aesthetic surgery,procedure,PLASTIC_PLASTIC_SURGERY,乳房重建;乳房美容;隆乳;乳癌重建;縮乳,,乳房整形重建,乳癌術後乳房重建與乳房美容手術。,cgmh_plastic_surgery_scrape_manual_v1
+PLASTIC_BURN_RECONSTRUCTION,燒燙傷重建,Burn reconstruction,procedure,PLASTIC_PLASTIC_SURGERY,燒燙傷;燒燙傷整形重建,,燒燙傷修復,燒燙傷治療、疤痕與功能重建。,cgmh_plastic_surgery_scrape_manual_v1
+PLASTIC_CHRONIC_WOUND,慢性傷口,Chronic wound,disease_or_condition,PLASTIC_PLASTIC_SURGERY,慢性傷口;急慢性傷口;糖尿病足,,傷口很久不癒合,慢性或困難傷口照護與重建。,cgmh_plastic_surgery_scrape_manual_v1
+PLASTIC_CRANIOFACIAL_SURGERY,顱顏整形,Craniofacial surgery,subspecialty,PLASTIC_PLASTIC_SURGERY,顱顏整形;顱顏重建;正顎手術;削骨手術;唇顎裂,,臉骨重建;正顎削骨,顱顏畸形、正顎、削骨與唇顎裂重建。,cgmh_plastic_surgery_scrape_manual_v1
+PLASTIC_GENDER_AFFIRMING_SURGERY,性別置換手術,Gender affirming surgery,procedure,PLASTIC_PLASTIC_SURGERY,性別置換手術;變性手術;臉部女性化;平胸,,性別重置手術,性別肯定相關整形手術。,cgmh_plastic_surgery_scrape_manual_v1
+PLASTIC_HAND_SURGERY,手外科,Hand surgery,subspecialty,PLASTIC_PLASTIC_SURGERY,手外科;手部外傷;手外傷;腕關節外傷,,手部受傷;手腕受傷,手部、腕部外傷與功能重建。,cgmh_plastic_surgery_scrape_manual_v1
+PLASTIC_LYMPHEDEMA_SURGERY,淋巴水腫手術,Lymphedema surgery,procedure,PLASTIC_RECONSTRUCTIVE_SURGERY,淋巴水腫;淋巴吻合,,淋巴水腫,淋巴水腫顯微重建與吻合手術。,cgmh_plastic_surgery_scrape_manual_v1
+PLASTIC_PERIPHERAL_NERVE_RECONSTRUCTION,周邊神經重建,Peripheral nerve reconstruction,procedure,PLASTIC_RECONSTRUCTIVE_SURGERY,周邊神經;神經重建;臂叢神經;腕隧道;肘隧道,,神經修復;手腳麻神經壓迫,周邊神經損傷、壓迫或腫瘤相關重建。,cgmh_plastic_surgery_scrape_manual_v1
+PLASTIC_PLASTIC_SURGERY,整形外科,Plastic surgery,subspecialty,,整形外科;整形;整形美容,,整形重建;美容整形,重建、顯微、外傷與美容整形相關診療。,cgmh_plastic_surgery_scrape_manual_v1
+PLASTIC_RECONSTRUCTIVE_SURGERY,重建手術,Reconstructive surgery,procedure,PLASTIC_PLASTIC_SURGERY,重建;整形重建;外傷重建整形;顯微重建,,重建手術,外傷、腫瘤切除後或先天缺損的組織重建。,cgmh_plastic_surgery_scrape_manual_v1
+PLASTIC_SCAR_KELOID,疤痕與蟹足腫,Scar and keloid,disease_or_condition,PLASTIC_PLASTIC_SURGERY,疤痕;蟹足腫;修疤,,疤痕修復,疤痕、蟹足腫與疤痕美化治療。,cgmh_plastic_surgery_scrape_manual_v1
+PROCTO_ANAL_FISTULA,肛門廔管,Anal fistula,disease_or_condition,PROCTO_COLORECTAL_SURGERY,肛門瘺管;肛門廔管;廔管,,肛門廔管,肛門周邊感染後形成的異常通道。,cgmh_colorectal_surgery_scrape_manual_v1
+PROCTO_COLONOSCOPY,大腸鏡檢查,Colonoscopy,procedure,PROCTO_COLORECTAL_SURGERY,大腸鏡;無痛大腸鏡;舒眠大腸鏡,,照大腸鏡,以內視鏡檢查大腸與直腸。,cgmh_colorectal_surgery_scrape_manual_v1
+PROCTO_COLORECTAL_CANCER,大腸直腸癌,Colorectal cancer,disease_or_condition,PROCTO_COLORECTAL_SURGERY,大腸直腸癌;直腸癌;大腸癌,,大腸癌;直腸癌,大腸或直腸惡性腫瘤。,cgmh_colorectal_surgery_scrape_manual_v1
+PROCTO_COLORECTAL_SURGERY,大腸直腸肛門外科,Colorectal surgery,subspecialty,,大腸直腸肛門外科;大腸直腸外科,,大腸直腸肛門問題,大腸、直腸與肛門疾病的外科診療。,cgmh_colorectal_surgery_scrape_manual_v1
+PROCTO_CONSTIPATION,便秘,Constipation,symptom,PROCTO_COLORECTAL_SURGERY,便祕;便秘,,排便困難,排便次數減少或排便困難。,cgmh_colorectal_surgery_scrape_manual_v1
+PROCTO_HEMORRHOIDS,痔瘡,Hemorrhoids,disease_or_condition,PROCTO_COLORECTAL_SURGERY,痔瘡;痔精割,,痔瘡,肛門周邊血管墊腫脹、疼痛或出血。,cgmh_colorectal_surgery_scrape_manual_v1
+PROCTO_HIPEC,腹腔內溫熱化療,HIPEC,procedure,PROCTO_COLORECTAL_CANCER,腹腔內溫熱化療;HIPEC,,腹腔熱化療,腹腔腫瘤相關溫熱化學治療。,cgmh_colorectal_surgery_scrape_manual_v1
+PROCTO_INFLAMMATORY_BOWEL_DISEASE,發炎性腸道疾病,Inflammatory bowel disease,disease_or_condition,PROCTO_COLORECTAL_SURGERY,發炎性腸道疾病;IBD;潰瘍性大腸炎,,腸道發炎,慢性腸道發炎疾病。,cgmh_colorectal_surgery_scrape_manual_v1
+PROCTO_MINIMALLY_INVASIVE_SURGERY,大腸直腸微創手術,Colorectal minimally invasive surgery,procedure,PROCTO_COLORECTAL_SURGERY,微創手術;腹腔鏡手術;達文西機械手臂手術;機器手臂微創手術,,微創大腸直腸手術,以腹腔鏡、內視鏡或機器手臂進行大腸直腸手術。,cgmh_colorectal_surgery_scrape_manual_v1
+PROCTO_STOMA,腸造口,Stoma surgery,procedure,PROCTO_COLORECTAL_SURGERY,大腸造口;腸造口;造口關閉,,人工肛門,腸造口建立或關閉相關手術。,cgmh_colorectal_surgery_scrape_manual_v1
 RHEUM_ALLERGY,過敏,Allergy,disease_or_condition,RHEUM_RHEUMATOLOGY,過敏;氣喘及過敏,,過敏問題,免疫系統對特定物質過度反應造成的症狀。,cgmh_rheumatology_scrape_manual_v1
 RHEUM_ANKYLOSING_SPONDYLITIS,僵直性脊椎炎,Ankylosing spondylitis,disease_or_condition,RHEUM_RHEUMATOLOGY,下背痛脊椎炎;僵直性脊椎炎門診,,僵直性脊椎炎;發炎性下背痛,以脊椎與薦腸關節發炎為主的風濕免疫疾病。,cgmh_rheumatology_scrape_manual_v1
 RHEUM_AUTOIMMUNE_DISEASE,自體免疫疾病,Autoimmune disease,disease_or_condition,RHEUM_RHEUMATOLOGY,自體免疫疾病,,免疫系統攻擊自己,免疫系統攻擊自身組織造成的疾病。,cgmh_rheumatology_scrape_manual_v1
@@ -245,3 +303,29 @@ RHEUM_GOUT,痛風及高尿酸血症,Gout and hyperuricemia,disease_or_condition,
 RHEUM_LUPUS,紅斑性狼瘡,Systemic lupus erythematosus,disease_or_condition,RHEUM_RHEUMATOLOGY,紅斑性狼瘡,,狼瘡,全身性自體免疫疾病，可影響皮膚、關節、腎臟等器官。,cgmh_rheumatology_scrape_manual_v1
 RHEUM_RHEUMATOID_ARTHRITIS,類風濕關節炎,Rheumatoid arthritis,disease_or_condition,RHEUM_RHEUMATOLOGY,類風濕性關節炎;類風濕關節炎門診,,類風濕,自體免疫造成慢性關節發炎。,cgmh_rheumatology_scrape_manual_v1
 RHEUM_RHEUMATOLOGY,風濕免疫科,Rheumatology and immunology,subspecialty,,風濕科;免疫風濕;自體免疫疾病,,免疫風濕問題,自體免疫、風濕與過敏相關疾病診療。,cgmh_rheumatology_scrape_manual_v1
+TRAUMA_ABDOMINAL_EMERGENCY,腹部急症,Abdominal emergency,disease_or_condition,TRAUMA_TRAUMA_SURGERY,腹部急症,,急性肚子痛,需要急症外科評估的腹部急症。,cgmh_trauma_surgery_scrape_manual_v1
+TRAUMA_EMERGENCY_MEDICINE,急診醫療,Emergency medicine,subspecialty,TRAUMA_TRAUMA_SURGERY,急診醫療,,急診,急診醫療與外傷初期處置。,cgmh_trauma_surgery_scrape_manual_v1
+TRAUMA_GENERAL_SURGERY,外傷一般外科,General surgery in trauma,subspecialty,TRAUMA_TRAUMA_SURGERY,一般外科;一般外科手術,,一般外科急症,外傷急症中的一般外科處置。,cgmh_trauma_surgery_scrape_manual_v1
+TRAUMA_LAPAROSCOPIC_ACUTE_SURGERY,急症腹腔鏡微創手術,Laparoscopic acute care surgery,procedure,TRAUMA_TRAUMA_SURGERY,腹腔鏡微創手術;腹腔鏡疝氣手術,,急症微創手術,外傷或急症肝膽胰胃腸腹腔鏡手術。,cgmh_trauma_surgery_scrape_manual_v1
+TRAUMA_MULTIPLE_TRAUMA,多重外傷,Multiple trauma,disease_or_condition,TRAUMA_TRAUMA_SURGERY,多重外傷,,嚴重多處受傷,多部位或嚴重外傷照護。,cgmh_trauma_surgery_scrape_manual_v1
+TRAUMA_RIB_CHEST_WALL_INJURY,胸壁創傷與肋骨骨折,Chest wall trauma and rib fracture,disease_or_condition,TRAUMA_TRAUMA_SURGERY,胸壁創傷;肋骨骨折,,肋骨骨折,胸壁創傷與肋骨骨折手術。,cgmh_trauma_surgery_scrape_manual_v1
+TRAUMA_TRAUMA_SURGERY,外傷急症外科,Trauma and acute care surgery,subspecialty,,外傷急症外科;外傷急重症醫療;外傷及重症醫療,,外傷急症,外傷、急症與急重症外科照護。,cgmh_trauma_surgery_scrape_manual_v1
+TS_CHEST_WALL_RECONSTRUCTION,胸壁與胸廓重建,Chest wall reconstruction,procedure,TS_THORACIC_SURGERY,胸廓手術;胸廓重建;胸壁重建;漏斗胸,,胸壁重建,胸壁、胸廓與漏斗胸矯正重建手術。,cgmh_thoracic_surgery_scrape_manual_v1
+TS_ESOPHAGEAL_DISEASE_TUMOR,食道疾病與食道腫瘤,Esophageal disease and tumor,disease_or_condition,TS_THORACIC_SURGERY,食道疾病;食道癌;食道腫瘤;食道手術,,食道腫瘤,食道疾病、食道癌與食道重建手術。,cgmh_thoracic_surgery_scrape_manual_v1
+TS_INTRATHORACIC_CHEMOTHERAPY,胸腔內熱化療,Intrathoracic heated chemotherapy,procedure,TS_THORACIC_SURGERY,胸腔內熱化療;熱消融;冷凍治療,,胸腔熱化療,胸腔腫瘤相關局部熱化療、消融或冷凍治療。,cgmh_thoracic_surgery_scrape_manual_v1
+TS_LUNG_CANCER_TUMOR,肺癌與肺腫瘤,Lung cancer and lung tumor,disease_or_condition,TS_THORACIC_SURGERY,肺癌;肺腫瘤;肺臟腫瘤,,肺部腫瘤,肺癌與肺部腫瘤手術。,cgmh_thoracic_surgery_scrape_manual_v1
+TS_LUNG_TRANSPLANT,肺臟移植,Lung transplant,procedure,TS_THORACIC_SURGERY,肺移植;肺臟移植,,換肺,肺臟移植手術與照護。,cgmh_thoracic_surgery_scrape_manual_v1
+TS_MEDIASTINAL_TUMOR,縱膈腫瘤,Mediastinal tumor,disease_or_condition,TS_THORACIC_SURGERY,縱膈腫瘤;縱隔腔腫瘤;胸腺腫瘤;胸腺切除,,胸腔中間腫瘤,縱膈腔與胸腺腫瘤手術。,cgmh_thoracic_surgery_scrape_manual_v1
+TS_PNEUMOTHORAX,氣胸,Pneumothorax,disease_or_condition,TS_THORACIC_SURGERY,氣胸,,肺塌陷,氣胸與相關胸腔鏡手術。,cgmh_thoracic_surgery_scrape_manual_v1
+TS_THORACIC_SURGERY,胸腔外科,Thoracic surgery,subspecialty,,胸腔外科;胸腔鏡;胸腔微創手術,,胸腔手術,肺、食道、縱膈與胸壁相關外科治療。,cgmh_thoracic_surgery_scrape_manual_v1
+TS_TRACHEAL_AIRWAY_SURGERY,氣管與呼吸道手術,Tracheal and airway surgery,procedure,TS_THORACIC_SURGERY,氣管;氣管支架;氣管狹窄;氣管腫瘤,,氣管手術,氣管狹窄、腫瘤與支架治療。,cgmh_thoracic_surgery_scrape_manual_v1
+URO_BPH,攝護腺肥大,Benign prostatic hyperplasia,disease_or_condition,URO_UROLOGY,攝護腺肥大;前列腺疾病;良性攝護腺肥大,,攝護腺變大;排尿不順,良性攝護腺肥大造成排尿症狀。,cgmh_urology_scrape_manual_v1
+URO_FEMALE_UROLOGY_INCONTINENCE,婦女泌尿與尿失禁,Female urology and urinary incontinence,disease_or_condition,URO_UROLOGY,婦女尿失禁;婦女泌尿;尿失禁,,漏尿,女性泌尿系統與尿失禁相關問題。,cgmh_urology_scrape_manual_v1
+URO_KIDNEY_TRANSPLANT,泌尿科腎臟移植,Urologic kidney transplant,procedure,URO_UROLOGY,腎臟移植,,換腎手術,泌尿科腎臟移植相關手術與照護。,cgmh_urology_scrape_manual_v1
+URO_MALE_SEXUAL_INFERTILITY,男性性功能與不孕,Male sexual dysfunction and infertility,disease_or_condition,URO_UROLOGY,性功能障礙;男性不孕症;男性學,,男性性功能問題;不孕,男性性功能障礙、不孕與男性學相關問題。,cgmh_urology_scrape_manual_v1
+URO_MINIMALLY_INVASIVE_SURGERY,泌尿微創手術,Urologic minimally invasive surgery,procedure,URO_UROLOGY,達文西;腹腔鏡;單孔;雷射手術;泌尿系統微創手術,,泌尿微創手術,泌尿系統腹腔鏡、機器手臂、雷射或單孔微創手術。,cgmh_urology_scrape_manual_v1
+URO_PEDIATRIC_UROLOGY,小兒泌尿,Pediatric urology,subspecialty,URO_UROLOGY,小兒先天性泌尿系統異常;小兒泌尿,,兒童泌尿問題,兒童先天或後天泌尿系統異常。,cgmh_urology_scrape_manual_v1
+URO_URINARY_STONES,泌尿道結石,Urinary stones,disease_or_condition,URO_UROLOGY,泌尿道結石;泌尿結石;腎臟結石,,尿路結石;腎結石,腎臟、輸尿管、膀胱等泌尿道結石。,cgmh_urology_scrape_manual_v1
+URO_UROLOGIC_CANCER,泌尿系統腫瘤,Urologic cancer,disease_or_condition,URO_UROLOGY,泌尿腫瘤;泌尿道腫瘤;泌尿系統腫瘤;泌尿系統癌症,,泌尿系統癌症,腎臟、膀胱、攝護腺等泌尿系統腫瘤。,cgmh_urology_scrape_manual_v1
+URO_UROLOGY,泌尿科,Urology,subspecialty,,一般泌尿科;一般泌尿;泌尿系統疾病,,泌尿問題,泌尿系統疾病、結石、攝護腺與泌尿腫瘤診療。,cgmh_urology_scrape_manual_v1
+URO_VOIDING_DYSFUNCTION,排尿功能障礙,Voiding dysfunction,symptom,URO_UROLOGY,排尿障礙;排尿功能障礙;膀胱功能障礙,,尿不出來;頻尿漏尿,排尿困難、頻尿、尿失禁或膀胱功能問題。,cgmh_urology_scrape_manual_v1
