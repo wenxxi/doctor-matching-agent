@@ -15,7 +15,6 @@ services:
   - type: web
     name: doctor-matching-agent-web
     runtime: static
-    plan: free
     buildCommand: cd apps/web && npm ci && npm run build
     staticPublishPath: apps/web/out
     envVars:
