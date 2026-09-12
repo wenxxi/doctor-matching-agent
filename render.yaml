@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: doctor-matching-agent-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r apps/api/requirements.txt
+    startCommand: cd apps/api && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: FRONTEND_ORIGINS
+        value: https://doctor-matching-agent-web.onrender.com
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
+
+  - type: web
+    name: doctor-matching-agent-web
+    runtime: static
+    plan: free
+    buildCommand: cd apps/web && npm ci && npm run build
+    staticPublishPath: apps/web/out
+    envVars:
+      - key: NEXT_PUBLIC_API_BASE_URL
+        value: https://doctor-matching-agent-api.onrender.com
