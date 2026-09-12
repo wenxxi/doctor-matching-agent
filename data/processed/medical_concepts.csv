@@ -35,7 +35,7 @@ CVS_DEEP_VEIN_THROMBOSIS,深層靜脈血栓,Deep vein thrombosis,disease_or_cond
 CVS_DIALYSIS_ACCESS,洗腎通路手術,Dialysis access surgery,procedure,CVS_CARDIOVASCULAR_SURGERY,洗腎廔管;血液透析通路;洗腎通路,,洗腎血管通路,血液透析血管通路建立與維護。,cgmh_cardiovascular_surgery_scrape_manual_v1
 CVS_ECMO_CRITICAL_CARE,葉克膜與重症照護,ECMO and critical care,procedure,CVS_CARDIOVASCULAR_SURGERY,葉克膜;重症照護,,葉克膜,葉克膜植入與心血管外科重症照護。,cgmh_cardiovascular_surgery_scrape_manual_v1
 CVS_HEART_FAILURE_SURGERY,心衰竭外科治療,Surgical treatment for heart failure,procedure,CVS_CARDIOVASCULAR_SURGERY,心衰竭;心臟移植;心室輔助器,,心臟衰竭手術,心衰竭外科、心臟移植與心室輔助器治療。,cgmh_cardiovascular_surgery_scrape_manual_v1
-CVS_PERIPHERAL_ARTERIAL_DISEASE,下肢動脈阻塞,Peripheral arterial disease,disease_or_condition,CVS_CARDIOVASCULAR_SURGERY,下肢動脈阻塞;糖尿病足血管病變,,腳血管阻塞,下肢動脈阻塞與糖尿病足血管病變。,cgmh_cardiovascular_surgery_scrape_manual_v1
+CVS_PERIPHERAL_ARTERIAL_DISEASE,下肢動脈阻塞,Peripheral arterial disease,disease_or_condition,CVS_CARDIOVASCULAR_SURGERY,下肢動脈阻塞;下肢血管阻塞;腳血管阻塞;足部血管阻塞;糖尿病足血管病變;腳黑掉;腳發黑;腳變黑;足部變黑,,腳血管阻塞;腳黑掉了;腳變黑發黑,下肢動脈阻塞與糖尿病足血管病變。,cgmh_cardiovascular_surgery_scrape_manual_v1
 CVS_VALVE_SURGERY,心臟瓣膜手術,Heart valve surgery,procedure,CVS_CARDIOVASCULAR_SURGERY,瓣膜修補;瓣膜置換;瓣膜手術;經導管瓣膜治療,,心臟瓣膜手術,心臟瓣膜修補、置換與經導管瓣膜治療。,cgmh_cardiovascular_surgery_scrape_manual_v1
 CVS_VARICOSE_VEINS,靜脈曲張,Varicose veins,disease_or_condition,CVS_CARDIOVASCULAR_SURGERY,靜脈曲張,,腳靜脈浮出來,靜脈曲張微創治療。,cgmh_cardiovascular_surgery_scrape_manual_v1
 DERM_ACNE_ROSACEA_SCAR,青春痘酒糟與痘疤,Acne rosacea and acne scar,disease_or_condition,DERM_DERMATOLOGY,青春痘;痘疤;酒糟;玫瑰斑,,痘痘痘疤,青春痘、酒糟與痘疤治療。,cgmh_dermatology_scrape_manual_v1
