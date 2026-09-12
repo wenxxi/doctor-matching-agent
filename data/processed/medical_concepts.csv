@@ -235,7 +235,7 @@ ONCO_ONCOLOGY,腫瘤科,Oncology,subspecialty,,癌症治療;固體腫瘤;腫瘤�
 ONCO_PALLIATIVE_CARE,安寧療護,Palliative care,subspecialty,ONCO_ONCOLOGY,安寧療護,,安寧照護,針對嚴重疾病或癌症病人的症狀緩和與照護。,cgmh_oncology_scrape_manual_v1
 ONCO_UROLOGIC_CANCER,泌尿道腫瘤,Urologic cancer,disease_or_condition,ONCO_ONCOLOGY,泌尿道腫瘤;泌尿道癌,,泌尿系統癌症,泌尿系統相關癌症。,cgmh_oncology_scrape_manual_v1
 OPH_CATARACT,白內障,Cataract,disease_or_condition,OPH_OPHTHALMOLOGY,白內障;白內障手術;白內障超音波乳化;飛秒雷射白內障,,白內障,白內障診斷與手術治療。,cgmh_ophthalmology_scrape_manual_v1
-OPH_CORNEA_OCULAR_SURFACE,角膜與眼表疾病,Cornea and ocular surface disease,disease_or_condition,OPH_OPHTHALMOLOGY,眼角膜;角膜;角結膜;外眼部疾病;眼表;角膜水腫,,角膜眼表問題,角膜、結膜、外眼部與眼表疾病。,cgmh_ophthalmology_scrape_manual_v1
+OPH_CORNEA_OCULAR_SURFACE,角膜與眼表疾病,Cornea and ocular surface disease,disease_or_condition,OPH_OPHTHALMOLOGY,眼角膜;角膜;角結膜;外眼部疾病;眼表;角膜水腫;乾眼;乾眼症;眼睛乾澀;眼睛酸澀;異物感,,角膜眼表問題;眼睛酸澀異物感;眼睛乾乾有異物感,角膜、結膜、外眼部與眼表疾病。,cgmh_ophthalmology_scrape_manual_v1
 OPH_EYE_TUMOR_TRAUMA_INFECTION,眼部腫瘤外傷與感染,Eye tumor trauma and infection,disease_or_condition,OPH_OPHTHALMOLOGY,眼部腫瘤;眼腫瘤;眼部外傷;眼內炎;眼窩腫瘤;眼瞼及眼窩腫瘤,,眼睛腫瘤外傷感染,眼部與眼窩腫瘤、外傷與眼內炎。,cgmh_ophthalmology_scrape_manual_v1
 OPH_GLAUCOMA,青光眼,Glaucoma,disease_or_condition,OPH_OPHTHALMOLOGY,青光眼;小樑成型;虹膜切開;導管植入,,青光眼,青光眼診斷、雷射與手術治療。,cgmh_ophthalmology_scrape_manual_v1
 OPH_OCULOPLASTIC_ORBIT_LACRIMAL,眼整形眼窩與淚管疾病,Oculoplastic orbital and lacrimal disease,procedure,OPH_OPHTHALMOLOGY,眼瞼下垂;眼皮下垂;眼窩;眼瞼;睫毛倒插;溢淚;鼻淚管阻塞;淚管;雙眼皮;眼袋;義眼;甲狀腺眼疾,,眼皮眼窩淚管問題,眼瞼、眼窩、淚管、甲狀腺眼疾與眼整形手術。,cgmh_ophthalmology_scrape_manual_v1

@@ -118,6 +118,25 @@ def test_recommendations_for_productive_cough_query(monkeypatch):
     assert data["message"] is None
 
 
+def test_recommendations_for_ocular_surface_query(monkeypatch):
+    clear_openai_settings(monkeypatch)
+
+    response = client.post(
+        "/api/recommendations",
+        json={"query": "眼睛酸澀 異物感", "limit": 3},
+    )
+
+    assert response.status_code == 200
+    data = response.json()
+    concept_ids = {concept["concept_id"] for concept in data["matched_concepts"]}
+    departments = {doctor["department_zh"] for doctor in data["recommended_doctors"]}
+    assert "OPH_CORNEA_OCULAR_SURFACE" in concept_ids
+    assert data["department_intent"] == "眼科"
+    assert data["recommended_doctors"]
+    assert departments == {"眼科"}
+    assert data["message"] is None
+
+
 def test_recommendations_unknown_query_returns_helpful_message(monkeypatch):
     clear_openai_settings(monkeypatch)
 
