@@ -28,12 +28,16 @@ If Render gives either service a different URL, update these environment variabl
 - API service: `FRONTEND_ORIGINS`
 - Web service: `NEXT_PUBLIC_API_BASE_URL`
 
-## Optional OpenAI Settings
+## OpenAI-Generated Reasons
 
-The app works without `OPENAI_API_KEY` by using keyword matching. To enable OpenAI-assisted extraction and reasons, add this secret to the API service environment:
+The app works without `OPENAI_API_KEY` by using keyword matching. In that mode, doctor cards show deterministic reasons such as `符合概念`.
+
+To enable generated doctor descriptions, add this secret to the API service environment:
 
 ```text
 OPENAI_API_KEY=your_api_key
 ```
 
 Do not commit API keys to the repo.
+
+After adding or changing this value in Render, redeploy the API service.
