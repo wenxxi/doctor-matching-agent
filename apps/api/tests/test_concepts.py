@@ -4,6 +4,7 @@ from fastapi.testclient import TestClient
 
 import app.services.openai_concept_extractor as openai_extractor_module
 from app.main import app
+from app.services.processed_data import load_medical_concepts
 from app.settings import get_openai_settings
 
 
@@ -70,7 +71,7 @@ def test_extract_concepts_uses_mocked_openai_with_api_key(monkeypatch):
     data = response.json()
     assert data["extractor"] == "openai"
     assert data["fallback_used"] is False
-    assert data["candidate_concepts_count"] <= 30
+    assert data["candidate_concepts_count"] == len(load_medical_concepts())
     assert data["input_tokens"] == 101
     assert data["output_tokens"] == 12
     assert [concept["concept_id"] for concept in data["matched_concepts"]] == ["ORTHO_KNEE"]

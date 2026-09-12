@@ -1,7 +1,6 @@
 from fastapi import APIRouter
 
 from app.schemas import RecommendationRequest, RecommendationResponse
-from app.services.clinical_query_rules import apply_clinical_query_rules
 from app.services.concept_extractor import get_concept_extractor
 from app.services.department_intent import detect_department_intent
 from app.services.doctor_matcher import rank_doctors, to_concept_response
@@ -14,7 +13,7 @@ router = APIRouter(prefix="/api/recommendations", tags=["recommendations"])
 def recommend_doctors(request: RecommendationRequest) -> RecommendationResponse:
     extractor = get_concept_extractor()
     extraction = extractor.extract_with_metadata(request.query)
-    matched_concepts = apply_clinical_query_rules(request.query, extraction.concepts)
+    matched_concepts = extraction.concepts
     department_intent = detect_department_intent(request.query, matched_concepts)
     recommended_doctors = rank_doctors(
         matched_concepts,

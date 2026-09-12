@@ -1,12 +1,28 @@
+from types import SimpleNamespace
+
 from fastapi.testclient import TestClient
 
 import app.routers.recommendations as recommendations_router
+import app.services.openai_concept_extractor as openai_extractor_module
 from app.main import app
 from app.services.openai_reason_generator import ReasonGenerationResult
 from app.settings import get_openai_settings
 
 
 client = TestClient(app)
+
+
+class FakeResponses:
+    def __init__(self, output_text: str) -> None:
+        self.output_text = output_text
+
+    def create(self, **kwargs):
+        return SimpleNamespace(output_text=self.output_text, usage=None)
+
+
+class FakeClient:
+    def __init__(self, output_text: str) -> None:
+        self.responses = FakeResponses(output_text)
 
 
 def clear_openai_settings(monkeypatch):
@@ -138,7 +154,18 @@ def test_recommendations_for_ocular_surface_query(monkeypatch):
 
 
 def test_recommendations_for_black_leg_query_routes_to_vascular_and_diabetic_foot(monkeypatch):
-    clear_openai_settings(monkeypatch)
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+    get_openai_settings.cache_clear()
+    fake_client = FakeClient(
+        '{"concept_ids":["CVS_PERIPHERAL_ARTERIAL_DISEASE","ENDO_DIABETIC_FOOT"],"confidence":0.86}'
+    )
+    monkeypatch.setattr(openai_extractor_module, "get_openai_client", lambda: fake_client)
+    monkeypatch.setattr(openai_extractor_module, "get_openai_model", lambda: "gpt-4o-mini")
+    monkeypatch.setattr(
+        recommendations_router,
+        "generate_llm_reasons_with_metadata",
+        lambda query, matched_concepts, doctors: ReasonGenerationResult(reasons={}),
+    )
 
     response = client.post(
         "/api/recommendations",
@@ -149,6 +176,7 @@ def test_recommendations_for_black_leg_query_routes_to_vascular_and_diabetic_foo
     data = response.json()
     concept_ids = {concept["concept_id"] for concept in data["matched_concepts"]}
     departments = {doctor["department_zh"] for doctor in data["recommended_doctors"]}
+    assert data["concept_extraction_method"] == "openai"
     assert "CVS_PERIPHERAL_ARTERIAL_DISEASE" in concept_ids
     assert "ENDO_DIABETIC_FOOT" in concept_ids
     assert "ORTHO_KNEE" not in concept_ids

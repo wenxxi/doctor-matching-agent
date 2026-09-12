@@ -11,6 +11,7 @@ from app.services.concept_extractor import (
     KeywordConceptExtractor,
 )
 from app.services.openai_concept_extractor import OpenAIConceptExtractor
+from app.services.processed_data import load_medical_concepts
 from app.settings import get_openai_settings
 
 
@@ -56,7 +57,7 @@ def test_openai_extractor_maps_knee_text_when_mocked(monkeypatch):
 
     concept_ids = {concept.concept_id for concept in matched}
     assert concept_ids == {"ORTHO_KNEE", "ORTHO_LIGAMENT_INJURY"}
-    assert result.candidate_concepts_count <= 30
+    assert result.candidate_concepts_count == len(load_medical_concepts())
     assert result.input_tokens == 111
     assert result.output_tokens == 22
     assert all(concept.matched_terms == ("LLM:0.82",) for concept in matched)
@@ -67,9 +68,30 @@ def test_openai_extractor_maps_knee_text_when_mocked(monkeypatch):
         concept["concept_id"]
         for concept in request_payload["allowed_concepts"]
     }
-    assert len(allowed_concept_ids) <= 30
+    assert len(allowed_concept_ids) == len(load_medical_concepts())
     assert "ORTHO_KNEE" in allowed_concept_ids
     assert "ORTHO_LIGAMENT_INJURY" in allowed_concept_ids
+
+
+def test_openai_extractor_can_use_medical_knowledge_across_departments(monkeypatch):
+    fake_client = FakeClient(
+        '{"concept_ids":["CVS_PERIPHERAL_ARTERIAL_DISEASE","ENDO_DIABETIC_FOOT"],"confidence":0.86}'
+    )
+    monkeypatch.setattr(openai_extractor_module, "get_openai_client", lambda: fake_client)
+    monkeypatch.setattr(openai_extractor_module, "get_openai_model", lambda: "gpt-4o-mini")
+
+    result = OpenAIConceptExtractor().extract_with_metadata("整支腳黑掉了")
+    concept_ids = {concept.concept_id for concept in result.concepts}
+    request_payload = json.loads(fake_client.responses.calls[0]["input"])
+    allowed_concept_ids = {
+        concept["concept_id"]
+        for concept in request_payload["allowed_concepts"]
+    }
+
+    assert concept_ids == {"CVS_PERIPHERAL_ARTERIAL_DISEASE", "ENDO_DIABETIC_FOOT"}
+    assert "CVS_PERIPHERAL_ARTERIAL_DISEASE" in allowed_concept_ids
+    assert "ENDO_DIABETIC_FOOT" in allowed_concept_ids
+    assert result.candidate_concepts_count == len(load_medical_concepts())
 
 
 def test_openai_extractor_ignores_unknown_concept_ids(monkeypatch):

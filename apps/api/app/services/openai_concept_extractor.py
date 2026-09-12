@@ -7,7 +7,7 @@ from app.services.concept_extractor import (
     MatchedConcept,
 )
 from app.services.openai_client import get_openai_client, get_openai_model
-from app.services.concept_prefilter import prefilter_concepts
+from app.services.processed_data import load_medical_concepts
 
 
 class OpenAIConceptExtractionError(Exception):
@@ -29,7 +29,7 @@ class OpenAIConceptExtractor(ConceptExtractor):
                 candidate_concepts_count=0,
             )
 
-        candidate_concepts = prefilter_concepts(query)
+        candidate_concepts = load_medical_concepts()
         concept_by_id = {concept["concept_id"]: concept for concept in candidate_concepts}
         response = get_openai_client().responses.create(
             model=get_openai_model(),
@@ -40,7 +40,7 @@ class OpenAIConceptExtractor(ConceptExtractor):
             text={
                 "format": {
                     "type": "json_schema",
-                    "name": "orthopedic_concept_extraction",
+                    "name": "doctor_matching_concept_extraction",
                     "strict": True,
                     "schema": {
                         "type": "object",
@@ -119,8 +119,11 @@ def payload_confidence(payload: dict[str, Any]) -> float:
 
 def build_instructions() -> str:
     return (
-        "You are a medical concept extraction assistant for an orthopedic doctor matching system. "
-        "Map the user's Chinese symptom description to known orthopedic concept IDs. "
+        "You are a medical concept extraction assistant for a multi-specialty doctor matching system. "
+        "Use medical knowledge to map the user's Chinese symptom description to the most relevant known concept IDs. "
+        "Consider that one query can map to multiple concepts and multiple departments. "
+        "For symptoms that could indicate a differential diagnosis, include the most clinically relevant plausible concepts "
+        "from the allowed list instead of forcing a single department. "
         "Only return concept IDs from the provided allowed_concepts list. "
         "Do not invent concept IDs. Do not recommend doctors. Do not provide medical advice. "
         "If no concept applies, return an empty concept_ids array. Return JSON only."
@@ -144,7 +147,7 @@ def build_input(query: str, concepts: list[dict[str, str]]) -> str:
             "user_query": query,
             "allowed_concepts": allowed_concepts,
             "output_contract": {
-                "concept_ids": ["ORTHO_KNEE"],
+                "concept_ids": ["CVS_PERIPHERAL_ARTERIAL_DISEASE", "ENDO_DIABETIC_FOOT"],
                 "confidence": 0.82,
             },
         },
