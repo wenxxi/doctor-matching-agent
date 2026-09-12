@@ -6,7 +6,7 @@ from app.schemas import (
     RecommendedDoctorResponse,
 )
 from app.services.concept_extractor import MatchedConcept
-from app.services.department_intent import DepartmentIntent
+from app.services.department_intent import CONCEPT_PREFIX_TO_DEPARTMENT, DepartmentIntent
 from app.services.processed_data import load_doctor_concept_map, load_doctors
 
 
@@ -145,10 +145,56 @@ def rank_doctors(
             )
         )
 
-    return sorted(
+    sorted_doctors = sorted(
         ranked,
         key=lambda doctor: (-doctor.score, doctor.doctor_id),
-    )[:limit]
+    )
+    return diversify_departments_if_needed(
+        sorted_doctors,
+        matched_concepts,
+        limit,
+        department_intent,
+    )
+
+
+def diversify_departments_if_needed(
+    doctors: list[RecommendedDoctorResponse],
+    matched_concepts: list[MatchedConcept],
+    limit: int,
+    department_intent: DepartmentIntent | None,
+) -> list[RecommendedDoctorResponse]:
+    if department_intent and department_intent.department_zh:
+        return doctors[:limit]
+
+    matched_departments = {
+        department
+        for concept in matched_concepts
+        if (department := CONCEPT_PREFIX_TO_DEPARTMENT.get(concept.concept_id.split("_", 1)[0]))
+    }
+    if len(matched_departments) <= 1:
+        return doctors[:limit]
+
+    selected: list[RecommendedDoctorResponse] = []
+    selected_ids: set[str] = set()
+    seen_departments: set[str] = set()
+
+    for doctor in doctors:
+        if doctor.department_zh in seen_departments:
+            continue
+        selected.append(doctor)
+        selected_ids.add(doctor.doctor_id)
+        seen_departments.add(doctor.department_zh)
+        if len(selected) == limit:
+            return selected
+
+    for doctor in doctors:
+        if doctor.doctor_id in selected_ids:
+            continue
+        selected.append(doctor)
+        if len(selected) == limit:
+            return selected
+
+    return selected
 
 
 def build_ranking_debug(

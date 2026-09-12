@@ -137,7 +137,7 @@ def test_recommendations_for_ocular_surface_query(monkeypatch):
     assert data["message"] is None
 
 
-def test_recommendations_for_black_leg_query_routes_to_vascular_surgery(monkeypatch):
+def test_recommendations_for_black_leg_query_routes_to_vascular_and_diabetic_foot(monkeypatch):
     clear_openai_settings(monkeypatch)
 
     response = client.post(
@@ -150,10 +150,11 @@ def test_recommendations_for_black_leg_query_routes_to_vascular_surgery(monkeypa
     concept_ids = {concept["concept_id"] for concept in data["matched_concepts"]}
     departments = {doctor["department_zh"] for doctor in data["recommended_doctors"]}
     assert "CVS_PERIPHERAL_ARTERIAL_DISEASE" in concept_ids
+    assert "ENDO_DIABETIC_FOOT" in concept_ids
     assert "ORTHO_KNEE" not in concept_ids
-    assert data["department_intent"] == "心臟血管外科"
+    assert data["department_intent"] is None
     assert data["recommended_doctors"]
-    assert departments == {"心臟血管外科"}
+    assert departments == {"心臟血管外科", "新陳代謝科"}
     assert data["message"] is None
 
 

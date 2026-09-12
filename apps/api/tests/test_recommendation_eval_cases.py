@@ -41,10 +41,15 @@ def test_recommendation_eval_case_with_keyword_fallback(case, monkeypatch):
         doctor["department_zh"]
         for doctor in data["recommended_doctors"]
     }
+    expected_departments = {
+        department.strip()
+        for department in case["expected_department_zh"].split(";")
+        if department.strip()
+    }
 
     assert data["concept_extraction_method"] == "keyword"
     assert data["fallback_used"] is False
     assert expected_concept_ids <= concept_ids
     assert data["recommended_doctors"]
     assert len(data["recommended_doctors"]) <= 3
-    assert departments == {case["expected_department_zh"]}
+    assert departments == expected_departments
