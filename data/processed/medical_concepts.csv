@@ -60,6 +60,27 @@ ENDO_METABOLIC_SYNDROME,代謝症候群,Metabolic syndrome,disease_or_condition,
 ENDO_OBESITY,肥胖與減重,Obesity and weight management,disease_or_condition,ENDO_ENDOCRINOLOGY,肥胖;減重,,體重過重;想減重,肥胖、體重控制與代謝風險管理。,cgmh_endocrinology_scrape_manual_v1
 ENDO_THYROID_DISEASE,甲狀腺疾病,Thyroid disease,disease_or_condition,ENDO_ENDOCRINOLOGY,甲狀腺;甲狀腺及內分泌疾病,,甲狀腺問題,甲狀腺功能或結構異常相關疾病。,cgmh_endocrinology_scrape_manual_v1
 ENDO_THYROID_NODULE,甲狀腺結節,Thyroid nodule,disease_or_condition,ENDO_THYROID_DISEASE,甲狀腺腫瘤,,甲狀腺長結節,甲狀腺結節或腫塊評估。,cgmh_endocrinology_scrape_manual_v1
+ENT_AIRWAY_RECONSTRUCTION_INFECTION,呼吸道重建與頭頸部感染,Airway reconstruction and head neck infection,procedure,ENT_OTOLARYNGOLOGY,呼吸道重建;頭頸部感染,,呼吸道重建感染,呼吸道重建與頭頸部感染處置。,cgmh_ent_scrape_manual_v1
+ENT_COCHLEAR_HEARING_IMPLANT,人工電子耳與助聽器,Cochlear implant and hearing aid,procedure,ENT_EAR_DISEASE_HEARING,人工電子耳;人工耳蝸;助聽器;BAHA;Bone Bridge;骨導型助聽器,,人工電子耳助聽器,人工電子耳、助聽器與骨導型聽力重建。,cgmh_ent_scrape_manual_v1
+ENT_EAR_DISEASE_HEARING,耳科疾病與聽力障礙,Ear disease and hearing loss,disease_or_condition,ENT_OTOLARYNGOLOGY,中耳炎;慢性中耳炎;耳鳴;耳科眩暈;聽力障礙;耳症;耳咽管;膽脂瘤;鼓膜穿孔;聽小骨重建;耳硬化;外耳炎,,耳鳴眩暈聽力中耳炎,中耳炎、耳鳴、眩暈、聽力障礙與中耳相關疾病。,cgmh_ent_scrape_manual_v1
+ENT_HEAD_NECK_TUMOR_CANCER,頭頸部腫瘤與口咽喉癌,Head and neck tumor and cancer,disease_or_condition,ENT_OTOLARYNGOLOGY,頭頸部腫瘤;頭頸腫瘤;口腔癌;口咽癌;咽喉癌;喉癌;下咽癌;鼻咽癌;喉頭頸腫瘤;顱底腫瘤,,頭頸癌口腔癌喉癌,頭頸部腫瘤、口腔癌、鼻咽癌、咽喉癌與相關手術。,cgmh_ent_scrape_manual_v1
+ENT_OTOLARYNGOLOGY,耳鼻喉頭頸外科,Otorhinolaryngology head and neck surgery,subspecialty,,一般耳鼻喉科;耳鼻喉科;耳鼻喉頭頸外科;一般耳鼻喉疾病,,耳鼻喉問題,耳、鼻、喉、頭頸與兒童耳鼻喉疾病診療。,cgmh_ent_scrape_manual_v1
+ENT_PEDIATRIC_ENT,兒童耳鼻喉,Pediatric otolaryngology,subspecialty,ENT_OTOLARYNGOLOGY,兒童耳鼻喉;兒童耳鼻喉科;兒童耳鼻喉疾病;兒童聽語評估,,小孩耳鼻喉,兒童耳鼻喉疾病與聽語評估。,cgmh_ent_scrape_manual_v1
+ENT_RHINITIS_SINUSITIS_ENDOSCOPY,鼻過敏鼻竇炎與鼻竇內視鏡,Allergic rhinitis sinusitis and sinus endoscopy,disease_or_condition,ENT_OTOLARYNGOLOGY,鼻過敏;鼻竇炎;復發性鼻竇炎;鼻竇內視鏡;鼻息肉;鼻中膈彎曲;嗅覺障礙;鼻因性頭痛;一般鼻症,,鼻過敏鼻竇炎,鼻過敏、鼻竇炎、鼻息肉、嗅覺障礙與鼻竇內視鏡手術。,cgmh_ent_scrape_manual_v1
+ENT_SALIVARY_THYROID_ROBOTIC_SURGERY,唾液腺甲狀腺與達文西手術,Salivary thyroid and robotic ENT surgery,procedure,ENT_OTOLARYNGOLOGY,唾液腺;腮腺;甲狀腺;達文西;機器手臂;經口甲狀腺切除;唾液腺內視鏡,,唾液腺甲狀腺達文西手術,唾液腺、腮腺、甲狀腺與達文西機器手臂手術。,cgmh_ent_scrape_manual_v1
+ENT_SLEEP_SNORING_APNEA,打鼾與睡眠呼吸中止症,Snoring and obstructive sleep apnea,disease_or_condition,ENT_OTOLARYNGOLOGY,打鼾;睡眠呼吸障礙;睡眠呼吸中止症;睡眠醫學;睡眠外科;睡眠內視鏡;舌根懸吊,,打呼睡眠呼吸中止,打鼾、睡眠呼吸中止症與睡眠外科。,cgmh_ent_scrape_manual_v1
+ENT_VOICE_LARYNGOLOGY,聲音嘶啞與喉科疾病,Voice hoarseness and laryngology,disease_or_condition,ENT_OTOLARYNGOLOGY,聲音嘶啞;聲音沙啞;喉科學;聲帶;聲帶病灶;嗓音外科;喉顯微雷射,,聲音沙啞聲帶問題,聲音嘶啞、聲帶疾病、喉科與嗓音外科。,cgmh_ent_scrape_manual_v1
+FAM_CHRONIC_DISEASE_CARE,慢性病照護,Chronic disease care,disease_or_condition,FAM_FAMILY_MEDICINE,慢性疾病;慢性病;慢性病照護;慢性病防治;慢性病治療;慢性病追蹤,,慢性病管理,慢性疾病診療、防治、追蹤與照護。,cgmh_family_medicine_scrape_manual_v1
+FAM_COMMON_MENTAL_HEALTH,常見身心疾病,Common mental health conditions,disease_or_condition,FAM_FAMILY_MEDICINE,常見身心疾病,,一般身心問題,家庭醫學中的常見身心疾病評估與轉介。,cgmh_family_medicine_scrape_manual_v1
+FAM_FAMILY_MEDICINE,家庭醫學科,Family medicine,subspecialty,,家庭醫學;家庭醫業;Family medicine;Primary care,,家醫科;一般成人照護,家庭醫學、基層醫療、慢性病、預防保健與健康管理。,cgmh_family_medicine_scrape_manual_v1
+FAM_GERIATRICS_HOME_CARE,老人醫學與居家醫療,Geriatrics and home care,subspecialty,FAM_FAMILY_MEDICINE,老人醫學;居家醫療;居家醫療照護,,老人居家照護,老人醫學、居家醫療與長期健康照護。,cgmh_family_medicine_scrape_manual_v1
+FAM_OBESITY_WEIGHT_MANAGEMENT,肥胖醫學與體重管理,Obesity medicine and weight management,disease_or_condition,FAM_FAMILY_MEDICINE,肥胖醫學;減重;體重管理;健康飲食;運動處方,,減重體重管理,肥胖醫學、減重諮詢、健康飲食與運動處方。,cgmh_family_medicine_scrape_manual_v1
+FAM_OCCUPATIONAL_ENVIRONMENTAL_MEDICINE,職業及環境醫學,Occupational and environmental medicine,subspecialty,FAM_FAMILY_MEDICINE,職業醫學;環境職業醫學;職業及環境;職業傷病;復配工;勞工體檢;特殊危害作業體檢;事業單位;臨場服務,,職業醫學勞工體檢,職業醫學、職業傷病、勞工體檢與職場臨場服務。,cgmh_family_medicine_scrape_manual_v1
+FAM_OSTEOPOROSIS_THYROID,骨質疏鬆與甲狀腺疾病,Osteoporosis and thyroid disease,disease_or_condition,FAM_FAMILY_MEDICINE,骨質疏鬆;骨質疏鬆症;甲狀腺疾病,,骨鬆甲狀腺,骨質疏鬆與甲狀腺疾病照護。,cgmh_family_medicine_scrape_manual_v1
+FAM_PALLIATIVE_ADVANCE_CARE,安寧緩和與預立醫療決定,Palliative care and advance care planning,subspecialty,FAM_FAMILY_MEDICINE,安寧療護;安寧緩和;安寧緩和醫學;預立醫療決策;預立醫療決定,,安寧預立醫療,安寧緩和醫學、預立醫療決策與諮詢。,cgmh_family_medicine_scrape_manual_v1
+FAM_PREVENTIVE_HEALTH_CHECK,預防保健與健康檢查,Preventive care and health checkup,procedure,FAM_FAMILY_MEDICINE,預防保健;預防醫學;健康管理;健康檢查;體格檢查;健康諮詢;健康管理與檢查,,健檢預防保健,成人預防保健、健康管理、健康檢查與諮詢。,cgmh_family_medicine_scrape_manual_v1
+FAM_SMOKING_CESSATION,戒菸治療,Smoking cessation,procedure,FAM_FAMILY_MEDICINE,戒菸治療;戒菸諮詢,,戒菸,戒菸治療與戒菸諮詢。,cgmh_family_medicine_scrape_manual_v1
+FAM_VACCINATION_TRAVEL_MEDICINE,疫苗接種與旅遊醫學,Vaccination and travel medicine,procedure,FAM_PREVENTIVE_HEALTH_CHECK,疫苗接種;成人疫苗;旅遊醫學;航空醫學,,成人打疫苗旅遊醫學,一般成人疫苗接種、旅遊醫學與航空醫學。,cgmh_family_medicine_scrape_manual_v1
 GERI_CHRONIC_DISEASE_CARE,老年慢性病照護,Geriatric chronic disease care,subspecialty,GERI_GERIATRICS,常見老年慢性病;慢性病診治,,長輩慢性病,高齡者常見慢性病整合照護。,cgmh_geriatrics_scrape_manual_v1
 GERI_COMPREHENSIVE_GERIATRIC_ASSESSMENT,周全性老年整合評估,Comprehensive geriatric assessment,procedure,GERI_GERIATRICS,周全性老年整合評估;老年整合評估,,長輩整體評估,針對高齡者醫療、功能、心理與社會需求的整體評估。,cgmh_geriatrics_scrape_manual_v1
 GERI_GERIATRICS,高齡醫學,Geriatrics,subspecialty,,老年醫學;高齡醫學,,老人醫學;長輩照護,高齡者慢性病、功能、用藥與整合照護。,cgmh_geriatrics_scrape_manual_v1
@@ -366,6 +387,17 @@ PSY_PSYCHIATRY,精神科,Psychiatry,subspecialty,,精神科;精神醫學;一般�
 PSY_PSYCHOSOMATIC_COMMUNITY_OCCUPATIONAL,身心症與職業社區身心健康,Psychosomatic occupational and community mental health,subspecialty,PSY_PSYCHIATRY,身心症;心身症;職業身心健康;社區身心健康,,壓力身心症,身心症、職業身心健康與社區身心健康。,cgmh_psychiatry_scrape_manual_v1
 PSY_SLEEP_DISORDER,睡眠障礙,Sleep disorder,disease_or_condition,PSY_PSYCHIATRY,睡眠障礙,,睡不好失眠,睡眠障礙與相關精神身心問題。,cgmh_psychiatry_scrape_manual_v1
 PSY_SUICIDE_PTSD_ADDICTION,自殺創傷與藥癮戒治,Suicide PTSD and addiction treatment,disease_or_condition,PSY_PSYCHIATRY,自殺;創傷後壓力疾患;藥癮戒治,,創傷壓力藥癮,自殺風險、創傷後壓力疾患與藥癮戒治。,cgmh_psychiatry_scrape_manual_v1
+REHAB_CARDIOPULMONARY_REHAB,心肺復健,Cardiopulmonary rehabilitation,subspecialty,REHAB_REHABILITATION,心臟復健;心肺復健,,心肺復健,心臟與心肺功能復健。,cgmh_rehabilitation_scrape_manual_v1
+REHAB_MUSCULOSKELETAL_PAIN,肌肉骨骼疼痛復健,Musculoskeletal pain rehabilitation,disease_or_condition,REHAB_REHABILITATION,肌肉骨骼;骨骼肌肉;肌內骨骼;關節炎;疼痛治療;肌骨,,肌肉關節疼痛復健,關節炎、肌肉骨骼疼痛與軟組織問題復健。,cgmh_rehabilitation_scrape_manual_v1
+REHAB_NEUROREHABILITATION,神經復健,Neurorehabilitation,subspecialty,REHAB_REHABILITATION,神經復健;腦神經;脊髓損傷復健;脊隨損傷復健;腦中風;中風復健;腦部病變;頭部受傷,,中風脊髓神經復健,腦中風、腦部病變、頭部受傷、脊髓損傷與神經復健。,cgmh_rehabilitation_scrape_manual_v1
+REHAB_PEDIATRIC_EARLY_INTERVENTION,兒童復健與早期療育,Pediatric rehabilitation and early intervention,subspecialty,REHAB_REHABILITATION,兒童復健;兒童復建;兒童早療;兒童早期療育;早期療育;發展遲緩;語言發展;自閉症,,兒童早療復健,兒童復健、發展遲緩、早期療育、語言發展與自閉症兒童復健。,cgmh_rehabilitation_scrape_manual_v1
+REHAB_PROSTHETICS_ORTHOTICS_ENGINEERING,義肢裝具與復健工程,Prosthetics orthotics and rehabilitation engineering,procedure,REHAB_REHABILITATION,義肢裝具;復健工程,,義肢輔具,義肢、裝具、輔具與復健工程。,cgmh_rehabilitation_scrape_manual_v1
+REHAB_REHABILITATION,復健科,Rehabilitation medicine,subspecialty,,復健;一般復健;復健科,,復健治療,肌肉骨骼、神經、兒童、心肺與術後復健。,cgmh_rehabilitation_scrape_manual_v1
+REHAB_SHOCKWAVE_PROLO_DRY_NEEDLE,震波增生與乾針治療,Shockwave prolotherapy and dry needling,procedure,REHAB_MUSCULOSKELETAL_PAIN,體外震波;骨震波;增生注射;增生療法;乾針治療,,震波增生乾針,體外震波、增生療法與乾針等疼痛治療。,cgmh_rehabilitation_scrape_manual_v1
+REHAB_SPORTS_MEDICINE,運動醫學復健,Sports medicine rehabilitation,subspecialty,REHAB_REHABILITATION,運動醫學;運動醫學復健;運動傷害,,運動受傷復健,運動傷害評估、治療與復健訓練。,cgmh_rehabilitation_scrape_manual_v1
+REHAB_SWALLOWING_SPEECH_COGNITION,吞嚥語言與認知復健,Swallowing speech and cognitive rehabilitation,procedure,REHAB_REHABILITATION,吞嚥困難;吞嚥障礙;語言發展;認知;認知科學,,吞嚥語言認知復健,吞嚥、語言發展與認知相關復健。,cgmh_rehabilitation_scrape_manual_v1
+REHAB_TMS_NEUROMODULATION,經顱磁刺激治療,Transcranial magnetic stimulation,procedure,REHAB_NEUROREHABILITATION,經顱磁刺激;經臚磁刺激;TMS,,磁刺激治療,經顱磁刺激與神經調控治療。,cgmh_rehabilitation_scrape_manual_v1
+REHAB_ULTRASOUND_INJECTION,超音波導引注射治療,Ultrasound-guided injection therapy,procedure,REHAB_MUSCULOSKELETAL_PAIN,超音波導引;超音波引導;導引注射;超音波檢查;軟組織超音波;肌骨超音波,,超音波導引打針,肌骨或神經肌肉超音波檢查與導引注射治療。,cgmh_rehabilitation_scrape_manual_v1
 RHEUM_ALLERGY,過敏,Allergy,disease_or_condition,RHEUM_RHEUMATOLOGY,過敏;氣喘及過敏,,過敏問題,免疫系統對特定物質過度反應造成的症狀。,cgmh_rheumatology_scrape_manual_v1
 RHEUM_ANKYLOSING_SPONDYLITIS,僵直性脊椎炎,Ankylosing spondylitis,disease_or_condition,RHEUM_RHEUMATOLOGY,下背痛脊椎炎;僵直性脊椎炎門診,,僵直性脊椎炎;發炎性下背痛,以脊椎與薦腸關節發炎為主的風濕免疫疾病。,cgmh_rheumatology_scrape_manual_v1
 RHEUM_AUTOIMMUNE_DISEASE,自體免疫疾病,Autoimmune disease,disease_or_condition,RHEUM_RHEUMATOLOGY,自體免疫疾病,,免疫系統攻擊自己,免疫系統攻擊自身組織造成的疾病。,cgmh_rheumatology_scrape_manual_v1

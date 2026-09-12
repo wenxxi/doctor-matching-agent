@@ -87,6 +87,9 @@ def test_tied_concept_prefixes_have_no_single_intent():
         ("青春痘和濕疹想看皮膚科", "DERM_ACNE_ROSACEA_SCAR", "皮膚科"),
         ("白內障想看眼科", "OPH_CATARACT", "眼科"),
         ("憂鬱焦慮想看精神科", "PSY_DEPRESSION_ANXIETY", "精神科"),
+        ("運動傷害想看復健科", "REHAB_SPORTS_MEDICINE", "復健科"),
+        ("慢性病追蹤想看家庭醫學", "FAM_CHRONIC_DISEASE_CARE", "家庭醫學科"),
+        ("鼻過敏和耳鳴想看耳鼻喉科", "ENT_RHINITIS_SINUSITIS_ENDOSCOPY", "耳鼻喉頭頸外科"),
     ],
 )
 def test_detects_new_department_intents(query, concept_id, expected_department):
