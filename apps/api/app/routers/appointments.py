@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 
-from app.schemas import AppointmentsResponse
+from app.schemas import AppointmentsResponse, AppointmentPreparationRequest, AppointmentPreparationResponse
+from app.services.appointment_agent import prepare_appointment
 from app.services.appointments import get_appointments
 from app.services.processed_data import load_doctors
 
@@ -14,3 +15,13 @@ def doctor_appointments(doctor_id: str) -> AppointmentsResponse:
     if doctor is None:
         raise HTTPException(status_code=404, detail="Doctor not found")
     return get_appointments(doctor)
+
+
+@router.post("/{doctor_id}/appointments/prepare", response_model=AppointmentPreparationResponse)
+def prepare_doctor_appointment(
+    doctor_id: str, request: AppointmentPreparationRequest,
+) -> AppointmentPreparationResponse:
+    doctor = next((row for row in load_doctors() if row["doctor_id"] == doctor_id), None)
+    if doctor is None:
+        raise HTTPException(status_code=404, detail="Doctor not found")
+    return prepare_appointment(doctor, request)

@@ -44,7 +44,11 @@ After deployment, confirm:
 
 1. The API `/health` returns `{"status":"ok"}`.
 2. The API `/docs` includes `GET /api/doctors/{doctor_id}/appointments`.
-3. A recommendation card on the website shows the appointment lookup button, and selecting a returned slot opens the official CGMH patient information page. Appointment availability depends on the hospital's live site; a temporary lookup failure should still show the official registration link.
+3. A recommendation card shows the appointment assistant. Set preferences, let it select and verify a slot, then confirm that the on-site patient form receives a CGMH captcha. This read-only check does not submit a registration.
+
+The booking workflow uses short-lived in-memory sessions. Run the API with **one worker and one instance**; a restart or deploy expires active sessions. Do not configure horizontal scaling until a shared expiring session store and distributed submission lock are implemented. Never enable request-body logging, form analytics, or tracing that captures patient fields or booking tokens. Booking responses use `Cache-Control: no-store`.
+
+Real registration requires the user's own patient details, manual captcha entry, and explicit consent. Automated tests mock the hospital's responses; they do not prove a real registration was accepted. Cross-hospital record consent and unsupported hospital forms stop the flow. An unknown result after submission must be checked through the hospital's registration query before any retry.
 
 ## OpenAI-Generated Reasons
 

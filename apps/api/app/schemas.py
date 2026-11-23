@@ -1,8 +1,8 @@
-from datetime import datetime
+from datetime import date, datetime
 from uuid import UUID
-from typing import Literal
+from typing import Annotated, Literal
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
 class DoctorExpertiseResponse(BaseModel):
@@ -114,4 +114,33 @@ class AppointmentsResponse(BaseModel):
     schedule_urls: list[str]
     checked_at: datetime | None
     slots: list[AppointmentSlotResponse]
+    message: str
+
+
+class AppointmentPreparationRequest(BaseModel):
+    patient_type: Literal["first_visit", "department_first", "returning", "unknown"]
+    date_from: date | None = None
+    date_to: date | None = None
+    sessions: list[Literal["上午", "下午", "夜診"]] = Field(
+        default_factory=lambda: ["上午", "下午", "夜診"], min_length=1, max_length=3,
+    )
+    weekdays: list[Annotated[int, Field(ge=0, le=6)]] = Field(
+        default_factory=lambda: list(range(7)), min_length=1, max_length=7,
+    )
+
+    @model_validator(mode="after")
+    def validate_date_range(self):
+        if self.date_from and self.date_to and self.date_from > self.date_to:
+            raise ValueError("開始日期不可晚於結束日期")
+        return self
+
+
+class AppointmentPreparationResponse(BaseModel):
+    doctor_id: str
+    status: Literal["awaiting_patient", "no_match", "unavailable", "retry_needed"]
+    selected_slot: AppointmentSlotResponse | None = None
+    verified_at: datetime | None = None
+    candidate_count: int = 0
+    attempted_count: int = 0
+    steps: list[str] = Field(default_factory=list)
     message: str

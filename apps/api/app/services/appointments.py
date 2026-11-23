@@ -68,6 +68,10 @@ def registration_url_for(doctor: dict[str, str]) -> str | None:
 
 @lru_cache(maxsize=128)
 def fetch_page(url: str, cache_window: int) -> tuple[str, datetime]:
+    return fetch_live_page(url)
+
+
+def fetch_live_page(url: str) -> tuple[str, datetime]:
     request = Request(url, headers={"User-Agent": "DoctorMatchingAgent/0.1"})
     with urlopen(request, timeout=8) as response:
         html = response.read(2_000_000).decode("utf-8-sig")

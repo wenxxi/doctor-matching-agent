@@ -1,86 +1,122 @@
 "use client";
 
-import { useState } from "react";
+import { FormEvent, useState } from "react";
+import BookingForm, { AppointmentSlot } from "./booking-form";
 
 type Appointments = {
-  status: "available" | "no_slots" | "partial" | "unavailable" | "unsupported";
+  status: string;
   checked_at: string | null;
   schedule_urls: string[];
   message: string;
-  slots: {
-    date: string;
-    session: string;
-    eligibility: string;
-    registration_url: string;
-  }[];
+  slots: AppointmentSlot[];
+};
+
+type Preparation = {
+  status: string;
+  selected_slot: AppointmentSlot | null;
+  verified_at: string | null;
+  steps: string[];
+  message: string;
 };
 
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") || "http://localhost:8000";
+const inputClass = "mt-1 w-full rounded border border-slate-300 bg-white px-2 py-2";
 
 export default function AppointmentPanel({ doctor }: {
   doctor: { doctor_id: string; doctor_name_zh: string; registration_url: string | null };
 }) {
   const [result, setResult] = useState<Appointments | null>(null);
+  const [preparation, setPreparation] = useState<Preparation | null>(null);
+  const [selected, setSelected] = useState<AppointmentSlot | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [date, setDate] = useState("");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
   const [session, setSession] = useState("");
+  const [weekdays, setWeekdays] = useState("all");
+  const [patientType, setPatientType] = useState("unknown");
+  const [bookingBusy, setBookingBusy] = useState(false);
 
   if (!doctor.registration_url) return null;
 
-  async function loadAppointments() {
+  async function queryAppointments(prepare: boolean) {
     setIsLoading(true);
     setError(null);
-    setResult(null);
+    setPreparation(null);
+    setSelected(null);
     try {
-      const response = await fetch(`${apiBaseUrl}/api/doctors/${encodeURIComponent(doctor.doctor_id)}/appointments`);
-      if (!response.ok) throw new Error("查詢失敗");
-      setResult(await response.json() as Appointments);
-    } catch {
-      setError("暫時無法查詢時段，請使用官方掛號入口。");
+      const endpoint = `${apiBaseUrl}/api/doctors/${encodeURIComponent(doctor.doctor_id)}/appointments`;
+      const response = await fetch(prepare ? `${endpoint}/prepare` : endpoint, prepare ? {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          patient_type: patientType, date_from: dateFrom || null, date_to: dateTo || null,
+          sessions: session ? [session] : ["上午", "下午", "夜診"],
+          weekdays: weekdays === "weekdays" ? [0, 1, 2, 3, 4] : weekdays === "weekends" ? [5, 6] : [0, 1, 2, 3, 4, 5, 6],
+        }),
+      } : undefined);
+      if (!response.ok) throw new Error("查詢失敗，請確認日期範圍或稍後重試。");
+      if (prepare) {
+        const data = await response.json() as Preparation;
+        setPreparation(data);
+        setSelected(data.selected_slot);
+      } else {
+        setResult(await response.json() as Appointments);
+      }
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : "暫時無法查詢時段，請稍後重試。");
     } finally {
       setIsLoading(false);
     }
   }
 
-  const slots = result?.slots.filter((slot) => (!date || slot.date === date) && (!session || slot.session === session)) ?? [];
+  function prepare(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    void queryAppointments(true);
+  }
 
   return (
-    <section aria-label={`${doctor.doctor_name_zh}掛號`} className="mt-4 space-y-3 border-t border-slate-200 pt-4">
-      <div className="flex flex-wrap items-center gap-3">
-        <button type="button" onClick={loadAppointments} disabled={isLoading} className="rounded-md bg-teal-700 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-800 disabled:bg-slate-400">
-          {isLoading ? "正在查詢院方時段…" : result ? "重新查詢時段" : "查詢這位醫師可掛號時段"}
-        </button>
-        <a href={doctor.registration_url} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-teal-700">官方掛號入口 ↗</a>
+    <section aria-label={`${doctor.doctor_name_zh}掛號助理`} className="mt-4 space-y-3 border-t border-slate-200 pt-4 text-sm leading-6 text-slate-700">
+      <h4 className="font-semibold text-slate-950">掛號助理</h4>
+      <p>告訴我就診條件，我會查時段、挑選最早符合的門診，確認院方資料頁後，讓你直接在這裡填寫資料與驗證碼。</p>
+      <form onSubmit={prepare} className="space-y-3">
+        <fieldset disabled={isLoading || Boolean(selected)} className="grid gap-3 sm:grid-cols-2 disabled:opacity-60">
+          <label>患者類型<select value={patientType} onChange={(event) => setPatientType(event.target.value)} className={inputClass}>
+            <option value="unknown">不確定（排除初診限定時段）</option><option value="first_visit">全院初診（從未在林口長庚看診）</option><option value="department_first">科初診（半年內未看過該科）</option><option value="returning">複診</option>
+          </select></label>
+          <label>可看診時段<select value={session} onChange={(event) => setSession(event.target.value)} className={inputClass}>
+            <option value="">全部</option>{["上午", "下午", "夜診"].map((name) => <option key={name}>{name}</option>)}
+          </select></label>
+          <label>最早日期<input type="date" value={dateFrom} onChange={(event) => setDateFrom(event.target.value)} className={inputClass} /></label>
+          <label>最晚日期<input type="date" min={dateFrom || undefined} value={dateTo} onChange={(event) => setDateTo(event.target.value)} className={inputClass} /></label>
+          <label>星期<select value={weekdays} onChange={(event) => setWeekdays(event.target.value)} className={inputClass}>
+            <option value="all">不限</option><option value="weekdays">週一至週五</option><option value="weekends">週六、週日</option>
+          </select></label>
+          <button type="submit" disabled={isLoading || Boolean(selected)} className="self-end rounded-md bg-teal-700 px-4 py-2 font-semibold text-white disabled:bg-slate-400">{isLoading ? "正在查詢、挑選與確認…" : "請助理安排掛號"}</button>
+        </fieldset>
+      </form>
+      <div aria-live="polite" className="space-y-2">
+        {error ? <p role="alert" className="text-red-700">{error}</p> : null}
+        {preparation ? <><ol className="list-inside list-decimal text-xs text-slate-600">{preparation.steps.map((step, index) => <li key={index}>{step}</li>)}</ol><p>{preparation.message}</p></> : null}
       </div>
-      <div aria-live="polite" className="space-y-3 text-sm leading-6 text-slate-600">
-        {error ? <p role="alert">{error}</p> : null}
+      {selected ? (
+        <>
+          <BookingForm key={selected.registration_url} doctorId={doctor.doctor_id} doctorName={doctor.doctor_name_zh} slot={selected} onBusyChange={setBookingBusy} />
+          <button type="button" disabled={bookingBusy} onClick={() => { setSelected(null); setPreparation(null); }} className="text-xs text-slate-600 underline disabled:opacity-50">關閉此表單、重新選時段（不會取消院方已完成的掛號）</button>
+        </>
+      ) : null}
+      <details>
+        <summary className="cursor-pointer font-semibold text-teal-700">我想自行查看其他時段</summary>
+        <button type="button" onClick={() => void queryAppointments(false)} disabled={isLoading || Boolean(selected)} className="my-3 rounded border border-teal-300 px-3 py-2 disabled:opacity-50">查詢這位醫師可掛號時段</button>
         {result ? <p>{result.message}</p> : null}
-        {result?.checked_at ? <p className="text-xs">資料查詢時間：{new Date(result.checked_at).toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })}（台北時間；快取最長約 2 分鐘）</p> : null}
-        {result && result.slots.length > 0 ? (
-          <>
-            <div className="flex flex-wrap gap-3">
-              <label>日期 <input type="date" value={date} onChange={(event) => setDate(event.target.value)} className="rounded border border-slate-300 px-2 py-1" /></label>
-              <label>時段 <select value={session} onChange={(event) => setSession(event.target.value)} className="rounded border border-slate-300 px-2 py-1">
-                <option value="">全部</option>
-                {["上午", "下午", "夜診"].map((name) => <option key={name}>{name}</option>)}
-              </select></label>
-            </div>
-            {slots.length === 0 ? <p>所選條件沒有時段，請調整日期或時段。</p> : null}
-            <ul className="max-h-80 space-y-2 overflow-y-auto">
-              {slots.map((slot) => (
-                <li key={slot.registration_url} className="rounded-md border border-teal-200 bg-teal-50 p-3">
-                  <p className="font-semibold text-slate-900">{slot.date} {slot.session}</p>
-                  <p>{slot.eligibility}</p>
-                  <a href={slot.registration_url} target="_blank" rel="noopener noreferrer" className="font-semibold text-teal-800">前往院方填寫掛號資料 ↗</a>
-                </li>
-              ))}
-            </ul>
-          </>
-        ) : null}
-        {result?.schedule_urls.map((url, index) => <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="mr-3 inline-block font-semibold text-teal-700">科別門診表{result.schedule_urls.length > 1 ? ` ${index + 1}` : ""} ↗</a>)}
-      </div>
-      <p className="text-xs leading-5 text-slate-500">選擇時段後，請在長庚官網確認醫師、日期及初診資格，填寫患者資料與驗證碼。完成院方確認才算掛號成功。</p>
+        {result?.checked_at ? <p className="text-xs">查詢時間：{new Date(result.checked_at).toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })}（台北時間；快取約 2 分鐘）</p> : null}
+        <ul className="mt-3 max-h-80 space-y-2 overflow-y-auto">
+          {result?.slots.map((slot) => <li key={slot.registration_url} className="rounded border border-slate-200 p-3">
+            <p className="font-semibold">{slot.date} {slot.session}</p><p>{slot.eligibility}</p>
+            <button type="button" disabled={Boolean(selected)} onClick={() => setSelected(slot)} className="font-semibold text-teal-700 disabled:opacity-50">在本站填寫掛號資料</button>
+          </li>)}
+        </ul>
+        {result?.schedule_urls.map((url, index) => <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="mr-3 inline-block text-xs font-semibold text-teal-700">科別門診表{result.schedule_urls.length > 1 ? ` ${index + 1}` : ""}</a>)}
+      </details>
     </section>
   );
 }

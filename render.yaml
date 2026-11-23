@@ -4,7 +4,7 @@ services:
     runtime: python
     plan: free
     buildCommand: pip install -r apps/api/requirements.txt
-    startCommand: cd apps/api && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    startCommand: cd apps/api && uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1
     healthCheckPath: /health
     envVars:
       - key: FRONTEND_ORIGINS
