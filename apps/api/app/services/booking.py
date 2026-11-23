@@ -110,11 +110,13 @@ class HospitalPageParser(HTMLParser):
         if tag == "form":
             action = attributes.get("action", "")
             path = urlsplit(urljoin(BASE_URL, action)).path
-            if attributes.get("method", "").lower() == "post" and re.fullmatch(r"/Checkin[A-Za-z]*/3/[A-Za-z0-9/]+", path):
+            if attributes.get("method", "").lower() == "post" and re.fullmatch(r"/Checkin[A-Za-z]*/3/[A-Za-z0-9/]+", path) and not re.search(r"cancel|delete", path, re.IGNORECASE):
                 self.current = HospitalForm(hospital_url(action))
                 self.forms.append(self.current)
         if self.current is None:
             return
+        if "PatQueryCheckinConfirm" in attributes.get("class", "") or attributes.get("name") == "ValidateNumber":
+            self.current.unsupported = True
         if tag == "label":
             self.label_for = attributes.get("for")
             self.label_text = []

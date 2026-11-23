@@ -211,6 +211,14 @@ def test_external_form_actions_are_rejected():
         booking.parse_hospital_page("<form method='post' action='https://example.com/CheckinConfirm/3/32700A/20991019/2245/1'></form>")
 
 
+def test_sms_verification_and_cancellation_forms_are_never_submitted_as_confirmation():
+    _, session = start()
+    sms_form = CONFIRMATION.replace("</form>", "<input name='ValidateNumber'><a class='PatQueryCheckinConfirm_SendValidate'>確認</a></form>")
+    assert booking.finish_response(session, sms_form).status == "needs_official"
+    cancellation = CONFIRMATION.replace("CheckinConfirm", "CheckinCancel")
+    assert booking.parse_hospital_page(cancellation).forms == []
+
+
 def test_api_uses_no_store_and_never_echoes_invalid_patient_data():
     client = TestClient(app)
     response = client.post("/api/booking/sessions", json={"doctor_id": DOCTOR["doctor_id"], "registration_url": SLOT.registration_url})
