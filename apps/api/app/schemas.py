@@ -1,5 +1,6 @@
 from datetime import datetime
 from uuid import UUID
+from typing import Literal
 
 from pydantic import BaseModel, ConfigDict
 
@@ -65,6 +66,7 @@ class RecommendedDoctorResponse(BaseModel):
     subdepartment_zh: str
     specialty_raw_zh: str
     source_url: str
+    registration_url: str | None = None
     score: float
     matched_concepts: list[MatchedConceptResponse]
     reasons: list[str]
@@ -96,3 +98,20 @@ class ConceptExtractionResponse(BaseModel):
     input_tokens: int | None = None
     output_tokens: int | None = None
     matched_concepts: list[MatchedConceptResponse]
+
+
+class AppointmentSlotResponse(BaseModel):
+    date: str
+    session: str
+    eligibility: str
+    registration_url: str
+
+
+class AppointmentsResponse(BaseModel):
+    doctor_id: str
+    status: Literal["available", "no_slots", "partial", "unavailable", "unsupported"]
+    registration_url: str | None
+    schedule_urls: list[str]
+    checked_at: datetime | None
+    slots: list[AppointmentSlotResponse]
+    message: str

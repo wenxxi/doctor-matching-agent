@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import DatabaseHealthError, check_database_connection
 from app.routers.concepts import router as concepts_router
+from app.routers.appointments import router as appointments_router
 from app.routers.doctors import router as doctors_router
 from app.routers.recommendations import router as recommendations_router
 
@@ -44,6 +45,7 @@ def create_app() -> FastAPI:
             )
 
     app.include_router(doctors_router)
+    app.include_router(appointments_router)
     app.include_router(concepts_router)
     app.include_router(recommendations_router)
 

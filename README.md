@@ -11,7 +11,24 @@ This scaffold includes:
 - Alembic migrations and a sample PostgreSQL doctor data layer
 - CSV-backed MVP doctor recommendation endpoint with optional GPT-4o-mini concept extraction and explanation writing
 
-No embeddings, chat history, authentication, scraping workflow, or direct GPT doctor search is implemented yet.
+No embeddings, chat history, authentication, or direct GPT doctor search is implemented yet.
+
+## Online Demo（Render）
+
+- 網頁：[Doctor Matching Agent](https://doctor-matching-agent-web.onrender.com)
+- API 文件：[Swagger UI](https://doctor-matching-agent-api.onrender.com/docs)
+- API 健康檢查：[Health](https://doctor-matching-agent-api.onrender.com/health)
+
+Render 免費後端閒置後首次請求可能需要較長時間啟動。部署設定與更新方式請見 [DEPLOYMENT.md](DEPLOYMENT.md)。
+
+## 林口長庚掛號整合
+
+推薦醫師卡片提供官方掛號入口，以及「查詢這位醫師可掛號時段」。後端依公開科別列表找到門診表，查詢四個週次，以完整醫師姓名比對院方提供的可掛號連結；使用者可篩選日期與上午／下午／夜診，直接前往官方患者掛號資料頁。
+
+- `GET /api/doctors/{doctor_id}/appointments` 使用推薦資料中的醫師 ID，不接受外部 URL。
+- 公開頁面快取約 2 分鐘，回傳資料取得時間；初診與科初診限制會保留顯示，時段不保證保留名額。
+- 院方連線失敗、部分週次失敗與查無可掛號入口分開顯示，仍提供官方入口。院方頁面格式變更時可能需要更新解析器。
+- 患者資料、驗證碼及掛號送出均在長庚官網完成；本專案不收集患者掛號資料，也不會自動提交掛號。
 
 ## Prerequisites
 

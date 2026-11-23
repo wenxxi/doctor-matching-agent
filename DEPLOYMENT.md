@@ -28,6 +28,24 @@ If Render gives either service a different URL, update these environment variabl
 - API service: `FRONTEND_ORIGINS`
 - Web service: `NEXT_PUBLIC_API_BASE_URL`
 
+## Updating the Existing Render Deployment
+
+The existing services use the same GitHub repository:
+
+- Website: https://doctor-matching-agent-web.onrender.com
+- API: https://doctor-matching-agent-api.onrender.com
+- Source: https://github.com/wenxxi/doctor-matching-agent
+
+Push changes to `main`. If both services have **Auto-Deploy → On Commit** enabled and track `main`, Render rebuilds and deploys them automatically. Check each service's **Deploys** page for the deployed commit and result.
+
+If automatic deployment is disabled, open each service in the [Render Dashboard](https://dashboard.render.com/) and select **Manual Deploy → Deploy latest commit**. Update both the API and website for the appointment integration.
+
+After deployment, confirm:
+
+1. The API `/health` returns `{"status":"ok"}`.
+2. The API `/docs` includes `GET /api/doctors/{doctor_id}/appointments`.
+3. A recommendation card on the website shows the appointment lookup button, and selecting a returned slot opens the official CGMH patient information page. Appointment availability depends on the hospital's live site; a temporary lookup failure should still show the official registration link.
+
 ## OpenAI-Generated Reasons
 
 The app works without `OPENAI_API_KEY` by using keyword matching. In that mode, doctor cards show deterministic reasons such as `符合概念`.

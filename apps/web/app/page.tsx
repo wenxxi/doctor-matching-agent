@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import AppointmentPanel from "./appointments";
 
 type MatchedConcept = {
   concept_id: string;
@@ -26,6 +27,7 @@ type RecommendedDoctor = {
   subdepartment_zh: string;
   specialty_raw_zh: string;
   source_url: string;
+  registration_url: string | null;
   score: number;
   matched_concepts: MatchedConcept[];
   reasons: string[];
@@ -414,6 +416,7 @@ function DoctorPanel({
                 Source profile
               </a>
             ) : null}
+            <AppointmentPanel key={doctor.doctor_id} doctor={doctor} />
           </article>
         ))
       )}

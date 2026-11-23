@@ -1,5 +1,6 @@
 from collections import defaultdict
 
+from app.services.appointments import registration_url_for
 from app.schemas import (
     MatchedConceptResponse,
     RankingDebugResponse,
@@ -138,6 +139,7 @@ def rank_doctors(
                 subdepartment_zh=doctor["subdepartment_zh"],
                 specialty_raw_zh=doctor["specialty_raw_zh"],
                 source_url=doctor["source_url"],
+                registration_url=registration_url_for(doctor),
                 score=round(score, 3),
                 matched_concepts=concept_responses,
                 reasons=build_reasons(rows, matched_by_id, doctor["specialty_raw_zh"]),

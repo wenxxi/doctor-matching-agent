@@ -53,6 +53,7 @@ def test_recommendations_for_knee_query(monkeypatch):
     assert "ORTHO_KNEE" in concept_ids
     assert "ORTHO_LIGAMENT_INJURY" in concept_ids
     assert data["recommended_doctors"]
+    assert data["recommended_doctors"][0]["registration_url"] == "https://register.cgmh.org.tw/Register/3"
     assert len(data["recommended_doctors"]) <= 3
     assert data["message"] is None
 
