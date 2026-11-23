@@ -11,7 +11,7 @@ This scaffold includes:
 - Alembic migrations and a sample PostgreSQL doctor data layer
 - CSV-backed MVP doctor recommendation endpoint with optional GPT-4o-mini concept extraction and explanation writing
 
-No embeddings, chat history, authentication, or direct GPT doctor search is implemented yet.
+No embeddings, authentication, persistent conversation storage, or direct GPT doctor search is implemented yet.
 
 ## Online Demo（Render）
 
@@ -20,6 +20,17 @@ No embeddings, chat history, authentication, or direct GPT doctor search is impl
 - API 健康檢查：[Health](https://doctor-matching-agent-api.onrender.com/health)
 
 Render 免費後端閒置後首次請求可能需要較長時間啟動。部署設定與更新方式請見 [DEPLOYMENT.md](DEPLOYMENT.md)。
+
+## 對話追問與條件記憶
+
+首頁以對話整理就醫需求，只追問尚未確認的症狀／科別、初複診、日期範圍與時段。條件完整後自動推薦醫師，並將相同條件帶入每張醫師卡片的掛號助理。
+
+- 例如先說「膝蓋疼痛，想下週下午看診」，再回答「我是複診」；後續說「週三不行」時，保留原症狀、日期與下午偏好，只排除星期三。「改成上午」則只改時段。
+- 支援明確的「日期不限」「時段不限」「不確定初複診」，不會反覆追問已確認的項目。要求其他醫院時會說明目前僅支援林口長庚，不直接套用錯誤院區。
+- `POST /api/intake/chat` 接收 `message` 與上一輪回傳的 `state`，回傳更新後條件、下一個必要問題、快捷回答與 `ready`。相對日期以台北日期計算。
+- 有 OpenAI 設定時使用結構化條件擷取，明確日期與星期編輯由本地程式校正；未設定或模型失敗時採本地解析。不明確或衝突的條件會要求澄清，不直接視為已接受。
+- 對話與條件只存於目前網頁的記憶體，不使用 localStorage、sessionStorage 或後端對話資料庫。重新整理、點「清除對話與條件」或輸入「清除記憶」會重設；聊天內容可含健康資訊，有 API 設定時症狀與條件會送交模型解析，請勿在對話填入掛號證號、生日或驗證碼。
+- 日期、時段與星期修改會清除舊的掛號候選，避免沿用舊條件。院方掛號處理期間暫停對話修改；僅改時段而症狀相同時沿用已取得的醫師推薦。
 
 ## 林口長庚掛號整合
 

@@ -1,7 +1,8 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import BookingForm, { AppointmentSlot } from "./booking-form";
+import { IntakeState, weekdayLabels } from "./intake-types";
 
 type Appointments = {
   status: string;
@@ -22,20 +23,25 @@ type Preparation = {
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") || "http://localhost:8000";
 const inputClass = "mt-1 w-full rounded border border-slate-300 bg-white px-2 py-2";
 
-export default function AppointmentPanel({ doctor }: {
+export default function AppointmentPanel({ doctor, preferences, onBookingBusy }: {
   doctor: { doctor_id: string; doctor_name_zh: string; registration_url: string | null };
+  preferences: IntakeState | null;
+  onBookingBusy: (doctorId: string, busy: boolean) => void;
 }) {
   const [result, setResult] = useState<Appointments | null>(null);
   const [preparation, setPreparation] = useState<Preparation | null>(null);
   const [selected, setSelected] = useState<AppointmentSlot | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [dateFrom, setDateFrom] = useState("");
-  const [dateTo, setDateTo] = useState("");
-  const [session, setSession] = useState("");
-  const [weekdays, setWeekdays] = useState("all");
-  const [patientType, setPatientType] = useState("unknown");
+  const [dateFrom, setDateFrom] = useState(preferences?.date_from ?? "");
+  const [dateTo, setDateTo] = useState(preferences?.date_to ?? "");
+  const [sessions, setSessions] = useState<string[]>(preferences?.sessions ?? ["上午", "下午", "夜診"]);
+  const [weekdays, setWeekdays] = useState(preferences?.weekdays ?? [0, 1, 2, 3, 4, 5, 6]);
+  const [patientType, setPatientType] = useState<string>(preferences?.patient_type ?? "unknown");
   const [bookingBusy, setBookingBusy] = useState(false);
+
+  useEffect(() => { onBookingBusy(doctor.doctor_id, bookingBusy); }, [doctor.doctor_id, bookingBusy, onBookingBusy]);
+  useEffect(() => () => { onBookingBusy(doctor.doctor_id, false); }, [doctor.doctor_id, onBookingBusy]);
 
   if (!doctor.registration_url) return null;
 
@@ -50,8 +56,8 @@ export default function AppointmentPanel({ doctor }: {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           patient_type: patientType, date_from: dateFrom || null, date_to: dateTo || null,
-          sessions: session ? [session] : ["上午", "下午", "夜診"],
-          weekdays: weekdays === "weekdays" ? [0, 1, 2, 3, 4] : weekdays === "weekends" ? [5, 6] : [0, 1, 2, 3, 4, 5, 6],
+          sessions,
+          weekdays,
         }),
       } : undefined);
       if (!response.ok) throw new Error("查詢失敗，請確認日期範圍或稍後重試。");
@@ -78,20 +84,21 @@ export default function AppointmentPanel({ doctor }: {
     <section aria-label={`${doctor.doctor_name_zh}掛號助理`} className="mt-4 space-y-3 border-t border-slate-200 pt-4 text-sm leading-6 text-slate-700">
       <h4 className="font-semibold text-slate-950">掛號助理</h4>
       <p>告訴我就診條件，我會查時段、挑選最早符合的門診，確認院方資料頁後，讓你直接在這裡填寫資料與驗證碼。</p>
+      {preferences ? <p className="text-xs text-teal-800">已套用對話中確認的條件；你也可以單獨調整這張醫師卡片。</p> : null}
       <form onSubmit={prepare} className="space-y-3">
         <fieldset disabled={isLoading || Boolean(selected)} className="grid gap-3 sm:grid-cols-2 disabled:opacity-60">
           <label>患者類型<select value={patientType} onChange={(event) => setPatientType(event.target.value)} className={inputClass}>
             <option value="unknown">不確定（排除初診限定時段）</option><option value="first_visit">全院初診（從未在林口長庚看診）</option><option value="department_first">科初診（半年內未看過該科）</option><option value="returning">複診</option>
           </select></label>
-          <label>可看診時段<select value={session} onChange={(event) => setSession(event.target.value)} className={inputClass}>
-            <option value="">全部</option>{["上午", "下午", "夜診"].map((name) => <option key={name}>{name}</option>)}
-          </select></label>
+          <div><p>可看診時段</p><div className="mt-2 flex flex-wrap gap-3">
+            {["上午", "下午", "夜診"].map((name) => <label key={name} className="inline-flex items-center gap-1"><input type="checkbox" checked={sessions.includes(name)} onChange={(event) => setSessions(event.target.checked ? [...sessions, name] : sessions.filter((item) => item !== name))} />{name}</label>)}
+          </div></div>
           <label>最早日期<input type="date" value={dateFrom} onChange={(event) => setDateFrom(event.target.value)} className={inputClass} /></label>
           <label>最晚日期<input type="date" min={dateFrom || undefined} value={dateTo} onChange={(event) => setDateTo(event.target.value)} className={inputClass} /></label>
-          <label>星期<select value={weekdays} onChange={(event) => setWeekdays(event.target.value)} className={inputClass}>
-            <option value="all">不限</option><option value="weekdays">週一至週五</option><option value="weekends">週六、週日</option>
-          </select></label>
-          <button type="submit" disabled={isLoading || Boolean(selected)} className="self-end rounded-md bg-teal-700 px-4 py-2 font-semibold text-white disabled:bg-slate-400">{isLoading ? "正在查詢、挑選與確認…" : "請助理安排掛號"}</button>
+          <div><p>可看診星期</p><div className="mt-2 flex flex-wrap gap-3">
+            {weekdayLabels.map((name, day) => <label key={name} className="inline-flex items-center gap-1"><input type="checkbox" checked={weekdays.includes(day)} onChange={(event) => setWeekdays(event.target.checked ? [...weekdays, day].sort() : weekdays.filter((item) => item !== day))} />週{name}</label>)}
+          </div></div>
+          <button type="submit" disabled={isLoading || Boolean(selected) || !sessions.length || !weekdays.length} className="self-end rounded-md bg-teal-700 px-4 py-2 font-semibold text-white disabled:bg-slate-400">{isLoading ? "正在查詢、挑選與確認…" : "請助理安排掛號"}</button>
         </fieldset>
       </form>
       <div aria-live="polite" className="space-y-2">

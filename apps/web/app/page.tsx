@@ -1,7 +1,9 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import AppointmentPanel from "./appointments";
+import IntakeChat from "./intake-chat";
+import { IntakeState } from "./intake-types";
 
 type MatchedConcept = {
   concept_id: string;
@@ -51,18 +53,15 @@ type RecommendationResponse = {
   message: string | null;
 };
 
-const sampleQueries = [
-  "胃脹氣，吃完飯肚子脹，想看腸胃科。",
-  "有點喉嚨痛，最近有黃痰，一直咳嗽兩個禮拜。",
-  "不孕症想做試管嬰兒，也有多囊性卵巢和子宮內膜異位症。",
-];
-
 const apiBaseUrl =
   process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ||
   "http://localhost:8000";
 
 export default function Home() {
-  const [query, setQuery] = useState(sampleQueries[0]);
+  const [intake, setIntake] = useState<IntakeState | null>(null);
+  const [conditionRevision, setConditionRevision] = useState(0);
+  const [bookingBusyIds, setBookingBusyIds] = useState<string[]>([]);
+  const lastQuery = useRef<string | null>(null);
   const [result, setResult] = useState<RecommendationResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -92,17 +91,26 @@ export default function Home() {
     return values.reduce((sum, value) => sum + value, 0);
   }, [result]);
 
-  async function submitRecommendation(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const trimmedQuery = query.trim();
-    if (!trimmedQuery) {
-      setError("請輸入症狀或就醫需求。");
+  const updateBookingBusy = useCallback((doctorId: string, busy: boolean) => {
+    setBookingBusyIds((previous) => {
+      if (previous.includes(doctorId) === busy) return previous;
+      return busy ? [...previous, doctorId] : previous.filter((item) => item !== doctorId);
+    });
+  }, []);
+
+  async function updateIntake(state: IntakeState | null, ready: boolean) {
+    setIntake(state);
+    setConditionRevision((previous) => previous + 1);
+    setError(null);
+    if (!state || !ready) {
       setResult(null);
+      lastQuery.current = null;
       return;
     }
+    if (lastQuery.current === state.clinical_query && result) return;
 
     setIsLoading(true);
-    setError(null);
+    setResult(null);
 
     try {
       const response = await fetch(`${apiBaseUrl}/api/recommendations`, {
@@ -111,7 +119,7 @@ export default function Home() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          query: trimmedQuery,
+          query: state.clinical_query,
           limit: 3,
         }),
       });
@@ -121,6 +129,7 @@ export default function Home() {
       }
 
       const data = (await response.json()) as RecommendationResponse;
+      lastQuery.current = state.clinical_query;
       setResult(data);
     } catch (requestError) {
       setResult(null);
@@ -139,57 +148,20 @@ export default function Home() {
       <section className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-6xl flex-col gap-4 px-5 py-8 sm:px-8">
           <div>
-            <p className="text-sm font-semibold text-teal-700">MVP Test UI</p>
+            <p className="text-sm font-semibold text-teal-700">你的就醫與掛號助理</p>
             <h1 className="mt-2 text-3xl font-bold tracking-normal sm:text-5xl">
               Doctor Matching Agent
             </h1>
           </div>
           <p className="max-w-3xl text-base leading-7 text-slate-600">
-            Enter a patient symptom description to find relevant doctors based
-            on matched medical concepts and available specialty data.
+            透過對話整理症狀與就診條件，找到相關醫師，再由掛號助理協助安排門診。目前支援林口長庚。
           </p>
         </div>
       </section>
 
       <section className="mx-auto grid max-w-6xl gap-6 px-5 py-6 sm:px-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.25fr)]">
         <div className="space-y-5">
-          <form
-            onSubmit={submitRecommendation}
-            className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm"
-          >
-            <label
-              htmlFor="query"
-              className="text-sm font-semibold text-slate-800"
-            >
-              Patient Input
-            </label>
-            <textarea
-              id="query"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              className="mt-3 min-h-40 w-full resize-y rounded-md border border-slate-300 bg-white px-3 py-3 text-base leading-7 outline-none transition focus:border-teal-600 focus:ring-2 focus:ring-teal-100"
-              placeholder="請描述疼痛位置、症狀、受傷情境或已知診斷。"
-            />
-            <div className="mt-3 flex flex-wrap gap-2">
-              {sampleQueries.map((sample) => (
-                <button
-                  key={sample}
-                  type="button"
-                  onClick={() => setQuery(sample)}
-                  className="rounded-md border border-slate-300 px-3 py-2 text-left text-xs leading-5 text-slate-700 transition hover:border-teal-500 hover:text-teal-800"
-                >
-                  {sample}
-                </button>
-              ))}
-            </div>
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="mt-4 inline-flex min-h-11 items-center justify-center rounded-md bg-teal-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-teal-800 disabled:cursor-not-allowed disabled:bg-slate-400"
-            >
-              {isLoading ? "Matching..." : "Recommend 3 Doctors"}
-            </button>
-          </form>
+          <IntakeChat onUpdate={updateIntake} disabled={bookingBusyIds.length > 0} />
 
           {showDebug ? (
             <DebugPanel result={result} totalTokens={totalTokens} />
@@ -197,6 +169,7 @@ export default function Home() {
         </div>
 
         <div className="space-y-5">
+          {isLoading ? <p role="status" className="text-sm text-teal-800">正在依就醫需求更新推薦醫師…</p> : null}
           {error ? (
             <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm leading-6 text-red-800">
               {error}
@@ -214,8 +187,11 @@ export default function Home() {
             showDebug={showDebug}
           />
           <DoctorPanel
+            key={conditionRevision}
             doctors={result?.recommended_doctors ?? []}
             showDebug={showDebug}
+            preferences={intake}
+            onBookingBusy={updateBookingBusy}
           />
         </div>
       </section>
@@ -306,9 +282,13 @@ function ConceptPanel({
 function DoctorPanel({
   doctors,
   showDebug,
+  preferences,
+  onBookingBusy,
 }: {
   doctors: RecommendedDoctor[];
   showDebug: boolean;
+  preferences: IntakeState | null;
+  onBookingBusy: (doctorId: string, busy: boolean) => void;
 }) {
   return (
     <section className="space-y-3">
@@ -416,7 +396,7 @@ function DoctorPanel({
                 Source profile
               </a>
             ) : null}
-            <AppointmentPanel key={doctor.doctor_id} doctor={doctor} />
+            <AppointmentPanel key={doctor.doctor_id} doctor={doctor} preferences={preferences} onBookingBusy={onBookingBusy} />
           </article>
         ))
       )}
