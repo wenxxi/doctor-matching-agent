@@ -73,10 +73,10 @@ export default function AppointmentPanel({ doctor, preferences, onBookingBusy, a
         onCaseUpdate?.(detail, agentContext.token);
         return;
       }
-      const response = await fetch(prepare ? `${endpoint}/prepare` : endpoint, prepare ? {
+      const response = await fetch(prepare ? `${endpoint}/prepare` : `${endpoint}/search`, {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify(choices),
-      } : undefined);
+      });
       if (!response.ok) throw new Error("查詢失敗，請確認日期範圍或稍後重試。");
       if (prepare) {
         const data = await response.json() as Preparation;
@@ -136,7 +136,7 @@ export default function AppointmentPanel({ doctor, preferences, onBookingBusy, a
         <ul className="mt-3 max-h-80 space-y-2 overflow-y-auto">
           {result?.slots.map((slot) => <li key={slot.registration_url} className="rounded border border-slate-200 p-3">
             <p className="font-semibold">{slot.date} {slot.session}</p><p>{slot.eligibility}</p>
-            <button type="button" disabled={Boolean(selected) || !canPrepare || isLoading} onClick={() => agentContext ? void queryAppointments(true, slot) : setSelected(slot)} className="font-semibold text-teal-700 disabled:opacity-50">在本站填寫掛號資料</button>
+            <button type="button" disabled={Boolean(selected) || !canPrepare || isLoading} onClick={() => void queryAppointments(true, slot)} className="font-semibold text-teal-700 disabled:opacity-50">確認時段並填寫掛號資料</button>
           </li>)}
         </ul>
         {result?.schedule_urls.map((url, index) => <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="mr-3 inline-block text-xs font-semibold text-teal-700">科別門診表{result.schedule_urls.length > 1 ? ` ${index + 1}` : ""}</a>)}

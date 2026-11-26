@@ -28,6 +28,10 @@ export type RecommendedDoctor = {
   reasons: string[];
   ranking_debug: RankingDebug | null;
   llm_reason_zh: string | null;
+  availability: {
+    selected_slot: { date: string; session: string; eligibility: string; registration_url: string };
+    verified_at: string;
+  } | null;
 };
 
 export type RecommendationResponse = {

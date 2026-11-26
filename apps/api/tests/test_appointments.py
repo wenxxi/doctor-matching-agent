@@ -109,3 +109,15 @@ def test_appointments_endpoint_uses_known_doctor_and_returns_404_for_unknown(mon
     assert response.status_code == 200
     assert response.json()["status"] == "available"
     assert client.get("/api/doctors/unknown/appointments").status_code == 404
+
+
+def test_search_excludes_initial_only_and_outside_preferences(monkeypatch):
+    mock_pages(monkeypatch)
+    client = TestClient(app)
+    url = f'/api/doctors/{DOCTOR["doctor_id"]}/appointments/search'
+    result = client.post(url, json={"patient_type": "returning", "sessions": ["夜診"]})
+    assert result.status_code == 200
+    assert [slot["session"] for slot in result.json()["slots"]] == ["夜診"]
+    result = client.post(url, json={"patient_type": "returning", "sessions": ["上午"]})
+    assert result.json()["slots"] == []
+    assert result.json()["status"] == "no_slots"

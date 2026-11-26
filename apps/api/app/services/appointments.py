@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from functools import lru_cache
 from html.parser import HTMLParser
 from time import time
+from threading import Lock
 from urllib.parse import urljoin
 from urllib.request import Request, urlopen
 from zoneinfo import ZoneInfo
@@ -28,6 +29,7 @@ DEPARTMENT_ALIASES = {
     "婦產科": ("婦產科", "不孕症門診"),
 }
 SESSION_NAMES = {"1": "上午", "2": "下午", "3": "夜診"}
+PAGE_LOCKS = tuple(Lock() for _ in range(32))
 
 
 class LinkParser(HTMLParser):
@@ -67,8 +69,14 @@ def registration_url_for(doctor: dict[str, str]) -> str | None:
 
 
 @lru_cache(maxsize=128)
-def fetch_page(url: str, cache_window: int) -> tuple[str, datetime]:
+def cached_page(url: str, cache_window: int) -> tuple[str, datetime]:
     return fetch_live_page(url)
+
+
+def fetch_page(url: str, cache_window: int) -> tuple[str, datetime]:
+    # Concurrent checks for doctors in one department share the same schedule.
+    with PAGE_LOCKS[hash(url) % len(PAGE_LOCKS)]:
+        return cached_page(url, cache_window)
 
 
 def fetch_live_page(url: str) -> tuple[str, datetime]:

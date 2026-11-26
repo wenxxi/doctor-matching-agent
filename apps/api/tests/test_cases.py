@@ -33,7 +33,7 @@ def database(monkeypatch, tmp_path):
 
 
 @pytest.fixture
-def client(database):
+def client(database, verified_doctor_availability):
     return TestClient(app)
 
 
@@ -119,6 +119,28 @@ def test_graph_interrupts_and_resumes_with_persisted_case_memory(client):
     assert third["task"]["intake"]["weekdays"] == [0, 1, 3, 4, 5, 6]
     assert third["task"]["intake"]["sessions"] == ["下午"]
     assert len(third["messages"]) == 6
+
+
+def test_condition_changes_recheck_availability_instead_of_reusing_old_doctors(client, monkeypatch):
+    import app.routers.recommendations as recommendations
+
+    original = recommendations.filter_available_doctors
+    calls = []
+
+    def capture(candidates, preferences, limit):
+        calls.append(preferences.model_dump(mode="json"))
+        return original(candidates, preferences, limit)
+
+    monkeypatch.setattr(recommendations, "filter_available_doctors", capture)
+    headers = owner(client)
+    case = ready_case(client, headers)
+    updated = message(client, headers, case, "改成上午，週三不行").json()
+    assert len(calls) == 2
+    assert calls[0]["patient_type"] == calls[1]["patient_type"] == "returning"
+    assert calls[0]["sessions"] == ["下午"]
+    assert calls[1]["sessions"] == ["上午"]
+    assert 2 not in calls[1]["weekdays"]
+    assert updated["task"]["recommendation"]["recommended_doctors"][0]["availability"]["selected_slot"]["session"] == "上午"
 
 
 def test_database_restart_does_not_lose_checkpoints_or_memory(client, database):

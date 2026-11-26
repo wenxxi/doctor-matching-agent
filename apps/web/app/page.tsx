@@ -19,7 +19,6 @@ export default function Home() {
   const [agentCase, setAgentCase] = useState<CaseDetail | null>(null);
   const [agentToken, setAgentToken] = useState<string | null>(null);
   const caseFingerprint = useRef("");
-  const lastQuery = useRef<string | null>(null);
   const [result, setResult] = useState<RecommendationResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -62,7 +61,6 @@ export default function Home() {
     setIntake(detail?.task.intake ?? null);
     setResult(detail?.task.recommendation ?? null);
     setError(null);
-    lastQuery.current = null;
     const fingerprint = detail ? detail.case.id + detail.task.id + detail.case.status + JSON.stringify(detail.task.intake) + (detail.task.preparation?.selected_slot?.registration_url ?? "") : "";
     if (fingerprint !== caseFingerprint.current) {
       caseFingerprint.current = fingerprint;
@@ -82,10 +80,8 @@ export default function Home() {
     setError(null);
     if (!state || !ready) {
       setResult(null);
-      lastQuery.current = null;
       return;
     }
-    if (lastQuery.current === state.clinical_query && result) return;
 
     setIsLoading(true);
     setResult(null);
@@ -99,6 +95,11 @@ export default function Home() {
         body: JSON.stringify({
           query: state.clinical_query,
           limit: 3,
+          preferences: {
+            patient_type: state.patient_type ?? "unknown",
+            date_from: state.date_from, date_to: state.date_to,
+            sessions: state.sessions ?? ["上午", "下午", "夜診"], weekdays: state.weekdays,
+          },
         }),
       });
 
@@ -107,7 +108,6 @@ export default function Home() {
       }
 
       const data = (await response.json()) as RecommendationResponse;
-      lastQuery.current = state.clinical_query;
       setResult(data);
     } catch (requestError) {
       setResult(null);
@@ -147,7 +147,7 @@ export default function Home() {
         </div>
 
         <div className="space-y-5">
-          {isLoading ? <p role="status" className="text-sm text-teal-800">正在依就醫需求更新推薦醫師…</p> : null}
+          {isLoading ? <p role="status" className="text-sm text-teal-800">正在比對醫師專長，並向院方確認符合條件的可掛號時段…</p> : null}
           {error ? (
             <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm leading-6 text-red-800">
               {error}
@@ -166,7 +166,7 @@ export default function Home() {
           />
           <DoctorPanel
             key={conditionRevision}
-            doctors={result?.recommended_doctors ?? []}
+            doctors={(result?.recommended_doctors ?? []).filter((doctor) => doctor.availability)}
             showDebug={showDebug}
             preferences={intake}
             onBookingBusy={updateBookingBusy}
@@ -285,7 +285,7 @@ function DoctorPanel({
 
       {doctors.length === 0 ? (
         <div className="rounded-lg border border-slate-200 bg-white p-4 text-sm leading-6 text-slate-600 shadow-sm">
-          No doctor recommendations yet.
+          尚未有已確認時段的醫師。請完成就醫條件；若是先前儲存的推薦，請在對話中輸入「維持目前條件」重新查詢。
         </div>
       ) : (
         doctors.map((doctor, index) => (
@@ -317,6 +317,12 @@ function DoctorPanel({
                 {doctor.llm_reason_zh}
               </p>
             ) : null}
+
+            {doctor.availability ? <div className="mt-3 rounded-md bg-teal-50 p-3 text-sm text-teal-900">
+              <p className="font-semibold">已確認符合條件：{doctor.availability.selected_slot.date} {doctor.availability.selected_slot.session}</p>
+              <p>{doctor.availability.selected_slot.eligibility}</p>
+              <p className="mt-1 text-xs">確認時間：{new Date(doctor.availability.verified_at).toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })}。尚未保留名額，安排時會再次確認。</p>
+            </div> : null}
 
             {!doctor.llm_reason_zh && doctor.reasons[0] ? (
               <p className="mt-4 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm leading-7 text-slate-700">

@@ -44,12 +44,17 @@ def wait_for_details(state):
 
 def recommend(state):
     query = state["intake"]["clinical_query"]
-    if state.get("recommendation_query") == query and state.get("recommendation") is not None:
-        return {"phase": "selecting_doctor", "trace": step(state, "recommend", "症狀未改變，沿用此個案已取得的推薦醫師。")}
     try:
-        result = recommend_doctors(RecommendationRequest(query=query))
+        intake = state["intake"]
+        preferences = AppointmentPreparationRequest(
+            patient_type=intake.get("patient_type") or "unknown",
+            date_from=intake.get("date_from"), date_to=intake.get("date_to"),
+            sessions=intake.get("sessions") or ["上午", "下午", "夜診"],
+            weekdays=intake.get("weekdays", list(range(7))),
+        )
+        result = recommend_doctors(RecommendationRequest(query=query, preferences=preferences))
         return {"recommendation": result.model_dump(mode="json"), "recommendation_query": query,
-                "phase": "selecting_doctor", "trace": step(state, "recommend", "已呼叫既有醫師推薦服務。")}
+                "phase": "selecting_doctor", "trace": step(state, "recommend", "已依目前就醫條件查詢時段，只推薦院方患者資料頁可確認的醫師。")}
     except Exception:
         response = dict(state["intake_response"])
         response.update(ready=False, reply="推薦服務暫時無法完成，條件已保留，請傳送「維持目前條件」重試。")

@@ -33,9 +33,16 @@ class DoctorResponse(BaseModel):
     expertise: list[DoctorExpertiseResponse]
 
 
-class RecommendationRequest(BaseModel):
-    query: str
-    limit: int = 3
+class AppointmentSlotResponse(BaseModel):
+    date: str
+    session: str
+    eligibility: str
+    registration_url: str
+
+
+class DoctorAvailability(BaseModel):
+    selected_slot: AppointmentSlotResponse
+    verified_at: datetime
 
 
 class ConceptExtractionRequest(BaseModel):
@@ -72,6 +79,7 @@ class RecommendedDoctorResponse(BaseModel):
     reasons: list[str]
     ranking_debug: RankingDebugResponse | None = None
     llm_reason_zh: str | None = None
+    availability: DoctorAvailability | None = None
 
 
 class RecommendationResponse(BaseModel):
@@ -98,13 +106,6 @@ class ConceptExtractionResponse(BaseModel):
     input_tokens: int | None = None
     output_tokens: int | None = None
     matched_concepts: list[MatchedConceptResponse]
-
-
-class AppointmentSlotResponse(BaseModel):
-    date: str
-    session: str
-    eligibility: str
-    registration_url: str
 
 
 class AppointmentsResponse(BaseModel):
@@ -144,3 +145,11 @@ class AppointmentPreparationResponse(BaseModel):
     attempted_count: int = 0
     steps: list[str] = Field(default_factory=list)
     message: str
+
+
+class RecommendationRequest(BaseModel):
+    query: str
+    limit: int = 3
+    preferences: AppointmentPreparationRequest = Field(
+        default_factory=lambda: AppointmentPreparationRequest(patient_type="unknown"),
+    )

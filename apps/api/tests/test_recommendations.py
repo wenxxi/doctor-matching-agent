@@ -1,4 +1,5 @@
 from types import SimpleNamespace
+import pytest
 
 from fastapi.testclient import TestClient
 
@@ -7,9 +8,12 @@ import app.services.openai_concept_extractor as openai_extractor_module
 from app.main import app
 from app.services.openai_reason_generator import ReasonGenerationResult
 from app.settings import get_openai_settings
+from app.schemas import AppointmentPreparationResponse
+from app.services import available_doctors
 
 
 client = TestClient(app)
+pytestmark = pytest.mark.usefixtures("verified_doctor_availability")
 
 
 class FakeResponses:
@@ -204,6 +208,17 @@ def test_recommendations_unknown_query_returns_helpful_message(monkeypatch):
     assert data["matched_concepts"] == []
     assert data["recommended_doctors"] == []
     assert data["message"]
+
+
+def test_unverified_doctors_are_never_returned_when_hospital_is_unreachable(monkeypatch):
+    clear_openai_settings(monkeypatch)
+    monkeypatch.setattr(available_doctors, "prepare_appointment", lambda doctor, preferences: AppointmentPreparationResponse(
+        doctor_id=doctor["doctor_id"], status="unavailable", message="院方暫時無法連線",
+    ))
+    response = client.post("/api/recommendations", json={"query": "膝蓋疼痛", "preferences": {"patient_type": "returning"}})
+    assert response.status_code == 200
+    assert response.json()["recommended_doctors"] == []
+    assert "無法確認" in response.json()["message"]
 
 
 def test_recommendations_limit_is_applied(monkeypatch):

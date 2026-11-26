@@ -12,6 +12,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[3]
 EVAL_CASES_CSV = PROJECT_ROOT / "data" / "evaluation" / "recommendation_eval_cases.csv"
 
 client = TestClient(app)
+pytestmark = pytest.mark.usefixtures("verified_doctor_availability")
 
 
 def load_eval_cases():

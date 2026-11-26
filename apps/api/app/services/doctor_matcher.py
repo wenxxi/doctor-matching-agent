@@ -99,11 +99,15 @@ def rank_doctors(
     matched_concepts: list[MatchedConcept],
     limit: int,
     department_intent: DepartmentIntent | None = None,
+    *,
+    candidate_limit: int | None = None,
 ) -> list[RecommendedDoctorResponse]:
     if not matched_concepts:
         return []
 
     limit = max(1, min(limit, 3))
+    if candidate_limit is not None:
+        limit = max(limit, min(candidate_limit, 12))
     matched_by_id = {concept.concept_id: concept for concept in matched_concepts}
     doctors_by_id = {doctor["doctor_id"]: doctor for doctor in load_doctors()}
     rows_by_doctor: dict[str, list[dict[str, str]]] = defaultdict(list)
