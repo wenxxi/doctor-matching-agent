@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import BookingForm, { AppointmentSlot } from "./booking-form";
 import { IntakeState, weekdayLabels } from "./intake-types";
+import { AgentContext, agentRequest, CaseDetail } from "./agent-types";
 
 type Appointments = {
   status: string;
@@ -23,14 +24,18 @@ type Preparation = {
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") || "http://localhost:8000";
 const inputClass = "mt-1 w-full rounded border border-slate-300 bg-white px-2 py-2";
 
-export default function AppointmentPanel({ doctor, preferences, onBookingBusy }: {
+export default function AppointmentPanel({ doctor, preferences, onBookingBusy, agentContext, onCaseUpdate }: {
   doctor: { doctor_id: string; doctor_name_zh: string; registration_url: string | null };
   preferences: IntakeState | null;
   onBookingBusy: (doctorId: string, busy: boolean) => void;
+  agentContext?: AgentContext | null;
+  onCaseUpdate?: (detail: CaseDetail | null, token: string | null) => void;
 }) {
+  const restored = agentContext?.status === "awaiting_patient" && [null, "awaiting_patient", "captcha_error"].includes(agentContext.booking_status)
+    && agentContext.preparation?.doctor_id === doctor.doctor_id ? agentContext.preparation : null;
   const [result, setResult] = useState<Appointments | null>(null);
-  const [preparation, setPreparation] = useState<Preparation | null>(null);
-  const [selected, setSelected] = useState<AppointmentSlot | null>(null);
+  const [preparation, setPreparation] = useState<Preparation | null>(restored);
+  const [selected, setSelected] = useState<AppointmentSlot | null>(restored?.selected_slot ?? null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [dateFrom, setDateFrom] = useState(preferences?.date_from ?? "");
@@ -45,20 +50,32 @@ export default function AppointmentPanel({ doctor, preferences, onBookingBusy }:
 
   if (!doctor.registration_url) return null;
 
-  async function queryAppointments(prepare: boolean) {
+  const canPrepare = !agentContext || ["selecting_doctor", "awaiting_patient"].includes(agentContext.status);
+
+  async function queryAppointments(prepare: boolean, chosenSlot?: AppointmentSlot) {
     setIsLoading(true);
     setError(null);
     setPreparation(null);
     setSelected(null);
     try {
       const endpoint = `${apiBaseUrl}/api/doctors/${encodeURIComponent(doctor.doctor_id)}/appointments`;
+      const choices = {
+        patient_type: patientType, date_from: chosenSlot?.date ?? (dateFrom || null), date_to: chosenSlot?.date ?? (dateTo || null),
+        sessions: chosenSlot ? [chosenSlot.session] : sessions, weekdays,
+      };
+      if (prepare && agentContext) {
+        const detail = await agentRequest("/cases/" + agentContext.case_id + "/prepare", agentContext.token, {
+          doctor_id: doctor.doctor_id, preferences: choices,
+          operation_id: crypto.randomUUID(), expected_version: agentContext.version,
+        }) as CaseDetail;
+        setPreparation(detail.task.preparation);
+        setSelected(detail.task.preparation?.selected_slot ?? null);
+        onCaseUpdate?.(detail, agentContext.token);
+        return;
+      }
       const response = await fetch(prepare ? `${endpoint}/prepare` : endpoint, prepare ? {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          patient_type: patientType, date_from: dateFrom || null, date_to: dateTo || null,
-          sessions,
-          weekdays,
-        }),
+        body: JSON.stringify(choices),
       } : undefined);
       if (!response.ok) throw new Error("查詢失敗，請確認日期範圍或稍後重試。");
       if (prepare) {
@@ -86,7 +103,7 @@ export default function AppointmentPanel({ doctor, preferences, onBookingBusy }:
       <p>告訴我就診條件，我會查時段、挑選最早符合的門診，確認院方資料頁後，讓你直接在這裡填寫資料與驗證碼。</p>
       {preferences ? <p className="text-xs text-teal-800">已套用對話中確認的條件；你也可以單獨調整這張醫師卡片。</p> : null}
       <form onSubmit={prepare} className="space-y-3">
-        <fieldset disabled={isLoading || Boolean(selected)} className="grid gap-3 sm:grid-cols-2 disabled:opacity-60">
+        <fieldset disabled={isLoading || Boolean(selected) || !canPrepare} className="grid gap-3 sm:grid-cols-2 disabled:opacity-60">
           <label>患者類型<select value={patientType} onChange={(event) => setPatientType(event.target.value)} className={inputClass}>
             <option value="unknown">不確定（排除初診限定時段）</option><option value="first_visit">全院初診（從未在林口長庚看診）</option><option value="department_first">科初診（半年內未看過該科）</option><option value="returning">複診</option>
           </select></label>
@@ -98,7 +115,7 @@ export default function AppointmentPanel({ doctor, preferences, onBookingBusy }:
           <div><p>可看診星期</p><div className="mt-2 flex flex-wrap gap-3">
             {weekdayLabels.map((name, day) => <label key={name} className="inline-flex items-center gap-1"><input type="checkbox" checked={weekdays.includes(day)} onChange={(event) => setWeekdays(event.target.checked ? [...weekdays, day].sort() : weekdays.filter((item) => item !== day))} />週{name}</label>)}
           </div></div>
-          <button type="submit" disabled={isLoading || Boolean(selected) || !sessions.length || !weekdays.length} className="self-end rounded-md bg-teal-700 px-4 py-2 font-semibold text-white disabled:bg-slate-400">{isLoading ? "正在查詢、挑選與確認…" : "請助理安排掛號"}</button>
+          <button type="submit" disabled={isLoading || Boolean(selected) || !canPrepare || !sessions.length || !weekdays.length} className="self-end rounded-md bg-teal-700 px-4 py-2 font-semibold text-white disabled:bg-slate-400">{isLoading ? "正在查詢、挑選與確認…" : "請助理安排掛號"}</button>
         </fieldset>
       </form>
       <div aria-live="polite" className="space-y-2">
@@ -107,7 +124,7 @@ export default function AppointmentPanel({ doctor, preferences, onBookingBusy }:
       </div>
       {selected ? (
         <>
-          <BookingForm key={selected.registration_url} doctorId={doctor.doctor_id} doctorName={doctor.doctor_name_zh} slot={selected} onBusyChange={setBookingBusy} />
+          <BookingForm key={selected.registration_url} doctorId={doctor.doctor_id} doctorName={doctor.doctor_name_zh} slot={selected} onBusyChange={setBookingBusy} agentContext={agentContext} onCaseUpdate={onCaseUpdate} />
           <button type="button" disabled={bookingBusy} onClick={() => { setSelected(null); setPreparation(null); }} className="text-xs text-slate-600 underline disabled:opacity-50">關閉此表單、重新選時段（不會取消院方已完成的掛號）</button>
         </>
       ) : null}
@@ -119,7 +136,7 @@ export default function AppointmentPanel({ doctor, preferences, onBookingBusy }:
         <ul className="mt-3 max-h-80 space-y-2 overflow-y-auto">
           {result?.slots.map((slot) => <li key={slot.registration_url} className="rounded border border-slate-200 p-3">
             <p className="font-semibold">{slot.date} {slot.session}</p><p>{slot.eligibility}</p>
-            <button type="button" disabled={Boolean(selected)} onClick={() => setSelected(slot)} className="font-semibold text-teal-700 disabled:opacity-50">在本站填寫掛號資料</button>
+            <button type="button" disabled={Boolean(selected) || !canPrepare || isLoading} onClick={() => agentContext ? void queryAppointments(true, slot) : setSelected(slot)} className="font-semibold text-teal-700 disabled:opacity-50">在本站填寫掛號資料</button>
           </li>)}
         </ul>
         {result?.schedule_urls.map((url, index) => <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="mr-3 inline-block text-xs font-semibold text-teal-700">科別門診表{result.schedule_urls.length > 1 ? ` ${index + 1}` : ""}</a>)}

@@ -5,6 +5,7 @@ from sqlalchemy import engine_from_config, pool
 
 from app.database import get_database_url
 from app.models import Doctor, DoctorExpertise  # noqa: F401
+from app.agent_models import AgentOwner, AgentTask, CareCase, CaseMessage
 from app.database import Base
 
 config = context.config

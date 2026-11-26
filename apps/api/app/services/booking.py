@@ -9,6 +9,7 @@ from http.cookiejar import CookieJar
 from threading import Lock, Timer
 from urllib.parse import quote, urlencode, urljoin, urlsplit
 from urllib.request import HTTPCookieProcessor, HTTPRedirectHandler, Request, build_opener
+from uuid import UUID
 
 from app.booking_schemas import (
     BookingContinueRequest, BookingField, BookingPatientRequest, BookingStateResponse,
@@ -219,6 +220,8 @@ class BookingSession:
     lock: Lock = field(default_factory=Lock)
     rounds: int = 0
     step_token: str = ""
+    task_id: UUID | None = None
+    task_version: int | None = None
 
 
 SESSIONS: dict[str, BookingSession] = {}

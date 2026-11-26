@@ -11,7 +11,7 @@ This scaffold includes:
 - Alembic migrations and a sample PostgreSQL doctor data layer
 - CSV-backed MVP doctor recommendation endpoint with optional GPT-4o-mini concept extraction and explanation writing
 
-No embeddings, authentication, persistent conversation storage, or direct GPT doctor search is implemented yet.
+The app includes opt-in case memory and LangGraph task orchestration. Embeddings, account login, and direct GPT doctor search are not implemented yet.
 
 ## Online Demo（Render）
 
@@ -29,8 +29,57 @@ Render 免費後端閒置後首次請求可能需要較長時間啟動。部署�
 - 支援明確的「日期不限」「時段不限」「不確定初複診」，不會反覆追問已確認的項目。要求其他醫院時會說明目前僅支援林口長庚，不直接套用錯誤院區。
 - `POST /api/intake/chat` 接收 `message` 與上一輪回傳的 `state`，回傳更新後條件、下一個必要問題、快捷回答與 `ready`。相對日期以台北日期計算。
 - 有 OpenAI 設定時使用結構化條件擷取，明確日期與星期編輯由本地程式校正；未設定或模型失敗時採本地解析。不明確或衝突的條件會要求澄清，不直接視為已接受。
-- 對話與條件只存於目前網頁的記憶體，不使用 localStorage、sessionStorage 或後端對話資料庫。重新整理、點「清除對話與條件」或輸入「清除記憶」會重設；聊天內容可含健康資訊，有 API 設定時症狀與條件會送交模型解析，請勿在對話填入掛號證號、生日或驗證碼。
+- 未建立個案時，對話與條件只存於目前網頁的記憶體，重新整理或清除對話會重設。勾選同意並建立可追蹤個案後，對話、條件與任務會保存到後端資料庫；localStorage 僅保存匿名存取憑證與選定個案 ID，不保存健康描述。有 API 設定時，症狀與條件仍會送交模型解析，請勿在對話填入掛號證號、生日或驗證碼。
 - 日期、時段與星期修改會清除舊的掛號候選，避免沿用舊條件。院方掛號處理期間暫停對話修改；僅改時段而症狀相同時沿用已取得的醫師推薦。
+
+## 個案、任務與 LangGraph
+
+- 「我的就醫個案」可建立、切換、結案、重新開啟及刪除個案。不同對象／問題應建立不同個案，例如「自己／膝蓋疼痛」與「媽媽／眼睛問題」。目前由使用者選擇個案，不會自動合併健康問題。
+- 新增 `agent_owners`、`care_cases`、`agent_tasks` 與 `case_messages` 四張資料表。匿名憑證只以 SHA-256 雜湊保存，所有個案 API 都檢查所屬者；這是同瀏覽器存取能力，不是跨裝置帳號登入。清除瀏覽器資料將失去憑證；要移除後端健康資料，請先刪除個案。
+- LangGraph 在需求整理、醫師推薦與時段準備之間路由；缺少條件、等待選醫師、等待患者資料時使用 interrupt。每個任務以自己的 UUID 作為 thread_id，由持久 checkpoint 保存流程狀態。已完成回合與等待輸入的節點，可在程序重啟後接續。
+- 使用 `AGENT_DATABASE_URL`，未設定時沿用 `DATABASE_URL`。本機兩者皆未設定才使用 `var/agent-memory.sqlite3`；Render 必須使用 PostgreSQL，不會退回容易遺失的本機檔案。首次啟用會建立四張新表及 LangGraph 管理的 checkpoint 表，不修改既有醫師資料。
+- 同個案採版本檢查、操作 ID 去重與鎖定，避免不同分頁互相覆蓋。刪除個案同時清除訊息、任務與該任務的 LangGraph checkpoints；目前沒有排程自動刪除資料。
+- 掛號證號、生日、驗證碼、院方 Cookie 與掛號 token 不寫入圖狀態／個案資料表。只回報已確認的結果、掛號序號與狀態。真正送出掛號仍在獨立、短期的掛號工作階段，不能因圖恢復而自動重播。
+- 院方結果不明時會停止；先至官網查詢，確認未掛號後才可在對話輸入「已向院方確認未掛號，重新安排」。重新整理時不會自動重送已進入確認／送出流程的掛號。
+
+### 資料關係
+
+```mermaid
+erDiagram
+    AGENT_OWNERS ||--o{ CARE_CASES : owns
+    CARE_CASES ||--o{ AGENT_TASKS : tracks
+    CARE_CASES ||--o{ CASE_MESSAGES : contains
+    AGENT_TASKS ||--o{ CASE_MESSAGES : records
+    AGENT_TASKS ||..o{ LANGGRAPH_CHECKPOINTS : "logical thread_id"
+```
+
+### Agent 流程
+
+```mermaid
+flowchart TD
+    A[選擇個案並驗證存取憑證] --> B[載入個案條件與任務 checkpoint]
+    B --> C[LangGraph：整理需求]
+    C --> D{條件完整？}
+    D -->|否| E[interrupt：等待補充]
+    E -->|新訊息| C
+    D -->|是| F[既有醫師推薦服務]
+    F --> G[interrupt：等待選醫師]
+    G -->|修改條件| C
+    G -->|選定醫師| H[既有時段查詢與頁面確認服務]
+    H --> I{找到時段？}
+    I -->|否| G
+    I -->|是| J[interrupt：等待患者資料]
+    J --> K[獨立短期掛號表單：人工輸入驗證碼並確認]
+    K --> L{院方結果}
+    L -->|確認成功| M[記錄序號並完成任務]
+    L -->|不明或特殊流程| N[停止操作，交由使用者確認]
+    C -.狀態保存.-> DB[(個案資料庫與 checkpoints)]
+    H -.狀態保存.-> DB
+    M -.結果保存.-> DB
+    N -.進度保存.-> DB
+```
+
+Render PostgreSQL 設定與本機測試方式見 [DEPLOYMENT.md](DEPLOYMENT.md)。
 
 ## 林口長庚掛號整合
 
@@ -42,7 +91,7 @@ Render 免費後端閒置後首次請求可能需要較長時間啟動。部署�
 - `POST /api/doctors/{doctor_id}/appointments/prepare` 接收 `patient_type`、`date_from`、`date_to`、`sessions` 與 `weekdays`（週一為 0），執行查詢、條件篩選、候選頁面驗證與改選。
 - `POST /api/booking/sessions` 建立獨立的院方工作階段與驗證碼。`/api/booking/submit`、`/continue`、`/captcha` 以 `X-Booking-Token` 識別工作階段；`DELETE /api/booking/session` 清除本站暫存，不會取消院方掛號。
 - 公開頁面快取約 2 分鐘，回傳資料取得時間；初診與科初診限制會保留顯示，時段不保證保留名額。
-- 患者資料不傳給語言模型、不寫入本專案資料庫或檔案；院方 Cookie、表單資料與權杖只在單一 API 程序記憶體暫存，10 分鐘後自動清除。不得為掛號端點開啟 request-body 日誌或第三方表單追蹤。
+- 掛號證號、生日與驗證碼不傳給語言模型、不寫入本專案資料庫或檔案；院方 Cookie、掛號表單資料與權杖只在單一 API 程序記憶體暫存，10 分鐘後自動清除。已同意儲存的個案對話與症狀描述則保存於個案資料庫。不得為掛號端點開啟 request-body 日誌或第三方表單追蹤。
 - 掛號送出逾時會標示「結果無法確認」，不自動重試；後續確認步驟帶有一次性步驟權杖，避免重複送出。只有在院方成功訊息、所選醫師／日期／時段與掛號序號皆可辨識時才顯示成功。
 - 目前以健保身分、到院看診送出。跨院病歷同意、附件、複雜動態表單或無法辨識的院方回覆會停止，提示使用者至院方查詢或完成作業。這是依公開網站表單串接的試用功能，並非院方正式 API；院方格式變動可能需要更新解析器。
 - 自動測試使用模擬院方回覆；真實連線驗證僅涵蓋公開時段、表單及驗證碼取得，不會使用測試身分或代使用者建立真實掛號。完整成功流程仍須由使用者以本人的真實掛號需求驗證。

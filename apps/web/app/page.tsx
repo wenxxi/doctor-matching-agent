@@ -2,56 +2,11 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import AppointmentPanel from "./appointments";
-import IntakeChat from "./intake-chat";
+import AgentWorkspace from "./agent-workspace";
 import { IntakeState } from "./intake-types";
+import { AgentContext, CaseDetail } from "./agent-types";
 
-type MatchedConcept = {
-  concept_id: string;
-  canonical_name_zh: string;
-  canonical_name_en: string;
-  category: string;
-  matched_terms: string[];
-};
-
-type RankingDebug = {
-  weighted_evidence_score: number;
-  distinct_concepts_bonus: number;
-  generic_concept_penalty: number;
-  department_intent_adjustment: number;
-  matched_concept_count: number;
-};
-
-type RecommendedDoctor = {
-  doctor_id: string;
-  doctor_name_zh: string;
-  hospital_zh: string;
-  department_zh: string;
-  subdepartment_zh: string;
-  specialty_raw_zh: string;
-  source_url: string;
-  registration_url: string | null;
-  score: number;
-  matched_concepts: MatchedConcept[];
-  reasons: string[];
-  ranking_debug: RankingDebug | null;
-  llm_reason_zh: string | null;
-};
-
-type RecommendationResponse = {
-  query: string;
-  concept_extraction_method: string;
-  fallback_used: boolean;
-  department_intent: string | null;
-  department_intent_confidence: number;
-  candidate_concepts_count: number | null;
-  input_tokens: number | null;
-  output_tokens: number | null;
-  reason_input_tokens: number | null;
-  reason_output_tokens: number | null;
-  matched_concepts: MatchedConcept[];
-  recommended_doctors: RecommendedDoctor[];
-  message: string | null;
-};
+import type { MatchedConcept, RecommendedDoctor, RecommendationResponse } from "./recommendation-types";
 
 const apiBaseUrl =
   process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ||
@@ -61,6 +16,9 @@ export default function Home() {
   const [intake, setIntake] = useState<IntakeState | null>(null);
   const [conditionRevision, setConditionRevision] = useState(0);
   const [bookingBusyIds, setBookingBusyIds] = useState<string[]>([]);
+  const [agentCase, setAgentCase] = useState<CaseDetail | null>(null);
+  const [agentToken, setAgentToken] = useState<string | null>(null);
+  const caseFingerprint = useRef("");
   const lastQuery = useRef<string | null>(null);
   const [result, setResult] = useState<RecommendationResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -97,6 +55,26 @@ export default function Home() {
       return busy ? [...previous, doctorId] : previous.filter((item) => item !== doctorId);
     });
   }, []);
+
+  const updateCase = useCallback((detail: CaseDetail | null, token: string | null) => {
+    setAgentCase(detail);
+    setAgentToken(token);
+    setIntake(detail?.task.intake ?? null);
+    setResult(detail?.task.recommendation ?? null);
+    setError(null);
+    lastQuery.current = null;
+    const fingerprint = detail ? detail.case.id + detail.task.id + detail.case.status + JSON.stringify(detail.task.intake) + (detail.task.preparation?.selected_slot?.registration_url ?? "") : "";
+    if (fingerprint !== caseFingerprint.current) {
+      caseFingerprint.current = fingerprint;
+      setConditionRevision((previous) => previous + 1);
+    }
+  }, []);
+
+  const agentContext: AgentContext | null = agentCase && agentToken ? {
+    token: agentToken, case_id: agentCase.case.id, task_id: agentCase.task.id,
+    version: agentCase.task.version, status: agentCase.task.status,
+    booking_status: agentCase.task.booking_status, preparation: agentCase.task.preparation,
+  } : null;
 
   async function updateIntake(state: IntakeState | null, ready: boolean) {
     setIntake(state);
@@ -161,7 +139,7 @@ export default function Home() {
 
       <section className="mx-auto grid max-w-6xl gap-6 px-5 py-6 sm:px-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.25fr)]">
         <div className="space-y-5">
-          <IntakeChat onUpdate={updateIntake} disabled={bookingBusyIds.length > 0} />
+          <AgentWorkspace currentCase={agentCase} onCaseUpdate={updateCase} onUpdate={updateIntake} disabled={bookingBusyIds.length > 0} />
 
           {showDebug ? (
             <DebugPanel result={result} totalTokens={totalTokens} />
@@ -192,6 +170,8 @@ export default function Home() {
             showDebug={showDebug}
             preferences={intake}
             onBookingBusy={updateBookingBusy}
+            agentContext={agentContext}
+            onCaseUpdate={updateCase}
           />
         </div>
       </section>
@@ -284,11 +264,15 @@ function DoctorPanel({
   showDebug,
   preferences,
   onBookingBusy,
+  agentContext,
+  onCaseUpdate,
 }: {
   doctors: RecommendedDoctor[];
   showDebug: boolean;
   preferences: IntakeState | null;
   onBookingBusy: (doctorId: string, busy: boolean) => void;
+  agentContext: AgentContext | null;
+  onCaseUpdate: (detail: CaseDetail | null, token: string | null) => void;
 }) {
   return (
     <section className="space-y-3">
@@ -396,7 +380,7 @@ function DoctorPanel({
                 Source profile
               </a>
             ) : null}
-            <AppointmentPanel key={doctor.doctor_id} doctor={doctor} preferences={preferences} onBookingBusy={onBookingBusy} />
+            <AppointmentPanel key={doctor.doctor_id} doctor={doctor} preferences={preferences} onBookingBusy={onBookingBusy} agentContext={agentContext} onCaseUpdate={onCaseUpdate} />
           </article>
         ))
       )}

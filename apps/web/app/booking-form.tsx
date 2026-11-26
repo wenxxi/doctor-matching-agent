@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useRef, useState } from "react";
+import { AgentContext, agentRequest, CaseDetail } from "./agent-types";
 
 export type AppointmentSlot = {
   date: string;
@@ -32,11 +33,13 @@ type BookingState = {
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") || "http://localhost:8000";
 const inputClass = "mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900";
 
-export default function BookingForm({ doctorId, doctorName, slot, onBusyChange }: {
+export default function BookingForm({ doctorId, doctorName, slot, onBusyChange, agentContext, onCaseUpdate }: {
   doctorId: string;
   doctorName: string;
   slot: AppointmentSlot;
   onBusyChange: (busy: boolean) => void;
+  agentContext?: AgentContext | null;
+  onCaseUpdate?: (detail: CaseDetail | null, token: string | null) => void;
 }) {
   const [state, setState] = useState<BookingState | null>(null);
   const [busy, setBusy] = useState(true);
@@ -68,8 +71,8 @@ export default function BookingForm({ doctorId, doctorName, slot, onBusyChange }
     async function start() {
       try {
         const response = await fetch(`${apiBaseUrl}/api/booking/sessions`, {
-          method: "POST", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ doctor_id: doctorId, registration_url: slot.registration_url }),
+          method: "POST", headers: { "Content-Type": "application/json", ...(agentContext ? { "X-Agent-Token": agentContext.token } : {}) },
+          body: JSON.stringify({ doctor_id: doctorId, registration_url: slot.registration_url, ...(agentContext ? { task_id: agentContext.task_id } : {}) }),
         });
         const data = await response.json();
         if (!response.ok) throw new Error(typeof data.detail === "string" ? data.detail : "無法建立掛號工作階段。");
@@ -115,6 +118,14 @@ export default function BookingForm({ doctorId, doctorName, slot, onBusyChange }
       if (next.status !== "captcha_error" && action !== "captcha") {
         setIdNumber("");
         setBirthday("");
+      }
+      if (agentContext && onCaseUpdate) {
+        try {
+          const detail = await agentRequest("/cases/" + agentContext.case_id, agentContext.token) as CaseDetail;
+          onCaseUpdate(detail, agentContext.token);
+        } catch {
+          setError("掛號回覆已顯示，但個案進度暫時無法更新；請保留結果並稍後重新載入。");
+        }
       }
     } catch (requestError) {
       const message = requestError instanceof Error ? requestError.message : "連線中斷。";

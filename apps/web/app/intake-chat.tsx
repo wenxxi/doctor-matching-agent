@@ -1,15 +1,18 @@
 "use client";
 
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { IntakeResponse, IntakeState, patientLabels, weekdayLabels } from "./intake-types";
+import type { CaseDetail } from "./agent-types";
 
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") || "http://localhost:8000";
 const greeting = "你好，我會幫你整理就醫需求。目前支援林口長庚，想看哪個部位、症狀或科別？也可以一起告訴我方便的日期與時段。";
 const examples = ["膝蓋運動後會痛，想下週下午看診。", "胃脹氣，吃完飯肚子脹，想看腸胃科。"];
 
-export default function IntakeChat({ onUpdate, disabled }: {
+export default function IntakeChat({ onUpdate, disabled, caseDetail, onSend }: {
   onUpdate: (state: IntakeState | null, ready: boolean) => Promise<void>;
   disabled: boolean;
+  caseDetail?: CaseDetail | null;
+  onSend?: (message: string) => Promise<void>;
 }) {
   const [state, setState] = useState<IntakeState | null>(null);
   const [messages, setMessages] = useState<{ role: "user" | "assistant"; content: string }[]>([{ role: "assistant", content: greeting }]);
@@ -20,6 +23,15 @@ export default function IntakeChat({ onUpdate, disabled }: {
   const sending = useRef(false);
   const transcript = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (!caseDetail) return;
+    setState(caseDetail.task.intake);
+    setMessages(caseDetail.messages.length ? caseDetail.messages.map((item) => ({ role: item.role, content: item.content })) : [{ role: "assistant", content: greeting }]);
+    setQuickReplies(caseDetail.task.intake_response?.quick_replies ?? examples);
+    setInput("");
+    setError(null);
+  }, [caseDetail]);
+
   async function send(message: string) {
     const content = message.trim();
     if (!content || sending.current || disabled) return;
@@ -27,6 +39,11 @@ export default function IntakeChat({ onUpdate, disabled }: {
     setBusy(true);
     setError(null);
     try {
+      if (onSend) {
+        await onSend(content);
+        setInput("");
+        return;
+      }
       const response = await fetch(apiBaseUrl + "/api/intake/chat", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: content, ...(state ? { state } : {}) }),
@@ -77,7 +94,7 @@ export default function IntakeChat({ onUpdate, disabled }: {
     <section className="space-y-4 rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
       <div className="flex items-center justify-between gap-3">
         <h2 className="font-semibold">就醫需求對話</h2>
-        <button type="button" disabled={busy || disabled} onClick={() => void reset()} className="text-xs text-slate-600 underline disabled:opacity-50">清除對話與條件</button>
+        {!caseDetail ? <button type="button" disabled={busy || disabled} onClick={() => void reset()} className="text-xs text-slate-600 underline disabled:opacity-50">清除對話與條件</button> : null}
       </div>
       <div ref={transcript} role="log" aria-label="就醫需求對話紀錄" aria-live="polite" aria-relevant="additions" className="max-h-96 space-y-3 overflow-y-auto">
         {messages.map((message, index) => <div key={index} className={message.role === "assistant" ? "mr-4 rounded-lg bg-slate-100 p-3 text-sm leading-7" : "ml-4 rounded-lg bg-teal-50 p-3 text-sm leading-7 text-teal-950"}>
@@ -96,9 +113,9 @@ export default function IntakeChat({ onUpdate, disabled }: {
         </div>
         <button type="submit" disabled={busy || disabled || !input.trim()} className="rounded-md bg-teal-700 px-4 py-2 text-sm font-semibold text-white disabled:bg-slate-400">{busy ? "正在整理需求與更新推薦…" : "傳送"}</button>
         {error ? <p role="alert" className="text-sm text-red-700">{error}</p> : null}
-        {disabled ? <p role="status" className="text-xs text-amber-800">院方正在處理掛號，請等候結果後再修改對話條件。</p> : null}
+        {disabled ? <p role="status" className="text-xs text-amber-800">個案正在更新、處理掛號或已結案，請稍候或從上方管理個案。</p> : null}
       </form>
-      <p className="text-xs leading-6 text-slate-500">條件只記在目前頁面，重新整理或清除對話會重設。請勿在對話輸入證號、生日或驗證碼；這些資料請填在掛號表單。</p>
+      <p className="text-xs leading-6 text-slate-500">{caseDetail ? "此對話與條件會保存到選定個案，重新開啟網頁可接續。" : "未建立可追蹤個案時，條件只記在目前頁面，重新整理會重設。"}請勿在對話輸入證號、生日或驗證碼；這些資料請填在掛號表單。</p>
     </section>
   );
 }

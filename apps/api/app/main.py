@@ -11,6 +11,7 @@ from app.routers.concepts import router as concepts_router
 from app.routers.appointments import router as appointments_router
 from app.routers.booking import router as booking_router
 from app.routers.intake import router as intake_router
+from app.routers.agent import router as agent_router
 from app.routers.doctors import router as doctors_router
 from app.routers.recommendations import router as recommendations_router
 
@@ -52,11 +53,14 @@ def create_app() -> FastAPI:
     app.include_router(appointments_router)
     app.include_router(booking_router)
     app.include_router(intake_router)
+    app.include_router(agent_router)
     app.include_router(concepts_router)
     app.include_router(recommendations_router)
 
     @app.exception_handler(RequestValidationError)
     async def validation_error(request: Request, exc: RequestValidationError):
+        if request.url.path.startswith("/api/agent/"):
+            return JSONResponse(status_code=422, content={"detail": "請確認個案內容、存取憑證與版本格式。"}, headers={"Cache-Control": "no-store, private"})
         if request.url.path.startswith("/api/intake/"):
             return JSONResponse(status_code=422, content={"detail": "請確認對話內容長度與條件格式。"}, headers={"Cache-Control": "no-store, private"})
         if request.url.path.startswith("/api/booking/"):

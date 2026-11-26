@@ -1,5 +1,6 @@
 from datetime import date, datetime
 from typing import Literal
+from uuid import UUID
 
 from pydantic import BaseModel, Field, SecretStr, model_validator
 
@@ -7,6 +8,7 @@ from pydantic import BaseModel, Field, SecretStr, model_validator
 class BookingStartRequest(BaseModel):
     doctor_id: str = Field(max_length=100)
     registration_url: str = Field(max_length=400)
+    task_id: UUID | None = None
 
 
 class BookingPatientRequest(BaseModel):
