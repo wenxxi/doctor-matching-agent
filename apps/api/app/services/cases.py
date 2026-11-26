@@ -145,7 +145,7 @@ def run_case(session, owner, case_id, request, action="message"):
             if task.status in {"completed", "needs_verification", "human_required", "closed"}:
                 if action != "message":
                     raise HTTPException(status_code=409, detail="請先重新描述或確認就醫需求。")
-                task = AgentTask(case_id=case.id, snapshot={})
+                task = AgentTask(case_id=case.id, snapshot={}, version=task.version)
                 session.add(task)
                 session.flush()
                 session.commit()

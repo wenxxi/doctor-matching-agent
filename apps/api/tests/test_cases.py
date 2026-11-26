@@ -252,6 +252,29 @@ def test_resolve_reopen_starts_new_task_but_retains_case_context(client):
     assert updated["task"]["intake"]["clinical_query"] == case["task"]["intake"]["clinical_query"]
 
 
+def test_retry_after_reopen_keeps_the_operation_version(client, monkeypatch):
+    headers = owner(client)
+    case = ready_case(client, headers)
+    path = "/api/agent/cases/" + case["case"]["id"]
+    client.post(path + "/resolve", headers=headers)
+    reopened = client.post(path + "/reopen", headers=headers).json()
+    original = care_graph.intake_turn
+    calls = []
+
+    def fail_once(request):
+        calls.append(True)
+        if len(calls) == 1:
+            raise RuntimeError("simulated restart after task creation")
+        return original(request)
+
+    monkeypatch.setattr(care_graph, "intake_turn", fail_once)
+    payload = {"message": "改成上午", "operation_id": str(uuid.uuid4()), "expected_version": reopened["task"]["version"]}
+    assert TestClient(app, raise_server_exceptions=False).post(path + "/messages", headers=headers, json=payload).status_code == 500
+    retried = client.post(path + "/messages", headers=headers, json=payload)
+    assert retried.status_code == 200, retried.text
+    assert retried.json()["task"]["intake"]["sessions"] == ["上午"]
+
+
 def test_delete_case_removes_messages_tasks_and_graph_checkpoints(client, database):
     headers = owner(client)
     case = ready_case(client, headers)
