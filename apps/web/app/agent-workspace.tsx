@@ -18,6 +18,9 @@ export default function AgentWorkspace({ currentCase, onCaseUpdate, onUpdate, di
   const [cases, setCases] = useState<CaseSummary[]>([]);
   const [available, setAvailable] = useState(false);
   const [initialized, setInitialized] = useState(false);
+  const [connectionAttempt, setConnectionAttempt] = useState(0);
+  const [connectionFailed, setConnectionFailed] = useState(false);
+  const [slowConnection, setSlowConnection] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [title, setTitle] = useState("");
@@ -28,32 +31,44 @@ export default function AgentWorkspace({ currentCase, onCaseUpdate, onUpdate, di
 
   useEffect(() => {
     let active = true;
+    const controller = new AbortController();
+    setInitialized(false);
+    setConnectionFailed(false);
+    setSlowConnection(false);
+    setError(null);
+    const slowTimer = setTimeout(() => { if (active) setSlowConnection(true); }, 8_000);
+    const deadline = setTimeout(() => controller.abort(), 75_000);
     async function restore() {
       try {
-        const status = await agentRequest("/status");
+        const status = await agentRequest("/status", null, undefined, undefined, { signal: controller.signal });
         if (!active) return;
         setAvailable(status.available);
         const savedToken = window.localStorage.getItem(tokenKey);
         if (!status.available || !savedToken) return;
         setToken(savedToken);
-        const list = await agentRequest("/cases", savedToken) as CaseSummary[];
+        const list = await agentRequest("/cases", savedToken, undefined, undefined, { signal: controller.signal }) as CaseSummary[];
         if (!active) return;
         setCases(list);
         const savedCase = window.localStorage.getItem(caseKey);
         const target = list.find((item) => item.id === savedCase) ?? list[0];
         if (target) {
-          const detail = await agentRequest("/cases/" + target.id, savedToken) as CaseDetail;
+          const detail = await agentRequest("/cases/" + target.id, savedToken, undefined, undefined, { signal: controller.signal }) as CaseDetail;
           if (active) onCaseUpdate(detail, savedToken);
         }
-      } catch (requestError) {
-        if (active) setError(requestError instanceof Error ? requestError.message : "暫時無法載入個案。");
+      } catch {
+        if (active) {
+          setConnectionFailed(true);
+          setError(controller.signal.aborted ? "服務啟動時間較長，連線等待已逾時。請稍後按「重新連線」。" : "暫時無法載入個案，請檢查網路後按「重新連線」。");
+        }
       } finally {
+        clearTimeout(slowTimer);
+        clearTimeout(deadline);
         if (active) setInitialized(true);
       }
     }
     void restore();
-    return () => { active = false; };
-  }, [onCaseUpdate]);
+    return () => { active = false; clearTimeout(slowTimer); clearTimeout(deadline); controller.abort(); };
+  }, [onCaseUpdate, connectionAttempt]);
 
   useEffect(() => {
     if (!currentCase) return;
@@ -121,7 +136,8 @@ export default function AgentWorkspace({ currentCase, onCaseUpdate, onUpdate, di
     <div className="space-y-4">
       <section className="space-y-3 rounded-lg border border-teal-200 bg-white p-4 text-sm leading-6">
         <h2 className="font-semibold">我的就醫個案</h2>
-        {!initialized ? <p role="status">正在確認個案記憶服務…</p> : !available ? <p className="text-slate-600">持久個案記憶尚未連接資料庫，目前仍可使用下方頁面內對話。</p> : null}
+        {!initialized ? <p role="status">{slowConnection ? "服務啟動中，首次開啟可能需要約一分鐘，請稍候…" : "正在確認個案記憶服務…"}</p> : !available && !connectionFailed ? <p className="text-slate-600">持久個案記憶尚未連接資料庫，目前仍可使用下方頁面內對話。</p> : null}
+        {connectionFailed ? <button type="button" disabled={busy || disabled} onClick={() => setConnectionAttempt((previous) => previous + 1)} className="text-teal-700 underline">重新連線</button> : null}
         {available ? <>
           {cases.length ? <label className="block">切換個案<select disabled={busy || disabled} value={currentCase?.case.id ?? ""} onChange={(event) => { const id = event.target.value; if (id) void action(async () => { const detail = await agentRequest("/cases/" + id, token) as CaseDetail; pending.current = null; onCaseUpdate(detail, token); }); }} className="mt-1 w-full rounded border border-slate-300 bg-white p-2">
             <option value="">請選擇個案</option>{cases.map((item) => <option key={item.id} value={item.id}>{item.subject_label} · {item.title}{item.status === "resolved" ? "（已結案）" : ""}</option>)}

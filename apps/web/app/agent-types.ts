@@ -54,14 +54,29 @@ export const taskLabels: Record<string, string> = {
 
 export const agentApiBase = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") || "http://localhost:8000";
 
-export async function agentRequest(path: string, token?: string | null, body?: unknown, method?: string) {
-  const response = await fetch(agentApiBase + "/api/agent" + path, {
-    method: method ?? (body ? "POST" : "GET"), cache: "no-store",
-    headers: { ...(token ? { "X-Agent-Token": token } : {}), ...(body ? { "Content-Type": "application/json" } : {}) },
-    ...(body ? { body: JSON.stringify(body) } : {}),
-  });
-  if (response.status === 204) return null;
-  const data = await response.json();
-  if (!response.ok) throw new Error(typeof data.detail === "string" ? data.detail : "個案服務暫時無法完成。");
-  return data;
+export async function agentRequest(path: string, token?: string | null, body?: unknown, method?: string, options: { signal?: AbortSignal; timeoutMs?: number } = {}) {
+  const controller = new AbortController();
+  let timedOut = false;
+  const cancel = () => controller.abort();
+  if (options.signal?.aborted) cancel();
+  options.signal?.addEventListener("abort", cancel, { once: true });
+  const timeout = setTimeout(() => { timedOut = true; controller.abort(); }, options.timeoutMs ?? 90_000);
+  try {
+    const response = await fetch(agentApiBase + "/api/agent" + path, {
+      signal: controller.signal,
+      method: method ?? (body ? "POST" : "GET"), cache: "no-store",
+      headers: { ...(token ? { "X-Agent-Token": token } : {}), ...(body ? { "Content-Type": "application/json" } : {}) },
+      ...(body ? { body: JSON.stringify(body) } : {}),
+    });
+    if (response.status === 204) return null;
+    const data = await response.json();
+    if (!response.ok) throw new Error(typeof data.detail === "string" ? data.detail : "個案服務暫時無法完成。");
+    return data;
+  } catch (error) {
+    if (timedOut) throw new Error("連線等待逾時。若剛才正在處理個案，請先重新載入進度確認結果。");
+    throw error;
+  } finally {
+    clearTimeout(timeout);
+    options.signal?.removeEventListener("abort", cancel);
+  }
 }
