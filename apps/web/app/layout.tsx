@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { LocaleProvider } from "./i18n";
 
 export const metadata: Metadata = {
   title: "Doctor Matching Agent",
@@ -12,8 +13,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="zh-Hant">
+      <body><LocaleProvider>{children}</LocaleProvider></body>
     </html>
   );
 }

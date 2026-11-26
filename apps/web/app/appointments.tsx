@@ -1,5 +1,7 @@
 "use client";
 
+import { useLocale } from "./i18n";
+
 import { FormEvent, useEffect, useState } from "react";
 import BookingForm, { AppointmentSlot } from "./booking-form";
 import { IntakeState, weekdayLabels } from "./intake-types";
@@ -31,6 +33,7 @@ export default function AppointmentPanel({ doctor, preferences, onBookingBusy, a
   agentContext?: AgentContext | null;
   onCaseUpdate?: (detail: CaseDetail | null, token: string | null) => void;
 }) {
+  const { locale, t } = useLocale();
   const restored = agentContext?.status === "awaiting_patient" && [null, "awaiting_patient", "captcha_error"].includes(agentContext.booking_status)
     && agentContext.preparation?.doctor_id === doctor.doctor_id ? agentContext.preparation : null;
   const [result, setResult] = useState<Appointments | null>(null);
@@ -98,48 +101,48 @@ export default function AppointmentPanel({ doctor, preferences, onBookingBusy, a
   }
 
   return (
-    <section aria-label={`${doctor.doctor_name_zh}掛號助理`} className="mt-4 space-y-3 border-t border-slate-200 pt-4 text-sm leading-6 text-slate-700">
-      <h4 className="font-semibold text-slate-950">掛號助理</h4>
-      <p>告訴我就診條件，我會查時段、挑選最早符合的門診，確認院方資料頁後，讓你直接在這裡填寫資料與驗證碼。</p>
-      {preferences ? <p className="text-xs text-teal-800">已套用對話中確認的條件；你也可以單獨調整這張醫師卡片。</p> : null}
+    <section aria-label={`${doctor.doctor_name_zh} ${t("掛號助理")}`} className="mt-4 space-y-3 border-t border-slate-200 pt-4 text-sm leading-6 text-slate-700">
+      <h4 className="font-semibold text-slate-950">{t("掛號助理")}</h4>
+      <p>{t("告訴我就診條件，我會查時段、挑選最早符合的門診，確認院方資料頁後，讓你直接在這裡填寫資料與驗證碼。")}</p>
+      {preferences ? <p className="text-xs text-teal-800">{t("已套用對話中確認的條件；你也可以單獨調整這張醫師卡片。")}</p> : null}
       <form onSubmit={prepare} className="space-y-3">
         <fieldset disabled={isLoading || Boolean(selected) || !canPrepare} className="grid gap-3 sm:grid-cols-2 disabled:opacity-60">
-          <label>患者類型<select value={patientType} onChange={(event) => setPatientType(event.target.value)} className={inputClass}>
-            <option value="unknown">不確定（排除初診限定時段）</option><option value="first_visit">全院初診（從未在林口長庚看診）</option><option value="department_first">科初診（半年內未看過該科）</option><option value="returning">複診</option>
+          <label>{t("患者類型")}<select value={patientType} onChange={(event) => setPatientType(event.target.value)} className={inputClass}>
+            <option value="unknown">{t("不確定（排除初診限定時段）")}</option><option value="first_visit">{t("全院初診（從未在林口長庚看診）")}</option><option value="department_first">{t("科初診（半年內未看過該科）")}</option><option value="returning">{t("複診")}</option>
           </select></label>
-          <div><p>可看診時段</p><div className="mt-2 flex flex-wrap gap-3">
-            {["上午", "下午", "夜診"].map((name) => <label key={name} className="inline-flex items-center gap-1"><input type="checkbox" checked={sessions.includes(name)} onChange={(event) => setSessions(event.target.checked ? [...sessions, name] : sessions.filter((item) => item !== name))} />{name}</label>)}
+          <div><p>{t("可看診時段")}</p><div className="mt-2 flex flex-wrap gap-3">
+            {["上午", "下午", "夜診"].map((name) => <label key={name} className="inline-flex items-center gap-1"><input type="checkbox" checked={sessions.includes(name)} onChange={(event) => setSessions(event.target.checked ? [...sessions, name] : sessions.filter((item) => item !== name))} />{t(name)}</label>)}
           </div></div>
-          <label>最早日期<input type="date" value={dateFrom} onChange={(event) => setDateFrom(event.target.value)} className={inputClass} /></label>
-          <label>最晚日期<input type="date" min={dateFrom || undefined} value={dateTo} onChange={(event) => setDateTo(event.target.value)} className={inputClass} /></label>
-          <div><p>可看診星期</p><div className="mt-2 flex flex-wrap gap-3">
-            {weekdayLabels.map((name, day) => <label key={name} className="inline-flex items-center gap-1"><input type="checkbox" checked={weekdays.includes(day)} onChange={(event) => setWeekdays(event.target.checked ? [...weekdays, day].sort() : weekdays.filter((item) => item !== day))} />週{name}</label>)}
+          <label>{t("最早日期")}<input type="date" value={dateFrom} onChange={(event) => setDateFrom(event.target.value)} className={inputClass} /></label>
+          <label>{t("最晚日期")}<input type="date" min={dateFrom || undefined} value={dateTo} onChange={(event) => setDateTo(event.target.value)} className={inputClass} /></label>
+          <div><p>{t("可看診星期")}</p><div className="mt-2 flex flex-wrap gap-3">
+            {weekdayLabels.map((name, day) => <label key={name} className="inline-flex items-center gap-1"><input type="checkbox" checked={weekdays.includes(day)} onChange={(event) => setWeekdays(event.target.checked ? [...weekdays, day].sort() : weekdays.filter((item) => item !== day))} />{t("週")}{t(name)}</label>)}
           </div></div>
-          <button type="submit" disabled={isLoading || Boolean(selected) || !canPrepare || !sessions.length || !weekdays.length} className="self-end rounded-md bg-teal-700 px-4 py-2 font-semibold text-white disabled:bg-slate-400">{isLoading ? "正在查詢、挑選與確認…" : "請助理安排掛號"}</button>
+          <button type="submit" disabled={isLoading || Boolean(selected) || !canPrepare || !sessions.length || !weekdays.length} className="self-end rounded-md bg-teal-700 px-4 py-2 font-semibold text-white disabled:bg-slate-400">{t(isLoading ? "正在查詢、挑選與確認…" : "請助理安排掛號")}</button>
         </fieldset>
       </form>
       <div aria-live="polite" className="space-y-2">
-        {error ? <p role="alert" className="text-red-700">{error}</p> : null}
-        {preparation ? <><ol className="list-inside list-decimal text-xs text-slate-600">{preparation.steps.map((step, index) => <li key={index}>{step}</li>)}</ol><p>{preparation.message}</p></> : null}
+        {error ? <p role="alert" className="text-red-700">{t(error)}</p> : null}
+        {preparation ? <><ol className="list-inside list-decimal text-xs text-slate-600">{preparation.steps.map((step, index) => <li key={index}>{step}</li>)}</ol><p>{t(preparation.message)}</p></> : null}
       </div>
       {selected ? (
         <>
           <BookingForm key={selected.registration_url} doctorId={doctor.doctor_id} doctorName={doctor.doctor_name_zh} slot={selected} onBusyChange={setBookingBusy} agentContext={agentContext} onCaseUpdate={onCaseUpdate} />
-          <button type="button" disabled={bookingBusy} onClick={() => { setSelected(null); setPreparation(null); }} className="text-xs text-slate-600 underline disabled:opacity-50">關閉此表單、重新選時段（不會取消院方已完成的掛號）</button>
+          <button type="button" disabled={bookingBusy} onClick={() => { setSelected(null); setPreparation(null); }} className="text-xs text-slate-600 underline disabled:opacity-50">{t("關閉此表單、重新選時段（不會取消院方已完成的掛號）")}</button>
         </>
       ) : null}
       <details>
-        <summary className="cursor-pointer font-semibold text-teal-700">我想自行查看其他時段</summary>
-        <button type="button" onClick={() => void queryAppointments(false)} disabled={isLoading || Boolean(selected)} className="my-3 rounded border border-teal-300 px-3 py-2 disabled:opacity-50">查詢這位醫師可掛號時段</button>
-        {result ? <p>{result.message}</p> : null}
-        {result?.checked_at ? <p className="text-xs">查詢時間：{new Date(result.checked_at).toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })}（台北時間；快取約 2 分鐘）</p> : null}
+        <summary className="cursor-pointer font-semibold text-teal-700">{t("我想自行查看其他時段")}</summary>
+        <button type="button" onClick={() => void queryAppointments(false)} disabled={isLoading || Boolean(selected)} className="my-3 rounded border border-teal-300 px-3 py-2 disabled:opacity-50">{t("查詢這位醫師可掛號時段")}</button>
+        {result ? <p>{t(result.message)}</p> : null}
+        {result?.checked_at ? <p className="text-xs">{t("查詢時間：")}{new Date(result.checked_at).toLocaleString(locale, { timeZone: "Asia/Taipei" })}{t("（台北時間；快取約 2 分鐘）")}</p> : null}
         <ul className="mt-3 max-h-80 space-y-2 overflow-y-auto">
           {result?.slots.map((slot) => <li key={slot.registration_url} className="rounded border border-slate-200 p-3">
-            <p className="font-semibold">{slot.date} {slot.session}</p><p>{slot.eligibility}</p>
-            <button type="button" disabled={Boolean(selected) || !canPrepare || isLoading} onClick={() => void queryAppointments(true, slot)} className="font-semibold text-teal-700 disabled:opacity-50">確認時段並填寫掛號資料</button>
+            <p className="font-semibold">{slot.date} {t(slot.session)}</p><p>{t(slot.eligibility)}</p>
+            <button type="button" disabled={Boolean(selected) || !canPrepare || isLoading} onClick={() => void queryAppointments(true, slot)} className="font-semibold text-teal-700 disabled:opacity-50">{t("確認時段並填寫掛號資料")}</button>
           </li>)}
         </ul>
-        {result?.schedule_urls.map((url, index) => <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="mr-3 inline-block text-xs font-semibold text-teal-700">科別門診表{result.schedule_urls.length > 1 ? ` ${index + 1}` : ""}</a>)}
+        {result?.schedule_urls.map((url, index) => <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="mr-3 inline-block text-xs font-semibold text-teal-700">{t("科別門診表")}{result.schedule_urls.length > 1 ? ` ${index + 1}` : ""}</a>)}
       </details>
     </section>
   );

@@ -25,6 +25,30 @@ def ready_state():
                        date_to="2026-12-06", date_range_known=True, sessions=["下午"])
 
 
+def test_english_ui_shortcuts_work_without_a_language_model():
+    first = turn("My knee hurts after exercise. I would like an afternoon appointment next week.")
+    assert first.state.clinical_query
+    assert first.state.sessions == ["下午"]
+    assert first.question == "patient_type"
+    second = turn("Returning patient", first.state)
+    assert second.ready
+    assert second.state.patient_type == "returning"
+    assert second.state.date_from == date(2026, 11, 30)
+    assert turn("Keep my current preferences", second.state).ready
+
+
+@pytest.mark.parametrize("message,field,value", [
+    ("First hospital visit", "patient_type", "first_visit"),
+    ("First departmental visit", "patient_type", "department_first"),
+    ("Patient type unknown", "patient_type", "unknown"),
+    ("Change to mornings", "sessions", ["上午"]),
+    ("Weekdays only", "weekdays", list(range(5))),
+])
+def test_english_shortcuts_preserve_canonical_api_values(message, field, value):
+    response = turn(message, ready_state())
+    assert getattr(response.state, field) == value
+
+
 def test_only_asks_for_missing_information_over_multiple_turns():
     first = turn("我膝蓋運動後會痛")
     assert first.state.clinical_query

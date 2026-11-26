@@ -1,5 +1,7 @@
 "use client";
 
+import { useLocale } from "./i18n";
+
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { AgentContext, agentRequest, CaseDetail } from "./agent-types";
 
@@ -41,6 +43,7 @@ export default function BookingForm({ doctorId, doctorName, slot, onBusyChange, 
   agentContext?: AgentContext | null;
   onCaseUpdate?: (detail: CaseDetail | null, token: string | null) => void;
 }) {
+  const { locale, t } = useLocale();
   const [state, setState] = useState<BookingState | null>(null);
   const [busy, setBusy] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -156,35 +159,34 @@ export default function BookingForm({ doctorId, doctorName, slot, onBusyChange, 
   const formStep = patientStep || state?.status === "awaiting_confirmation";
 
   return (
-    <section aria-label="本站掛號表單" className="space-y-3 rounded-md border border-teal-300 bg-white p-4">
-      <p className="text-xs font-semibold text-teal-700">本站掛號 · 試用</p>
-      <h4 className="font-semibold text-slate-950">{doctorName} · {slot.date} {slot.session}</h4>
-      <p className="text-xs text-slate-600">{slot.eligibility} · 到院看診／健保身分</p>
+    <section aria-label={t("本站掛號表單")} className="space-y-3 rounded-md border border-teal-300 bg-white p-4">
+      <p className="text-xs font-semibold text-teal-700">{t("本站掛號 · 試用")}</p>
+      <h4 className="font-semibold text-slate-950">{doctorName} · {slot.date} {t(slot.session)}</h4>
+      <p className="text-xs text-slate-600">{t(slot.eligibility)}{t("· 到院看診／健保身分")}</p>
       <div aria-live="polite">
-        {busy ? <p>{state ? "正在與院方處理，請勿關閉或重複送出…" : "正在建立院方工作階段並取得驗證碼…"}</p> : null}
-        {error ? <p role="alert" className="text-red-700">{error}</p> : null}
-        {state ? <p className={state.status === "confirmed" ? "font-semibold text-teal-800" : "text-slate-700"}>{state.message}</p> : null}
-        {state?.receipt_number ? <p className="text-lg font-bold">掛號序號：{state.receipt_number}</p> : null}
+        {busy ? <p>{t(state ? "正在與院方處理，請勿關閉或重複送出…" : "正在建立院方工作階段並取得驗證碼…")}</p> : null}
+        {error ? <p role="alert" className="text-red-700">{t(error)}</p> : null}
+        {state ? <p className={state.status === "confirmed" ? "font-semibold text-teal-800" : "text-slate-700"}>{t(state.message)}</p> : null}
+        {state?.receipt_number ? <p className="text-lg font-bold">{t("掛號序號：")}{state.receipt_number}</p> : null}
       </div>
-      {state?.expires_at && formStep ? <p className="text-xs text-slate-500">本次資料暫存至 {new Date(state.expires_at).toLocaleTimeString("zh-TW", { timeZone: "Asia/Taipei" })}（台北時間），逾期需重新開始。</p> : null}
+      {state?.expires_at && formStep ? <p className="text-xs text-slate-500">{t("本次資料暫存至")}{new Date(state.expires_at).toLocaleTimeString(locale, { timeZone: "Asia/Taipei" })}{t("（台北時間），逾期需重新開始。")}</p> : null}
       {formStep ? (
         <form onSubmit={submit} autoComplete="off" className="space-y-3">
           <fieldset disabled={busy} className="space-y-3 disabled:opacity-60">
             {patientStep ? (
               <>
-                <label className="block">證件類型
-                  <select value={idType} onChange={(event) => setIdType(event.target.value)} className={inputClass}>
-                    <option value="2">身分證字號</option><option value="1">病歷號</option><option value="3">護照號碼</option><option value="4">居留證號</option><option value="5">入出境許可證號</option>
+                <label className="block">{t("證件類型")}<select value={idType} onChange={(event) => setIdType(event.target.value)} className={inputClass}>
+                    <option value="2">{t("身分證字號")}</option><option value="1">{t("病歷號")}</option><option value="3">{t("護照號碼")}</option><option value="4">{t("居留證號")}</option><option value="5">{t("入出境許可證號")}</option>
                   </select>
                 </label>
-                <label className="block">證號<input type="text" required maxLength={20} value={idNumber} onChange={(event) => setIdNumber(event.target.value)} className={inputClass} autoComplete="off" spellCheck={false} /></label>
-                <label className="block">出生日期（西元）<input type="date" required value={birthday} onChange={(event) => setBirthday(event.target.value)} className={inputClass} /></label>
+                <label className="block">{t("證號")}<input type="text" required maxLength={20} value={idNumber} onChange={(event) => setIdNumber(event.target.value)} className={inputClass} autoComplete="off" spellCheck={false} /></label>
+                <label className="block">{t("出生日期（西元）")}<input type="date" required value={birthday} onChange={(event) => setBirthday(event.target.value)} className={inputClass} /></label>
               </>
             ) : state?.fields.map((item) => (
-              <label key={item.name} className="block">{item.label}{item.required ? "（必填）" : ""}
+              <label key={item.name} className="block">{t(item.label)}{t(item.required ? "（必填）" : "")}
                 {item.kind === "select" ? (
                   <select value={fields[item.name] ?? ""} required={item.required} onChange={(event) => setFields({ ...fields, [item.name]: event.target.value })} className={inputClass}>
-                    <option value="">請選擇</option>{item.options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+                    <option value="">{t("請選擇")}</option>{item.options.map((option) => <option key={option.value} value={option.value}>{t(option.label)}</option>)}
                   </select>
                 ) : item.kind === "checkbox" ? (
                   <input type="checkbox" checked={Boolean(fields[item.name])} required={item.required} onChange={(event) => setFields({ ...fields, [item.name]: event.target.checked ? item.value || "on" : "" })} className="ml-2" />
@@ -195,21 +197,21 @@ export default function BookingForm({ doctorId, doctorName, slot, onBusyChange, 
             ))}
             {state?.captcha_image ? (
               <div className="space-y-2">
-                <img src={state.captcha_image} alt="長庚院方驗證碼，請自行辨識並輸入" className="h-12 w-auto border border-slate-200" />
-                {patientStep ? <button type="button" onClick={() => void send("captcha")} className="text-teal-700 underline">看不清楚，換一張</button> : null}
+                <img src={state.captcha_image} alt={t("長庚院方驗證碼，請自行辨識並輸入")} className="h-12 w-auto border border-slate-200" />
+                {patientStep ? <button type="button" onClick={() => void send("captcha")} className="text-teal-700 underline">{t("看不清楚，換一張")}</button> : null}
               </div>
             ) : null}
-            {patientStep ? <label className="block">院方驗證碼<input type="text" required maxLength={12} value={verification} onChange={(event) => setVerification(event.target.value)} className={inputClass} autoComplete="off" /></label> : null}
+            {patientStep ? <label className="block">{t("院方驗證碼")}<input type="text" required maxLength={12} value={verification} onChange={(event) => setVerification(event.target.value)} className={inputClass} autoComplete="off" /></label> : null}
             <label className="flex items-start gap-2 text-xs leading-6">
               <input type="checkbox" required checked={consent} onChange={(event) => setConsent(event.target.checked)} className="mt-1.5" />
-              <span>我已核對醫師、日期與患者資料，並同意<a href="https://register.cgmh.org.tw/BasicmedicalinfoPDF/3" target="_blank" rel="noopener noreferrer" className="text-teal-700 underline">院方一般同意書及病人權利與配合事項</a>，授權系統將本次資料傳送長庚辦理這一筆掛號。</span>
+              <span>{t("我已核對醫師、日期與患者資料，並同意")}<a href="https://register.cgmh.org.tw/BasicmedicalinfoPDF/3" target="_blank" rel="noopener noreferrer" className="text-teal-700 underline">{t("院方一般同意書及病人權利與配合事項")}</a>{t("，授權系統將本次資料傳送長庚辦理這一筆掛號。")}</span>
             </label>
-            <button type="submit" disabled={!consent || busy} className="rounded-md bg-teal-700 px-4 py-2 font-semibold text-white disabled:bg-slate-400">{state?.status === "awaiting_confirmation" ? "確認資料並送出院方下一步" : "確認並送出掛號"}</button>
+            <button type="submit" disabled={!consent || busy} className="rounded-md bg-teal-700 px-4 py-2 font-semibold text-white disabled:bg-slate-400">{t(state?.status === "awaiting_confirmation" ? "確認資料並送出院方下一步" : "確認並送出掛號")}</button>
           </fieldset>
         </form>
       ) : null}
-      {state && ["unknown", "needs_official", "confirmed"].includes(state.status) ? <a href="https://register.cgmh.org.tw/Query/3" target="_blank" rel="noopener noreferrer" className="inline-block font-semibold text-teal-700">至院方查詢掛號結果</a> : null}
-      <p className="text-xs leading-5 text-slate-500">患者資料不會傳給語言模型或存入本專案資料庫；後端工作階段暫存最長 10 分鐘。掛號完成與否以院方成功回條為準。</p>
+      {state && ["unknown", "needs_official", "confirmed"].includes(state.status) ? <a href="https://register.cgmh.org.tw/Query/3" target="_blank" rel="noopener noreferrer" className="inline-block font-semibold text-teal-700">{t("至院方查詢掛號結果")}</a> : null}
+      <p className="text-xs leading-5 text-slate-500">{t("患者資料不會傳給語言模型或存入本專案資料庫；後端工作階段暫存最長 10 分鐘。掛號完成與否以院方成功回條為準。")}</p>
     </section>
   );
 }

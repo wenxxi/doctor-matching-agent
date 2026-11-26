@@ -1,5 +1,7 @@
 "use client";
 
+import { LanguageSwitch, useLocale } from "./i18n";
+
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import AppointmentPanel from "./appointments";
 import AgentWorkspace from "./agent-workspace";
@@ -13,6 +15,7 @@ const apiBaseUrl =
   "http://localhost:8000";
 
 export default function Home() {
+  const { locale, t } = useLocale();
   const [intake, setIntake] = useState<IntakeState | null>(null);
   const [conditionRevision, setConditionRevision] = useState(0);
   const [bookingBusyIds, setBookingBusyIds] = useState<string[]>([]);
@@ -125,15 +128,12 @@ export default function Home() {
     <main className="min-h-screen bg-[#f7f9fb] text-slate-950">
       <section className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-6xl flex-col gap-4 px-5 py-8 sm:px-8">
+          <div className="flex justify-end"><LanguageSwitch /></div>
           <div>
-            <p className="text-sm font-semibold text-teal-700">你的就醫與掛號助理</p>
-            <h1 className="mt-2 text-3xl font-bold tracking-normal sm:text-5xl">
-              Doctor Matching Agent
-            </h1>
+            <p className="text-sm font-semibold text-teal-700">{t("你的就醫與掛號助理")}</p>
+            <h1 className="mt-2 text-3xl font-bold tracking-normal sm:text-5xl">{t("Doctor Matching Agent")}</h1>
           </div>
-          <p className="max-w-3xl text-base leading-7 text-slate-600">
-            透過對話整理症狀與就診條件，找到相關醫師，再由掛號助理協助安排門診。目前支援林口長庚。
-          </p>
+          <p className="max-w-3xl text-base leading-7 text-slate-600">{t("透過對話整理症狀與就診條件，找到相關醫師，再由掛號助理協助安排門診。目前支援林口長庚。")}</p>
         </div>
       </section>
 
@@ -147,16 +147,16 @@ export default function Home() {
         </div>
 
         <div className="space-y-5">
-          {isLoading ? <p role="status" className="text-sm text-teal-800">正在比對醫師專長，並向院方確認符合條件的可掛號時段…</p> : null}
+          {isLoading ? <p role="status" className="text-sm text-teal-800">{t("正在比對醫師專長，並向院方確認符合條件的可掛號時段…")}</p> : null}
           {error ? (
             <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm leading-6 text-red-800">
-              {error}
+              {t(error)}
             </div>
           ) : null}
 
           {result?.message ? (
             <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-900">
-              {result.message}
+              {t(result.message)}
             </div>
           ) : null}
 
@@ -186,6 +186,7 @@ function DebugPanel({
   result: RecommendationResponse | null;
   totalTokens: number | null;
 }) {
+  const { t } = useLocale();
   const rows = [
     ["API", apiBaseUrl],
     ["Method", result?.concept_extraction_method ?? "-"],
@@ -202,13 +203,13 @@ function DebugPanel({
 
   return (
     <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
-      <h2 className="text-sm font-semibold text-slate-800">Debug</h2>
+      <h2 className="text-sm font-semibold text-slate-800">{t("Debug")}</h2>
       <dl className="mt-3 grid grid-cols-[7rem_minmax(0,1fr)] gap-x-3 gap-y-2 text-sm">
         {rows.map(([label, value]) => (
           <div key={label} className="contents">
-            <dt className="text-slate-500">{label}</dt>
+            <dt className="text-slate-500">{t(label)}</dt>
             <dd className="min-w-0 break-words font-medium text-slate-900">
-              {value}
+              {t(value)}
             </dd>
           </div>
         ))}
@@ -224,18 +225,17 @@ function ConceptPanel({
   concepts: MatchedConcept[];
   showDebug: boolean;
 }) {
+  const { locale, t } = useLocale();
   return (
     <section className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
       <div className="flex items-center justify-between gap-3">
-        <h2 className="text-base font-semibold">Matched Concepts</h2>
+        <h2 className="text-base font-semibold">{t("Matched Concepts")}</h2>
         <span className="rounded-md bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-600">
           {concepts.length}
         </span>
       </div>
       {concepts.length === 0 ? (
-        <p className="mt-3 text-sm leading-6 text-slate-600">
-          No concepts matched yet.
-        </p>
+        <p className="mt-3 text-sm leading-6 text-slate-600">{t("No concepts matched yet.")}</p>
       ) : (
         <div className="mt-3 flex flex-wrap gap-2">
           {concepts.map((concept) => (
@@ -244,7 +244,7 @@ function ConceptPanel({
               className="rounded-md border border-teal-200 bg-teal-50 px-3 py-2"
             >
               <p className="text-sm font-semibold text-teal-950">
-                {concept.canonical_name_zh}
+                {locale === "en" ? concept.canonical_name_en : concept.canonical_name_zh}
               </p>
               {showDebug ? (
                 <p className="mt-1 text-xs text-teal-800">
@@ -274,19 +274,17 @@ function DoctorPanel({
   agentContext: AgentContext | null;
   onCaseUpdate: (detail: CaseDetail | null, token: string | null) => void;
 }) {
+  const { locale, t } = useLocale();
   return (
     <section className="space-y-3">
       <div className="flex items-center justify-between gap-3">
-        <h2 className="text-base font-semibold">Recommended Doctors</h2>
-        <span className="rounded-md bg-slate-200 px-2 py-1 text-xs font-semibold text-slate-700">
-          Top {doctors.length}
+        <h2 className="text-base font-semibold">{t("Recommended Doctors")}</h2>
+        <span className="rounded-md bg-slate-200 px-2 py-1 text-xs font-semibold text-slate-700">{t("Top")}{" "}{doctors.length}
         </span>
       </div>
 
       {doctors.length === 0 ? (
-        <div className="rounded-lg border border-slate-200 bg-white p-4 text-sm leading-6 text-slate-600 shadow-sm">
-          尚未有已確認時段的醫師。請完成就醫條件；若是先前儲存的推薦，請在對話中輸入「維持目前條件」重新查詢。
-        </div>
+        <div className="rounded-lg border border-slate-200 bg-white p-4 text-sm leading-6 text-slate-600 shadow-sm">{t("尚未有已確認時段的醫師。請完成就醫條件；若是先前儲存的推薦，請在對話中輸入「維持目前條件」重新查詢。")}</div>
       ) : (
         doctors.map((doctor, index) => (
           <article
@@ -295,36 +293,38 @@ function DoctorPanel({
           >
             <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
               <div>
-                <p className="text-xs font-semibold text-teal-700">
-                  Recommendation {index + 1}
+                <p className="text-xs font-semibold text-teal-700">{t("Recommendation")}{" "}{index + 1}
                 </p>
                 <h3 className="mt-1 text-xl font-bold tracking-normal">
                   {doctor.doctor_name_zh}
                 </h3>
                 <p className="mt-1 text-sm text-slate-600">
-                  {doctor.hospital_zh} / {doctor.department_zh}
+                  {t(doctor.hospital_zh)} / {t(doctor.department_zh)}
                 </p>
               </div>
               {showDebug ? (
-                <div className="rounded-md bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-700">
-                  Score {doctor.score.toFixed(2)}
+                <div className="rounded-md bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-700">{t("Score")}{" "}{doctor.score.toFixed(2)}
                 </div>
               ) : null}
             </div>
 
-            {doctor.llm_reason_zh ? (
+            {doctor.llm_reason_zh && locale !== "en" ? (
               <p className="mt-4 rounded-md border border-teal-200 bg-teal-50 p-3 text-sm leading-7 text-teal-950">
                 {doctor.llm_reason_zh}
               </p>
             ) : null}
 
+            {locale === "en" ? <p className="mt-4 rounded-md border border-teal-200 bg-teal-50 p-3 text-sm leading-7 text-teal-950">
+              Matched expertise: {doctor.matched_concepts.map((concept) => concept.canonical_name_en).join(", ")}
+            </p> : null}
+
             {doctor.availability ? <div className="mt-3 rounded-md bg-teal-50 p-3 text-sm text-teal-900">
-              <p className="font-semibold">已確認符合條件：{doctor.availability.selected_slot.date} {doctor.availability.selected_slot.session}</p>
-              <p>{doctor.availability.selected_slot.eligibility}</p>
-              <p className="mt-1 text-xs">確認時間：{new Date(doctor.availability.verified_at).toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })}。尚未保留名額，安排時會再次確認。</p>
+              <p className="font-semibold">{t("已確認符合條件：")}{doctor.availability.selected_slot.date} {t(doctor.availability.selected_slot.session)}</p>
+              <p>{t(doctor.availability.selected_slot.eligibility)}</p>
+              <p className="mt-1 text-xs">{t("確認時間：")}{new Date(doctor.availability.verified_at).toLocaleString(locale, { timeZone: "Asia/Taipei" })}{t("。尚未保留名額，安排時會再次確認。")}</p>
             </div> : null}
 
-            {!doctor.llm_reason_zh && doctor.reasons[0] ? (
+            {!doctor.llm_reason_zh && doctor.reasons[0] && locale !== "en" ? (
               <p className="mt-4 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm leading-7 text-slate-700">
                 {doctor.reasons[0]}
               </p>
@@ -371,7 +371,7 @@ function DoctorPanel({
                   key={concept.concept_id}
                   className="rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700"
                 >
-                  {concept.canonical_name_zh}
+                  {locale === "en" ? concept.canonical_name_en : concept.canonical_name_zh}
                 </span>
               ))}
             </div>
@@ -382,9 +382,7 @@ function DoctorPanel({
                 target="_blank"
                 rel="noreferrer"
                 className="mt-4 inline-block text-sm font-semibold text-teal-700 hover:text-teal-900"
-              >
-                Source profile
-              </a>
+              >{t("Source profile")}</a>
             ) : null}
             <AppointmentPanel key={doctor.doctor_id} doctor={doctor} preferences={preferences} onBookingBusy={onBookingBusy} agentContext={agentContext} onCaseUpdate={onCaseUpdate} />
           </article>
@@ -401,9 +399,10 @@ function RankingMetric({
   label: string;
   value: number;
 }) {
+  const { t } = useLocale();
   return (
     <div className="rounded-md bg-slate-50 px-2 py-2">
-      <dt className="font-medium text-slate-500">{label}</dt>
+      <dt className="font-medium text-slate-500">{t(label)}</dt>
       <dd className="mt-1 font-semibold text-slate-900">{value.toFixed(3)}</dd>
     </div>
   );

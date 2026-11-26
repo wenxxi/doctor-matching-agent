@@ -22,6 +22,19 @@ DAY_NUMBERS = {"一": 0, "二": 1, "三": 2, "四": 3, "五": 4, "六": 5, "日"
 NEGATIVE = r"不行|不方便|不能|不要|不可以|排除|沒空"
 SENSITIVE = re.compile(r"\b[A-Za-z][12]\d{8}\b|(?:身分證|證號|驗證碼)[：:\s]*[A-Za-z0-9]{4,}")
 
+# Canonical equivalents for the English UI shortcuts. Keep API enums unchanged.
+ENGLISH_SHORTCUTS = {
+    "first hospital visit": "我是全院初診", "first departmental visit": "我是科初診",
+    "returning patient": "我是複診", "patient type unknown": "不確定初複診",
+    "next week": "下週", "within two weeks": "兩週內", "any date": "日期不限",
+    "morning": "上午", "afternoon": "下午", "evening": "夜診", "any session": "時段不限",
+    "any weekday": "星期不限", "weekdays only": "只有平日", "weekends only": "只有週末",
+    "use linkou chang gung": "改成林口長庚", "change to mornings": "改成上午",
+    "change to afternoons": "改成下午", "keep my current preferences": "維持目前條件",
+    "my knee hurts after exercise. i would like an afternoon appointment next week.": "膝蓋運動後會痛，想下週下午看診。",
+    "i have bloating after meals and would like to see a gastroenterologist.": "胃脹氣，吃完飯肚子脹，想看腸胃科。",
+}
+
 
 def taipei_today() -> date:
     return datetime.now(ZoneInfo("Asia/Taipei")).date()
@@ -45,7 +58,7 @@ def pending_question(state: IntakeState, today: date) -> str | None:
 
 def local_updates(message: str, state: IntakeState, today: date) -> dict:
     updates = {}
-    text = message.strip()
+    text = ENGLISH_SHORTCUTS.get(message.strip().casefold(), message.strip())
     question = pending_question(state, today)
     unrestricted = bool(re.search(r"不限|都可以|都可|沒有限制|沒有偏好", text))
     contextual_unrestricted = text in {"不限", "都可以", "都可", "沒有限制", "沒有偏好"}
@@ -230,7 +243,7 @@ def intake_turn(request: IntakeRequest) -> IntakeResponse:
         reply, quick_replies = QUESTIONS[question]
         prefix = "已更新這次條件。" if updates else "我還需要確認一項資訊。"
         return IntakeResponse(state=state, reply=prefix + reply, question=question, quick_replies=quick_replies, extraction_method=method)
-    if not updates and message not in {"維持目前條件", "依照目前條件推薦", "就照目前條件推薦", "好", "可以"}:
+    if not updates and ENGLISH_SHORTCUTS.get(message.casefold(), message) not in {"維持目前條件", "依照目前條件推薦", "就照目前條件推薦", "好", "可以"}:
         return IntakeResponse(state=state, reply="我還沒確認到你想修改哪個條件，原本設定仍保留。可以明確說明日期、上午／下午／夜診，或哪個星期不行。",
                               quick_replies=["改成上午", "改成下午", "維持目前條件"], extraction_method=method)
     return IntakeResponse(state=state, reply="已記住你的就醫條件，推薦醫師與下方掛號助理會沿用這些設定。你可以繼續說『週三不行』或『改成上午』來調整。", ready=True, extraction_method=method)
