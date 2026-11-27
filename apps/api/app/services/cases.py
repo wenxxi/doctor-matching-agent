@@ -13,12 +13,13 @@ from sqlalchemy import delete, func, select, or_, and_
 from sqlalchemy.orm import Session
 
 from app.agent_models import AgentOwner, AgentTask, CareCase, CaseMessage
-from app.agent_schemas import AgentTaskResponse, CaseDetailResponse, CaseMessagesPage
+from app.agent_schemas import AgentTaskResponse, CaseDetailResponse, CaseMessagesPage, AgentMessageResponse
 from app.services.agent_storage import checkpoint_store
 from app.services.care_graph import build_care_graph, CareGraphState
 from app.services.intake import SENSITIVE
 from app.services.privacy import ensure_safe_text
 from app.services.security import security_engine, storage_lock
+from app.services.processed_data import load_doctors
 
 
 LOCKS = weakref.WeakValueDictionary()
@@ -78,6 +79,22 @@ def current_task(session, case):
     return task
 
 
+def preparation_message(doctor_id):
+    doctor = next((row for row in load_doctors() if row["doctor_id"] == doctor_id), None)
+    return (f"請助理安排{doctor['doctor_name_zh']}醫師的門診時段。" if doctor else
+            "請助理安排所選醫師的門診時段。")
+
+
+def public_message(message):
+    response = AgentMessageResponse.model_validate(message)
+    # Present old system-generated messages using today's profile names without
+    # rewriting the user's stored transcript or exposing retired internal IDs.
+    match = re.fullmatch(r"請助理安排醫師 ([A-Z][A-Z0-9_]{1,99}) 的門診時段。", response.content)
+    if response.role == "user" and match:
+        response.content = preparation_message(match[1])
+    return response
+
+
 def message_page(session, case, before=None, limit=50):
     query = select(CaseMessage).where(CaseMessage.case_id == case.id)
     if before:
@@ -88,7 +105,7 @@ def message_page(session, case, before=None, limit=50):
                                and_(CaseMessage.created_at == cursor.created_at, CaseMessage.id < cursor.id)))
     rows = session.scalars(query.order_by(CaseMessage.created_at.desc(), CaseMessage.id.desc()).limit(limit + 1)).all()
     selected = rows[:limit]
-    return CaseMessagesPage(messages=list(reversed(selected)), next_cursor=selected[-1].id if len(rows) > limit else None)
+    return CaseMessagesPage(messages=[public_message(row) for row in reversed(selected)], next_cursor=selected[-1].id if len(rows) > limit else None)
 
 
 def case_detail(session, case):
@@ -204,7 +221,7 @@ def run_case(session, owner, case_id, request, action="message"):
         task.status = values["phase"]
         task.version += 1
         case.updated_at = datetime.now(timezone.utc)
-        text = request.message if action == "message" else f"請助理安排醫師 {request.doctor_id} 的門診時段。"
+        text = request.message if action == "message" else preparation_message(request.doctor_id)
         reply = values.get("preparation", {}).get("message") if action == "prepare" else values.get("intake_response", {}).get("reply")
         written_at = datetime.now(timezone.utc)
         session.add_all([

@@ -12,7 +12,14 @@ for (const extension of ['.ts', '.tsx']) {
     module._compile(result.outputText, filename);
   };
 }
-const { translate } = require('../app/i18n.tsx');
+const { translate, displayUserMessage } = require('../app/i18n.tsx');
+
+test('shows doctor names in generated preparation messages while preserving user text', () => {
+  assert.equal(displayUserMessage('請助理安排莊雅慧醫師的門診時段。', 'en'), 'Please arrange an appointment with Dr. 莊雅慧.');
+  assert.equal(displayUserMessage('請助理安排所選醫師的門診時段。', 'en'), 'Please arrange an appointment with the selected doctor.');
+  assert.equal(displayUserMessage('請助理安排莊雅慧醫師的門診時段。', 'zh-TW'), '請助理安排莊雅慧醫師的門診時段。');
+  assert.equal(displayUserMessage('我想請助理安排醫師，下午可以。', 'en'), '我想請助理安排醫師，下午可以。');
+});
 
 test('translates a prefixed assistant question as a complete English message', () => {
   const text = translate('已更新這次條件。上午、下午或夜診，哪些時段可以？也可以回答時段不限。', 'en');

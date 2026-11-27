@@ -232,12 +232,38 @@ def test_two_cases_never_share_symptoms_or_conditions(client):
 
 def test_graph_calls_existing_preparation_tool_and_waits_for_patient(client, monkeypatch):
     headers = owner(client)
-    case = prepare_case(client, headers, ready_case(client, headers), monkeypatch)
+    initial = ready_case(client, headers)
+    selected = initial["task"]["recommendation"]["recommended_doctors"][0]
+    case = prepare_case(client, headers, initial, monkeypatch)
     assert case["task"]["status"] == "awaiting_patient"
     assert case["task"]["preparation"]["selected_slot"]
+    assert case["messages"][-2]["content"] == f"請助理安排{selected['doctor_name_zh']}醫師的門診時段。"
+    assert selected["doctor_id"] not in case["messages"][-2]["content"]
     with checkpoint_store() as saver:
         checkpoint = care_graph.build_care_graph(saver).get_state({"configurable": {"thread_id": case["task"]["id"]}})
         assert checkpoint.interrupts
+
+
+def test_legacy_preparation_messages_use_names_in_details_and_pagination(client, database):
+    headers = owner(client)
+    case = create(client, headers)
+    legacy = "請助理安排醫師 CGMH_LINKOU_DERM_009 的門診時段。"
+    retired = "請助理安排醫師 CGMH_LINKOU_RETIRED_999 的門診時段。"
+    with Session(database) as session:
+        for text in (legacy, retired, "我想請助理安排醫師，下午可以。"):
+            session.add(CaseMessage(case_id=uuid.UUID(case["case"]["id"]), task_id=uuid.UUID(case["task"]["id"]),
+                                    operation_id=uuid.uuid4(), role="user", content=text))
+        session.commit()
+    for suffix in ("", "/messages"):
+        response = client.get("/api/agent/cases/" + case["case"]["id"] + suffix, headers=headers)
+        assert response.status_code == 200
+        texts = {message["content"] for message in response.json()["messages"]}
+        assert "請助理安排莊雅慧醫師的門診時段。" in texts
+        assert "請助理安排所選醫師的門診時段。" in texts
+        assert "我想請助理安排醫師，下午可以。" in texts
+        assert not any("CGMH_LINKOU_" in text for text in texts)
+    with Session(database) as session:
+        assert legacy in session.scalars(select(CaseMessage.content)).all()
 
 
 def test_invalid_doctor_selection_never_advances_checkpoint(client):

@@ -1,6 +1,6 @@
 "use client";
 
-import { useLocale } from "./i18n";
+import { useLocale, displayUserMessage } from "./i18n";
 
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { IntakeResponse, IntakeState, patientLabels, weekdayLabels } from "./intake-types";
@@ -107,7 +107,7 @@ export default function IntakeChat({ onUpdate, disabled, caseDetail, onSend, onL
         {caseDetail?.messages_cursor && onLoadOlder ? <button type="button" disabled={busy || disabled} onClick={() => void onLoadOlder()} className="text-xs text-teal-700 underline">{t("載入較早的對話")}</button> : null}
         {messages.map((message, index) => <div key={index} className={message.role === "assistant" ? "mr-4 rounded-lg bg-slate-100 p-3 text-sm leading-7" : "ml-4 rounded-lg bg-teal-50 p-3 text-sm leading-7 text-teal-950"}>
           <p className="mb-1 text-xs font-semibold text-slate-500">{t(message.role === "assistant" ? "就醫助理" : "你")}</p>
-          <p className="whitespace-pre-wrap">{message.role === "assistant" ? t(message.content) : message.content}</p>
+          <p className="whitespace-pre-wrap">{message.role === "assistant" ? t(message.content) : displayUserMessage(message.content, locale)}</p>
         </div>)}
       </div>
       {summary.length ? <dl aria-label={t("目前記住的條件")} className="grid grid-cols-[4.5rem_minmax(0,1fr)] gap-x-3 gap-y-2 rounded-md border border-teal-200 bg-teal-50 p-3 text-xs leading-6">

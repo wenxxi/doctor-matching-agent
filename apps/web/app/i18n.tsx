@@ -5,6 +5,13 @@ import { englishMessages, chineseMessages } from "./translations";
 
 export type Locale = "zh-TW" | "en";
 
+export function displayUserMessage(text: string, locale: Locale): string {
+  if (locale !== "en") return text;
+  const preparation = text.match(/^請助理安排(.+)醫師的門診時段。$/);
+  if (!preparation) return text;
+  return preparation[1] === "所選" ? "Please arrange an appointment with the selected doctor." : `Please arrange an appointment with Dr. ${preparation[1]}.`;
+}
+
 export function translate(text: string | null | undefined, locale: Locale): string {
   if (text == null) return "";
   if (locale === "zh-TW") return Object.prototype.hasOwnProperty.call(chineseMessages, text) ? chineseMessages[text] : text;
