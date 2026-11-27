@@ -129,6 +129,7 @@ class AppointmentsResponse(BaseModel):
     message: str
     failure_code: str | None = None
     provider_http_status: int | None = None
+    failure_evidence: dict[str, str] = Field(default_factory=dict)
 
 
 class AppointmentPreparationRequest(BaseModel):

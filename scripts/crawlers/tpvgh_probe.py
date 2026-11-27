@@ -5,8 +5,12 @@ from datetime import datetime, timezone
 import json
 from pathlib import Path
 import ssl
+import sys
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "apps/api"))
+from app.services.provider_diagnostics import response_evidence, SAMPLE_LIMIT
 
 
 URLS = (
@@ -40,9 +44,11 @@ def probe(url):
         except HTTPError as error:
             response = error
         with response:
-            html = response.read(2_000_000).decode("utf-8", errors="replace")
+            body = response.read(SAMPLE_LIMIT)
+            html = body.decode("utf-8", errors="replace")
             status = response.code
-        return {"url": url, "http_status": status, "status": classify_page(status, html)}
+            evidence = response_evidence(response.headers, body)
+        return {"url": url, "http_status": status, "status": classify_page(status, html), "response_evidence": evidence}
     except (URLError, OSError) as error:
         return {"url": url, "status": "connection_failed", "error_type": type(error).__name__}
 

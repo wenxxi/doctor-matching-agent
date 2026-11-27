@@ -16,12 +16,14 @@ import certifi
 
 from app.schemas import AppointmentsResponse, AppointmentSlotResponse, AppointmentPreparationResponse
 from app.services.processed_data import load_provider_metadata
+from app.services.provider_diagnostics import response_evidence, SAMPLE_LIMIT
 
 PROFILE_BASE = "https://www.vghtpe.gov.tw/"
 REG_BASE = "https://www6.vghtpe.gov.tw/reg/"
 LOCKS = tuple(Lock() for _ in range(32))
 logger = logging.getLogger(__name__)
 BLOCKED_UNTIL = 0.0
+BLOCKED_EVIDENCE = {}
 BLOCK_LOCK = Lock()
 BLOCKED_MESSAGE = "台北榮總目前限制本站查詢，暫時無法驗證該院時段；這不代表沒有名額。可保留條件稍後重試，或自行選擇改查林口長庚。"
 
@@ -139,7 +141,7 @@ def parse_slots(html, doctor_name, url, patient_type, today):
 
 
 def get_appointments(doctor, patient_type="returning", fresh=False):
-    global BLOCKED_UNTIL
+    global BLOCKED_UNTIL, BLOCKED_EVIDENCE
     url = timetable_url(doctor, patient_type)
     result = AppointmentsResponse(doctor_id=doctor["doctor_id"], status="unavailable", registration_url=url,
         schedule_urls=[url] if url else [], checked_at=None, slots=[], message="暫時無法確認榮總門診，請稍後重試。")
@@ -150,6 +152,7 @@ def get_appointments(doctor, patient_type="returning", fresh=False):
         if monotonic() < BLOCKED_UNTIL:
             result.failure_code, result.provider_http_status = "provider_http_error", 403
             result.message = BLOCKED_MESSAGE
+            result.failure_evidence = {**BLOCKED_EVIDENCE, "evidence_origin": "cached_denial"}
             return result
     try:
         html, checked = fetch_public(url) if fresh else public_page(url)
@@ -161,9 +164,19 @@ def get_appointments(doctor, patient_type="returning", fresh=False):
     except HTTPError as error:
         result.failure_code = "provider_http_error"
         result.provider_http_status = error.code
+        body = b""
+        try:
+            if error.fp is not None:
+                body = error.read(SAMPLE_LIMIT)
+        except OSError:
+            pass
+        finally:
+            error.close()
+        result.failure_evidence = response_evidence(error.headers, body)
         if error.code == 403:
             with BLOCK_LOCK:
                 BLOCKED_UNTIL = monotonic() + 300
+                BLOCKED_EVIDENCE = dict(result.failure_evidence)
     except URLError as error:
         result.failure_code = "provider_tls_error" if isinstance(error.reason, ssl.SSLCertVerificationError) else "provider_network_error"
     except TimeoutError:
