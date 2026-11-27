@@ -14,6 +14,7 @@ from app.routers.intake import router as intake_router
 from app.routers.agent import router as agent_router
 from app.routers.doctors import router as doctors_router
 from app.routers.recommendations import router as recommendations_router
+from app.routers.integration_screening import router as integration_screening_router
 
 
 def create_app() -> FastAPI:
@@ -56,6 +57,7 @@ def create_app() -> FastAPI:
     app.include_router(agent_router)
     app.include_router(concepts_router)
     app.include_router(recommendations_router)
+    app.include_router(integration_screening_router)
 
     @app.exception_handler(RequestValidationError)
     async def validation_error(request: Request, exc: RequestValidationError):
