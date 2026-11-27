@@ -102,7 +102,7 @@ Render PostgreSQL 設定與本機測試方式見 [DEPLOYMENT.md](DEPLOYMENT.md)�
 - 概念映射與 IDF 加權原始專長文字用於召回；不是只靠 embedding 或固定對照決定結果。模型可重排、排除醫師，但醫師 ID、患者引用及該醫師專長引用必須通過程式核對。引用存在不代表臨床相關性已被證明，仍需人工品質評估。
 - 每批最多 12 位候選；符合時段者不足時擴大一次，總計最多 24 位，不自行更改醫院、日期、星期、時段與資格。模型失敗明確標示規則降級；未經模型評估的純文字候選不直接推薦。
 - 共用 `doctors_normalized.csv`、`medical_concepts.csv` 與 `doctor_concept_map.csv`。目前為長庚 809 筆、榮總 592 筆醫師科別資料（591 位榮總醫師），433 個共用概念。推薦讀取 CSV；PostgreSQL 保存個案、訊息、任務及 checkpoints。
-- 榮總對應 28 科，排除急診與放射；沒有把「急診外傷」直接視為長庚「外傷急症外科」。36 份缺少可解析專長的簡介、1 份沒有肝臟專長的移植外科資料未納入；8 筆缺少掛號識別碼的專長資料不能通過時段驗證。完整涵蓋見 [科別報告](docs/evaluation/hospital-coverage.csv)。
+- 榮總對應 28 科，排除急診與放射；沒有把「急診外傷」直接視為長庚「外傷急症外科」。36 份缺少可解析專長的簡介、1 份沒有肝臟專長的移植外科資料未納入；8 筆缺少掛號識別碼的專長資料不能通過時段驗證。涵蓋結果可在本機產生報告檢查。
 - 榮總官方 profile ID 形成穩定醫師 ID；掛號識別碼、來源科別與取得日期保存在 `provider_metadata.json`。既有長庚醫師 ID 與映射保留不變。原始資料來源：臺北榮民總醫院[醫師查詢](https://www.vghtpe.gov.tw/docsearch.action)，依[政府網站資料開放宣告](https://www.vghtpe.gov.tw/Fpage.action?fid=2573)標示出處，不代表院方認可本服務。
 - 榮總 adapter 唯讀核對醫師、可選 radio、日期、時段、初複診型態與患者表單。取得時段後，使用者必須至該醫師官網選取相同日期並完成驗證；不在本站收集或代送榮總患者資料、不會因點連結就記為掛號完成。
 
@@ -116,7 +116,7 @@ cd ../..
 python3 scripts/processors/promote_hospital_data.py --source data/staging/tpvgh
 ```
 
-先檢視 `data/staging/tpvgh/coverage.json` 與唯讀評估報告再匯入。擷取最多兩個併發 GET，遇安全驗證則停止該來源，不解驗證碼或關閉 TLS 驗證。教學與決策見 [中文架構導讀](docs/learning/agent-hospital-integration.html)、[實作紀錄](docs/integration-worklog.md)。測試報告使用合成描述，沒有建立真實掛號；工程回歸不等於臨床有效性認證。
+先檢視 `data/staging/tpvgh/coverage.json` 與唯讀評估報告再匯入。擷取最多兩個併發 GET，遇安全驗證則停止該來源，不解驗證碼或關閉 TLS 驗證。教學、決策與實測報告只保存在本機，不隨程式碼發布。測試報告使用合成描述，沒有建立真實掛號；工程回歸不等於臨床有效性認證。
 
 ## 林口長庚掛號整合
 
@@ -245,37 +245,15 @@ cd apps/api
 uv run python scripts/import_doctors.py
 ```
 
-## Security controls
+## Local reports and checks
 
-All paid model calls go through `app/services/security.py`, including calls from LangGraph. Counters and capacity leases use the existing PostgreSQL database; if accounting is unavailable, paid calls stop. Requests are capped at 32 KiB with a 10-second receive deadline, and clinical query fields are limited to 2,000 characters.
+Generated lessons, architecture walkthroughs, security reviews, evaluation outputs, and deployment evidence are local-only and excluded by `.gitignore`. Do not force-add these files. The application source, security controls, synthetic regression tests, and CI configuration remain version controlled.
 
-| Setting | Default | Purpose |
-| --- | --- | --- |
-| `LLM_DAILY_BUDGET_USD` | `1.00` | Application budget per UTC admission day; conservative reservation before each model call |
-| `LLM_CONCURRENCY` | `2` | Shared model capacity leases |
-| `LLM_CALLS_PER_HOUR` | `60` | Model calls per peer and per owner |
-| `API_GLOBAL_REQUESTS_PER_MINUTE` | `300` | Global API admission limit |
-| `API_REQUESTS_PER_MINUTE` | `90` | API admission limit per trusted peer |
-| `EXPENSIVE_REQUESTS_PER_MINUTE` | `15` | Expensive endpoints per trusted peer |
-| `SESSION_CREATES_PER_HOUR` | `5` | Anonymous token issuance per peer |
-| `SESSION_CREATES_PER_DAY` | `200` | Global anonymous token issuance |
-| `PROVIDER_REQUESTS_PER_MINUTE` | `180` | Requests per hospital provider |
-| `ENABLE_HOSPITAL_SCREENING` | off | Opt-in research endpoint; not part of normal recommendations |
-
-The daily budget covers this application's calls, not other applications sharing an API key. It uses configured token prices, ignores cache discounts, keeps reservations for uncertain failures, and does not automatically retry. Changing models requires configuring `LLM_PRICED_MODEL`, `LLM_INPUT_USD_PER_MILLION`, and `LLM_OUTPUT_USD_PER_MILLION` unless the model is the supported GPT-4o mini variant. `store=False` is enforced; this does not promise that the model provider has no safety logs.
-
-Rate limiting trusts the ASGI peer address, not caller-supplied forwarding headers. Render runs with `--no-proxy-headers`; requests sharing an ingress proxy can share a quota. Verify the ingress trust boundary before enabling forwarded client IPs. Fixed time windows can admit a burst across a boundary; global budget and capacity controls remain shared across instances and restarts.
-
-Cases return at most 50 messages per page, have a 1,000-message/100-task limit, and are deleted after 30 days without an update. Existing records receive a 30-day policy activation grace period. Cleanup removes LangGraph checkpoints as well as case/task/message records, rechecks the cutoff under a database lock, and skips submissions in progress. Cleanup runs in bounded batches while the API is running; a sleeping free service resumes cleanup when it wakes. Expired cases can therefore remain beyond the nominal cutoff until a cleanup run. Deletion does not cancel hospital appointments. Anonymous access tokens expire after 180 days; no cross-device recovery is provided.
-
-Security regression tests:
+Run security acceptance tests from `apps/api`:
 
 ```bash
-cd apps/api
 uv run pytest -q tests/test_security.py
 ```
-
-Optional PostgreSQL integration tests use only the disposable `security_test` database on `127.0.0.1:55432` from `infra/security-test-compose.yml`. Set `SECURITY_TEST_POSTGRES_URL` to that test database, then run `uv run pytest -q tests/test_security_postgres.py`. They do not use production records or submit appointments.
 
 Python deployment dependencies are exported from `uv.lock` with exact versions and hashes. To update `requirements.txt`, run from `apps/api`:
 
@@ -283,7 +261,7 @@ Python deployment dependencies are exported from `uv.lock` with exact versions a
 uv export --frozen --no-dev --no-emit-project --format requirements-txt --no-header --output-file requirements.txt
 ```
 
-Render installs them with `pip install --require-hashes`. GitHub Actions runs API/PostgreSQL tests, frontend checks/build, lockfile consistency, and dependency audits on pushes and pull requests. See [the Chinese architecture lesson](docs/learning/security-fixes.html) and [the review findings](docs/evaluation/security-review.json).
+Render verifies dependency hashes. GitHub Actions runs tests, frontend build checks, lockfile consistency, and dependency audits on pushes and pull requests.
 
 The importer reads `data/sample_doctors.csv`, inserts sample doctors, splits `raw_expertise` into `doctor_expertise` rows, and is safe to run more than once.
 

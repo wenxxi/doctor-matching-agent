@@ -30,3 +30,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+
+# Private, generated teaching material and review/deployment evidence (local only)
+/docs/learning/
+/docs/evaluation/
+/docs/decisions/
+/docs/integration-worklog.md
+*.bundle
