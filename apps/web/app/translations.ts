@@ -5,6 +5,11 @@ export const chineseMessages: Record<string, string> = {
 };
 
 export const englishMessages: Record<string, string> = {
+  "原有就診條件已保留，不會自動改院。": "Your existing preferences are saved. The hospital will not be changed automatically.",
+  "台北榮總目前限制本站查詢，暫時無法驗證該院時段；這不代表沒有名額。": "Taipei Veterans currently restricts this site's queries, so appointments cannot be verified. This does not mean appointments are full.",
+  "可保留條件稍後重試，或自行選擇改查林口長庚。": "Keep your preferences and retry later, or choose Linkou Chang Gung.",
+  "台北榮總目前限制本站查詢，暫時無法驗證該院時段；這不代表沒有名額。可保留條件稍後重試，或自行選擇改查林口長庚。": "Taipei Veterans currently restricts this site's queries, so its appointments cannot be verified. This does not mean appointments are full. Keep your preferences and retry later, or choose Linkou Chang Gung.",
+  "院方拒絕存取，暫停該院重複查詢五分鐘；未嘗試繞過限制。": "The hospital denied access. Repeated queries are paused for five minutes; no access restriction was bypassed.",
   "兩家醫院的初複診資格要分別確認。若兩院狀態相同，可以回答兩院都是全院初診或兩院都是複診；若不同，請先選一家醫院搜尋。": "Visit eligibility differs by hospital. Confirm that both are first visits or both are returning visits. If your status differs, search one hospital at a time.",
   "兩院都是全院初診": "First visit at both hospitals", "兩院都是複診": "Returning patient at both hospitals",
   "等待患者完成掛號步驟": "Waiting for the patient to complete booking steps",

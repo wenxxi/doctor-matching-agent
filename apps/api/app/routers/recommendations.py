@@ -7,6 +7,7 @@ from app.services.doctor_matcher import diversify_departments_if_needed, to_conc
 from app.services.available_doctors import filter_available_doctors
 from app.services.doctor_relevance import retrieve_candidates, review_candidates
 from app.services.openai_reason_generator import generate_llm_reasons_with_metadata
+from app.services.tpvgh import BLOCKED_MESSAGE
 
 router = APIRouter(prefix="/api/recommendations", tags=["recommendations"])
 
@@ -34,12 +35,19 @@ def recommend_doctors(request: RecommendationRequest) -> RecommendationResponse:
     trace.append({"node": "retrieve", "message": f"概念與原始專長文字召回 {len(candidates)} 位候選；文字相似度不直接決定推薦。"})
     trace.extend(review.trace)
     clarification = extraction.clarification_question or review.clarification_question
-    available, incomplete = filter_available_doctors(review.doctors if not clarification else [], request.preferences, limit)
-    if len(available) < limit and not clarification:
+    availability_result = filter_available_doctors(review.doctors if not clarification else [], request.preferences, limit)
+    available, incomplete = availability_result
+    provider_failures = list(getattr(availability_result, "failures", []))
+    provider_blocked = request.hospital == "台北榮總" and any(item.get("http_status") == 403 for item in provider_failures)
+    if len(available) < limit and not clarification and not provider_blocked:
         extra_candidates, extra_rule_ids = retrieve_candidates(request.query, matched_concepts, department_intent, expanded=True, search_terms=extraction.search_terms, hospital=request.hospital)
         if extra_candidates:
             extra_review = review_candidates(request.query, extra_candidates, extra_rule_ids)
-            extra_available, extra_incomplete = filter_available_doctors(extra_review.doctors, request.preferences, limit - len(available))
+            extra_result = filter_available_doctors(extra_review.doctors, request.preferences, limit - len(available))
+            extra_available, extra_incomplete = extra_result
+            for failure in getattr(extra_result, "failures", []):
+                if failure not in provider_failures:
+                    provider_failures.append(failure)
             available.extend(extra_available)
             incomplete = incomplete or extra_incomplete
             trace.append({"node": "broaden", "message": "首批符合條件的醫師不足，重新查找其他相關候選一次；未放寬日期、時段或資格。"})
@@ -74,6 +82,9 @@ def recommend_doctors(request: RecommendationRequest) -> RecommendationResponse:
         message = f"目前確認 {len(recommended_doctors)} 位相關醫師有符合條件的掛號時段；其餘未確認可掛號的醫師已排除。"
     if candidates and incomplete:
         message = (message + " " if message else "") + "部分院方時段無法確認，已排除未確認的醫師；可稍後重新查詢。"
+    if any(item.get("http_status") == 403 for item in provider_failures):
+        message = BLOCKED_MESSAGE if not recommended_doctors else (message + " " if message else "") + BLOCKED_MESSAGE
+        trace.append({"node": "provider_unavailable", "message": "院方拒絕存取，暫停該院重複查詢五分鐘；未嘗試繞過限制。"})
     trace.append({"node": "availability", "message": f"確認 {len(recommended_doctors)} 位醫師具有符合條件的可掛號患者資料頁；未保留名額。"})
 
     return RecommendationResponse(
@@ -94,4 +105,5 @@ def recommend_doctors(request: RecommendationRequest) -> RecommendationResponse:
         assessment_summary=extraction.assessment_summary if not clarification else "尚無足夠來源證據，先補充需求而不確認疾病。",
         clarification_question=clarification,
         decision_trace=trace,
+        provider_failures=provider_failures,
     )

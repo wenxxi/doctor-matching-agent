@@ -94,6 +94,7 @@ def test_both_hospitals_have_recall_space_before_model_review(monkeypatch):
 
 
 def test_provider_http_failure_is_classified_without_exposing_upstream_details(monkeypatch):
+    monkeypatch.setattr(tpvgh, "BLOCKED_UNTIL", 0.0)
     monkeypatch.setattr(tpvgh, "load_provider_metadata", lambda: {DOCTOR["doctor_id"]: {"registration_doctor_id": "DOC2207G"}})
     def denied(url):
         raise HTTPError(url, 403, "private upstream detail", {}, None)
@@ -102,3 +103,6 @@ def test_provider_http_failure_is_classified_without_exposing_upstream_details(m
     assert result.status == "unavailable" and result.slots == []
     assert result.failure_code == "provider_http_error" and result.provider_http_status == 403
     assert "private upstream detail" not in result.model_dump_json()
+    monkeypatch.setattr(tpvgh, "public_page", lambda url: pytest.fail("403 must trigger a cooldown instead of repeatedly querying"))
+    second = tpvgh.get_appointments(DOCTOR)
+    assert second.provider_http_status == 403 and second.slots == []

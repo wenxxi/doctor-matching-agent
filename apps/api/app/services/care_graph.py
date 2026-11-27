@@ -61,10 +61,14 @@ def recommend(state):
                     "trace": (step(state, "recommend", "目前醫療描述不足，先追問而不強制配對醫師。") + result.decision_trace)[-50:]}
         if not result.recommended_doctors:
             response = dict(state["intake_response"])
+            provider_blocked = any(item.get("http_status") == 403 for item in result.provider_failures)
             response.update(ready=False, reply=(result.message or "目前沒有確認到符合條件的醫師門診。") + " 你可以修改就診條件後再查詢；我不會自行放寬條件。",
                             question="availability", quick_replies=["改成上午", "改成下午", "日期不限"])
+            if provider_blocked:
+                response.update(reply=(result.message or "院方限制本站查詢。") + " 原有就診條件已保留，不會自動改院。",
+                                question="hospital_availability", quick_replies=["維持目前條件", "改成林口長庚"])
             return {"recommendation": result.model_dump(mode="json"), "intake_response": response, "phase": "clarifying",
-                    "trace": (step(state, "recommend", "已查找替代候選仍無合適門診，詢問是否調整條件，不要求選擇不存在的醫師。") + result.decision_trace)[-50:]}
+                    "trace": (step(state, "recommend", "院方限制查詢，保留條件並等待重試或使用者改院。" if provider_blocked else "已查找替代候選仍無合適門診，詢問是否調整條件，不要求選擇不存在的醫師。") + result.decision_trace)[-50:]}
         return {"recommendation": result.model_dump(mode="json"), "recommendation_query": query,
                 "phase": "selecting_doctor", "trace": (step(state, "recommend", "已依目前就醫條件查詢時段，只推薦院方患者資料頁可確認的醫師。") + result.decision_trace)[-50:]}
     except Exception:

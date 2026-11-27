@@ -40,6 +40,13 @@ test('translates hospital eligibility and handoff without claiming a booking', (
   assert.match(translate('請在院方頁面選取上列日期與時段。點擊連結不代表掛號成功，名額以院方送出時為準。', 'en'), /does not book/);
 });
 
+test('provider denial and preserved hospital preferences remain clear in English', () => {
+  const message = translate('台北榮總目前限制本站查詢，暫時無法驗證該院時段；這不代表沒有名額。可保留條件稍後重試，或自行選擇改查林口長庚。 原有就診條件已保留，不會自動改院。', 'en');
+  assert.match(message, /restricts this site's queries/);
+  assert.match(message, /will not be changed automatically/);
+  assert.doesNotMatch(message, /[\u4e00-\u9fff]/);
+});
+
 test('leaves unknown source content and canonical values intact', () => {
   for (const value of ['CGMH_LINKOU_TEST', 'returning', 'TEST123', 'constructor', '__proto__', '患者自行填寫的個案名稱。']) {
     assert.equal(translate(value, 'en'), value);

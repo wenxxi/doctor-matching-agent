@@ -156,3 +156,31 @@ def test_expanded_retrieval_does_not_repeat_small_initial_pool(monkeypatch):
     expanded, _ = doctor_relevance.retrieve_candidates("膝關節痛", [], None, expanded=True)
     assert len(initial) == 8
     assert expanded == []
+
+
+def test_provider_denial_stops_broadening_instead_of_telling_user_to_change_dates(monkeypatch):
+    from app.routers import recommendations
+    from app.schemas import RecommendationRequest, AppointmentPreparationRequest
+    from app.services.available_doctors import AvailabilityResult
+    calls = []
+    def retrieve(*args, **kwargs):
+        calls.append(kwargs.get("expanded", False))
+        return [doctor("candidate", "膝關節")], {"candidate"}
+    monkeypatch.setattr(recommendations, "get_concept_extractor", lambda: KeywordConceptExtractor())
+    monkeypatch.setattr(recommendations, "retrieve_candidates", retrieve)
+    monkeypatch.setattr(recommendations, "review_candidates", lambda q, ds, ids: doctor_relevance.ReviewResult(doctors=ds, method="evidence_review", model_attempted=True))
+    monkeypatch.setattr(recommendations, "filter_available_doctors", lambda *a: AvailabilityResult([], True, [{"hospital":"臺北榮民總醫院", "code":"provider_http_error", "http_status":403}]))
+    result = recommendations.recommend_doctors(RecommendationRequest(query="膝蓋痛", hospital="台北榮總", preferences=AppointmentPreparationRequest(patient_type="returning")))
+    assert calls == [False]
+    assert result.recommended_doctors == []
+    assert "不代表沒有名額" in result.message
+    assert result.provider_failures[0]["http_status"] == 403
+    from app.services import care_graph
+    monkeypatch.setattr(care_graph, "recommend_doctors", lambda request: result)
+    state = {"intake": {"clinical_query":"膝蓋痛", "hospital":"台北榮總", "patient_type":"returning"},
+             "intake_response":{"ready":True, "reply":""}, "trace":[]}
+    routed = care_graph.recommend(state)
+    assert routed["phase"] == "clarifying"
+    assert routed["intake_response"]["question"] == "hospital_availability"
+    assert "改成上午" not in routed["intake_response"]["quick_replies"]
+    assert state["intake"]["hospital"] == "台北榮總"

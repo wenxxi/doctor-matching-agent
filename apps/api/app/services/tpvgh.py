@@ -6,7 +6,7 @@ import re
 import ssl
 import logging
 from threading import Lock
-from time import time
+from time import time, monotonic
 from urllib.parse import urlencode, urlsplit
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError, URLError
@@ -21,6 +21,9 @@ PROFILE_BASE = "https://www.vghtpe.gov.tw/"
 REG_BASE = "https://www6.vghtpe.gov.tw/reg/"
 LOCKS = tuple(Lock() for _ in range(32))
 logger = logging.getLogger(__name__)
+BLOCKED_UNTIL = 0.0
+BLOCK_LOCK = Lock()
+BLOCKED_MESSAGE = "台北榮總目前限制本站查詢，暫時無法驗證該院時段；這不代表沒有名額。可保留條件稍後重試，或自行選擇改查林口長庚。"
 
 
 class Markup(HTMLParser):
@@ -136,12 +139,18 @@ def parse_slots(html, doctor_name, url, patient_type, today):
 
 
 def get_appointments(doctor, patient_type="returning", fresh=False):
+    global BLOCKED_UNTIL
     url = timetable_url(doctor, patient_type)
     result = AppointmentsResponse(doctor_id=doctor["doctor_id"], status="unavailable", registration_url=url,
         schedule_urls=[url] if url else [], checked_at=None, slots=[], message="暫時無法確認榮總門診，請稍後重試。")
     if not url:
         result.message = "尚未確認這位醫師的院方掛號識別碼，暫不提供時段。"
         return result
+    with BLOCK_LOCK:
+        if monotonic() < BLOCKED_UNTIL:
+            result.failure_code, result.provider_http_status = "provider_http_error", 403
+            result.message = BLOCKED_MESSAGE
+            return result
     try:
         html, checked = fetch_public(url) if fresh else public_page(url)
         result.slots = parse_slots(html, doctor["doctor_name_zh"], url, patient_type,
@@ -152,6 +161,9 @@ def get_appointments(doctor, patient_type="returning", fresh=False):
     except HTTPError as error:
         result.failure_code = "provider_http_error"
         result.provider_http_status = error.code
+        if error.code == 403:
+            with BLOCK_LOCK:
+                BLOCKED_UNTIL = monotonic() + 300
     except URLError as error:
         result.failure_code = "provider_tls_error" if isinstance(error.reason, ssl.SSLCertVerificationError) else "provider_network_error"
     except TimeoutError:
@@ -161,6 +173,8 @@ def get_appointments(doctor, patient_type="returning", fresh=False):
     if result.failure_code:
         # No URL, query, credentials, patient data, or raw upstream exception text.
         logger.warning("TPVGH read-only check failed: code=%s http_status=%s", result.failure_code, result.provider_http_status)
+    if result.provider_http_status == 403:
+        result.message = BLOCKED_MESSAGE
     return result
 
 
@@ -174,6 +188,8 @@ def prepare(doctor, request):
     result.steps = ["唯讀核對榮總醫師識別碼、門診可選狀態與患者資料欄位。"]
     if snapshot.status == "unavailable":
         result.message = snapshot.message
+        result.failure_code = snapshot.failure_code
+        result.provider_http_status = snapshot.provider_http_status
         return result
     result.verified_at = snapshot.checked_at
     matching = [slot for slot in snapshot.slots if matches_preferences(slot, request)]

@@ -106,6 +106,7 @@ class RecommendationResponse(BaseModel):
     assessment_summary: str | None = None
     clarification_question: str | None = None
     decision_trace: list[dict[str, str]] = Field(default_factory=list)
+    provider_failures: list[dict] = Field(default_factory=list)
 
 
 class ConceptExtractionResponse(BaseModel):
@@ -158,6 +159,8 @@ class AppointmentPreparationResponse(BaseModel):
     attempted_count: int = 0
     steps: list[str] = Field(default_factory=list)
     message: str
+    failure_code: str | None = None
+    provider_http_status: int | None = None
 
 
 class RecommendationRequest(BaseModel):
