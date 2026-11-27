@@ -245,6 +245,46 @@ cd apps/api
 uv run python scripts/import_doctors.py
 ```
 
+## Security controls
+
+All paid model calls go through `app/services/security.py`, including calls from LangGraph. Counters and capacity leases use the existing PostgreSQL database; if accounting is unavailable, paid calls stop. Requests are capped at 32 KiB with a 10-second receive deadline, and clinical query fields are limited to 2,000 characters.
+
+| Setting | Default | Purpose |
+| --- | --- | --- |
+| `LLM_DAILY_BUDGET_USD` | `1.00` | Application budget per UTC admission day; conservative reservation before each model call |
+| `LLM_CONCURRENCY` | `2` | Shared model capacity leases |
+| `LLM_CALLS_PER_HOUR` | `60` | Model calls per peer and per owner |
+| `API_GLOBAL_REQUESTS_PER_MINUTE` | `300` | Global API admission limit |
+| `API_REQUESTS_PER_MINUTE` | `90` | API admission limit per trusted peer |
+| `EXPENSIVE_REQUESTS_PER_MINUTE` | `15` | Expensive endpoints per trusted peer |
+| `SESSION_CREATES_PER_HOUR` | `5` | Anonymous token issuance per peer |
+| `SESSION_CREATES_PER_DAY` | `200` | Global anonymous token issuance |
+| `PROVIDER_REQUESTS_PER_MINUTE` | `180` | Requests per hospital provider |
+| `ENABLE_HOSPITAL_SCREENING` | off | Opt-in research endpoint; not part of normal recommendations |
+
+The daily budget covers this application's calls, not other applications sharing an API key. It uses configured token prices, ignores cache discounts, keeps reservations for uncertain failures, and does not automatically retry. Changing models requires configuring `LLM_PRICED_MODEL`, `LLM_INPUT_USD_PER_MILLION`, and `LLM_OUTPUT_USD_PER_MILLION` unless the model is the supported GPT-4o mini variant. `store=False` is enforced; this does not promise that the model provider has no safety logs.
+
+Rate limiting trusts the ASGI peer address, not caller-supplied forwarding headers. Render runs with `--no-proxy-headers`; requests sharing an ingress proxy can share a quota. Verify the ingress trust boundary before enabling forwarded client IPs. Fixed time windows can admit a burst across a boundary; global budget and capacity controls remain shared across instances and restarts.
+
+Cases return at most 50 messages per page, have a 1,000-message/100-task limit, and are deleted after 30 days without an update. Existing records receive a 30-day policy activation grace period. Cleanup removes LangGraph checkpoints as well as case/task/message records, rechecks the cutoff under a database lock, and skips submissions in progress. Cleanup runs in bounded batches while the API is running; a sleeping free service resumes cleanup when it wakes. Expired cases can therefore remain beyond the nominal cutoff until a cleanup run. Deletion does not cancel hospital appointments. Anonymous access tokens expire after 180 days; no cross-device recovery is provided.
+
+Security regression tests:
+
+```bash
+cd apps/api
+uv run pytest -q tests/test_security.py
+```
+
+Optional PostgreSQL integration tests use only the disposable `security_test` database on `127.0.0.1:55432` from `infra/security-test-compose.yml`. Set `SECURITY_TEST_POSTGRES_URL` to that test database, then run `uv run pytest -q tests/test_security_postgres.py`. They do not use production records or submit appointments.
+
+Python deployment dependencies are exported from `uv.lock` with exact versions and hashes. To update `requirements.txt`, run from `apps/api`:
+
+```bash
+uv export --frozen --no-dev --no-emit-project --format requirements-txt --no-header --output-file requirements.txt
+```
+
+Render installs them with `pip install --require-hashes`. GitHub Actions runs API/PostgreSQL tests, frontend checks/build, lockfile consistency, and dependency audits on pushes and pull requests. See [the Chinese architecture lesson](docs/learning/security-fixes.html) and [the review findings](docs/evaluation/security-review.json).
+
 The importer reads `data/sample_doctors.csv`, inserts sample doctors, splits `raw_expertise` into `doctor_expertise` rows, and is safe to run more than once.
 
 This PostgreSQL dataset is demo/sample data for the `/api/doctors` endpoint. The recommendation endpoint uses the processed CSV files under `data/processed/` as its current source of doctor matching data.

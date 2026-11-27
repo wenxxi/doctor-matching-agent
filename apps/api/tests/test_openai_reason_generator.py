@@ -23,6 +23,9 @@ class FakeClient:
     def __init__(self, output_text: str | Exception) -> None:
         self.responses = FakeResponses(output_text)
 
+    def with_options(self, **kwargs):
+        return self
+
 
 def clear_settings_cache() -> None:
     get_openai_settings.cache_clear()

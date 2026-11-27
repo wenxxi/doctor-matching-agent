@@ -1,5 +1,8 @@
 import json
 import re
+from fastapi import HTTPException
+from app.services.security import create_response
+from app.services.privacy import SENSITIVE, sensitive, ensure_safe_payload
 from datetime import date, datetime, timedelta
 from zoneinfo import ZoneInfo
 
@@ -23,7 +26,6 @@ QUESTIONS = {
 }
 DAY_NUMBERS = {"一": 0, "二": 1, "三": 2, "四": 3, "五": 4, "六": 5, "日": 6, "天": 6, "1": 0, "2": 1, "3": 2, "4": 3, "5": 4, "6": 5, "7": 6}
 NEGATIVE = r"不行|不方便|不能|不要|不可以|排除|沒空"
-SENSITIVE = re.compile(r"\b[A-Za-z][12]\d{8}\b|(?:身分證|證號|驗證碼)[：:\s]*[A-Za-z0-9]{4,}")
 
 # Canonical equivalents for the English UI shortcuts. Keep API enums unchanged.
 ENGLISH_SHORTCUTS = {
@@ -178,7 +180,7 @@ def local_updates(message: str, state: IntakeState, today: date) -> dict:
 
 
 def llm_updates(message: str, state: IntakeState, today: date) -> dict:
-    response = get_openai_client().with_options(timeout=15, max_retries=0).responses.create(
+    response = create_response(get_openai_client(),
         model=get_openai_model(), temperature=0, max_output_tokens=900,
         instructions=(
             "你是就醫需求對話的條件擷取器，不提供診斷、不呼叫掛號工具。只回傳JSON。"
@@ -221,8 +223,8 @@ def intake_turn(request: IntakeRequest) -> IntakeResponse:
         state = IntakeState()
         question = "clinical_query"
         return IntakeResponse(state=state, reply="已清除這次對話的條件。" + QUESTIONS[question][0], question=question)
-    if SENSITIVE.search(message) or SENSITIVE.search(state.clinical_query):
-        return IntakeResponse(state=IntakeState() if SENSITIVE.search(state.clinical_query) else state,
+    if sensitive(message) or sensitive(state.clinical_query) or sensitive(state.hospital):
+        return IntakeResponse(state=IntakeState() if sensitive(state.clinical_query) or sensitive(state.hospital) else state,
                               reply="證號與驗證碼請填在掛號表單，不要放在對話中。這則內容未送交語言模型。")
     method = "local"
     local_patch = None
@@ -242,6 +244,8 @@ def intake_turn(request: IntakeRequest) -> IntakeResponse:
                 }
             IntakeState.model_validate({**state.model_dump(), **updates})
             method = "openai"
+        except HTTPException:
+            raise
         except Exception:
             updates = local_patch
     if updates is None:

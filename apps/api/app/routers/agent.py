@@ -1,10 +1,10 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Header, HTTPException, Response
+from fastapi import APIRouter, Depends, Header, HTTPException, Response, Query
 from sqlalchemy import select
 
 from app.agent_models import CareCase
-from app.agent_schemas import AgentPrepareRequest, AgentSessionResponse, AgentTurnRequest, CaseCreateRequest, CaseDetailResponse, CaseSummary
+from app.agent_schemas import AgentPrepareRequest, AgentSessionResponse, AgentTurnRequest, CaseCreateRequest, CaseDetailResponse, CaseSummary, CaseMessagesPage
 from app.services import cases
 from app.services.agent_storage import AGENT_STORAGE_ERRORS, get_agent_engine, get_agent_session, initialize_agent_storage
 
@@ -61,6 +61,11 @@ def get_case(case_id: UUID, owner=Depends(owner_dependency), session=Depends(sto
 @router.post("/cases/{case_id}/messages", response_model=CaseDetailResponse)
 def send_message(case_id: UUID, request: AgentTurnRequest, owner=Depends(owner_dependency), session=Depends(storage_session)):
     return cases.run_case(session, owner, case_id, request)
+
+
+@router.get("/cases/{case_id}/messages", response_model=CaseMessagesPage)
+def older_messages(case_id: UUID, before: UUID | None = None, limit: int = Query(default=50, ge=1, le=50), owner=Depends(owner_dependency), session=Depends(storage_session)):
+    return cases.message_page(session, cases.owned_case(session, owner, case_id), before, limit)
 
 
 @router.post("/cases/{case_id}/prepare", response_model=CaseDetailResponse)

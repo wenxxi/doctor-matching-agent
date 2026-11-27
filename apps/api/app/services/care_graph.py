@@ -1,4 +1,5 @@
 from typing import TypedDict
+from fastapi import HTTPException
 
 from langgraph.graph import END, START, StateGraph
 from langgraph.types import interrupt
@@ -71,6 +72,8 @@ def recommend(state):
                     "trace": (step(state, "recommend", "院方限制查詢，保留條件並等待重試或使用者改院。" if provider_blocked else "已查找替代候選仍無合適門診，詢問是否調整條件，不要求選擇不存在的醫師。") + result.decision_trace)[-50:]}
         return {"recommendation": result.model_dump(mode="json"), "recommendation_query": query,
                 "phase": "selecting_doctor", "trace": (step(state, "recommend", "已依目前就醫條件查詢時段，只推薦院方患者資料頁可確認的醫師。") + result.decision_trace)[-50:]}
+    except HTTPException:
+        raise
     except Exception:
         response = dict(state["intake_response"])
         response.update(ready=False, reply="推薦服務暫時無法完成，條件已保留，請傳送「維持目前條件」重試。")

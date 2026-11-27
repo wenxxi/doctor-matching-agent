@@ -1,4 +1,6 @@
 import re
+from fastapi import HTTPException
+from app.services.privacy import ensure_safe_text
 from dataclasses import dataclass
 
 from app.settings import get_openai_settings
@@ -53,6 +55,7 @@ class KeywordConceptExtractor(ConceptExtractor):
 
     def extract_concepts(self, query: str) -> list[MatchedConcept]:
         segments = reported_segments(query)
+        ensure_safe_text(query)
         normalized_query = normalize_text(" ".join(segments))
         if not normalized_query:
             return []
@@ -109,8 +112,11 @@ class FallbackConceptExtractor(ConceptExtractor):
         return self.extract_with_metadata(query).concepts
 
     def extract_with_metadata(self, query: str) -> ConceptExtractionResult:
+        ensure_safe_text(query)
         try:
             primary_result = self.primary.extract_with_metadata(query)
+        except HTTPException:
+            raise
         except Exception:
             result = self.fallback.extract_with_metadata(query)
             return ConceptExtractionResult(

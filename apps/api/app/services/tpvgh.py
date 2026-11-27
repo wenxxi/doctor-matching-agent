@@ -13,6 +13,7 @@ from urllib.error import HTTPError, URLError
 from zoneinfo import ZoneInfo
 
 import certifi
+from app.services.security import provider_request
 
 from app.schemas import AppointmentsResponse, AppointmentSlotResponse, AppointmentPreparationResponse
 from app.services.processed_data import load_provider_metadata
@@ -60,7 +61,7 @@ def fetch_public(url):
     if parsed.scheme != "https" or parsed.netloc not in {"www.vghtpe.gov.tw", "www6.vghtpe.gov.tw"}:
         raise ValueError("Unexpected hospital origin")
     request = Request(url, headers={"User-Agent": "DoctorMatchingAgent/0.1 (read-only source check)"})
-    with urlopen(request, timeout=10, context=ssl.create_default_context(cafile=certifi.where())) as response:
+    with provider_request("tpvgh"), urlopen(request, timeout=10, context=ssl.create_default_context(cafile=certifi.where())) as response:
         if urlsplit(response.url).netloc != parsed.netloc:
             raise ValueError("Unexpected redirect")
         html = response.read(2_000_000).decode("utf-8-sig")

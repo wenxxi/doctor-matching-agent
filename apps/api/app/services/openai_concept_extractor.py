@@ -1,5 +1,7 @@
 import json
 from typing import Any
+from app.services.security import create_response
+from app.services.privacy import ensure_safe_text
 
 from app.services.concept_extractor import (
     ConceptExtractionResult,
@@ -23,6 +25,7 @@ class OpenAIConceptExtractor(ConceptExtractor):
         return self.extract_with_metadata(query).concepts
 
     def extract_with_metadata(self, query: str) -> ConceptExtractionResult:
+        ensure_safe_text(query)
         if not query.strip():
             return ConceptExtractionResult(
                 concepts=[],
@@ -33,7 +36,7 @@ class OpenAIConceptExtractor(ConceptExtractor):
 
         candidate_concepts = load_medical_concepts()
         concept_by_id = {concept["concept_id"]: concept for concept in candidate_concepts}
-        response = get_openai_client().with_options(timeout=25, max_retries=0).responses.create(
+        response = create_response(get_openai_client(),
             model=get_openai_model(),
             instructions=build_instructions(),
             input=build_input(query, candidate_concepts),
@@ -195,9 +198,6 @@ def build_input(query: str, concepts: list[dict[str, str]]) -> str:
             "concept_id": concept["concept_id"],
             "canonical_name_zh": concept["canonical_name_zh"],
             "canonical_name_en": concept["canonical_name_en"],
-            "category": concept["category"],
-            "synonyms_zh": concept["synonyms_zh"],
-            "lay_terms_zh": concept["lay_terms_zh"],
         }
         for concept in concepts
     ]
@@ -207,6 +207,7 @@ def build_input(query: str, concepts: list[dict[str, str]]) -> str:
             "allowed_concepts": allowed_concepts,
         },
         ensure_ascii=False,
+        separators=(",", ":"),
     )
 
 

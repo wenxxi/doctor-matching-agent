@@ -34,6 +34,7 @@ export type CaseDetail = {
     booking_receipt_number: string | null;
   };
   messages: { id: string; role: "user" | "assistant"; content: string }[];
+  messages_cursor?: string | null;
 };
 
 export type AgentContext = {
@@ -54,6 +55,10 @@ export const taskLabels: Record<string, string> = {
 
 export const agentApiBase = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") || "http://localhost:8000";
 
+export class AgentRequestError extends Error {
+  constructor(message: string, public status: number) { super(message); }
+}
+
 export async function agentRequest(path: string, token?: string | null, body?: unknown, method?: string, options: { signal?: AbortSignal; timeoutMs?: number } = {}) {
   const controller = new AbortController();
   let timedOut = false;
@@ -70,7 +75,7 @@ export async function agentRequest(path: string, token?: string | null, body?: u
     });
     if (response.status === 204) return null;
     const data = await response.json();
-    if (!response.ok) throw new Error(typeof data.detail === "string" ? data.detail : "個案服務暫時無法完成。");
+    if (!response.ok) throw new AgentRequestError(typeof data.detail === "string" ? data.detail : "個案服務暫時無法完成。", response.status);
     return data;
   } catch (error) {
     if (timedOut) throw new Error("連線等待逾時。若剛才正在處理個案，請先重新載入進度確認結果。");

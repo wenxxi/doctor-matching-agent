@@ -1,10 +1,14 @@
 import os
+import asyncio
+from contextlib import asynccontextmanager, suppress
 
 from fastapi import FastAPI, Request, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.exception_handlers import request_validation_exception_handler
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from app.security_middleware import SecurityMiddleware
+from app.services.retention import maintenance_loop
 
 from app.database import DatabaseHealthError, check_database_connection
 from app.routers.concepts import router as concepts_router
@@ -17,8 +21,20 @@ from app.routers.recommendations import router as recommendations_router
 from app.routers.integration_screening import router as integration_screening_router
 
 
+@asynccontextmanager
+async def lifespan(app):
+    task = asyncio.create_task(maintenance_loop())
+    try:
+        yield
+    finally:
+        task.cancel()
+        with suppress(asyncio.CancelledError):
+            await task
+
+
 def create_app() -> FastAPI:
-    app = FastAPI(title="Doctor Matching Agent API", version="0.1.0")
+    app = FastAPI(title="Doctor Matching Agent API", version="0.1.0", lifespan=lifespan)
+    app.add_middleware(SecurityMiddleware)
 
     frontend_origins = [
         origin.strip()
@@ -71,7 +87,7 @@ def create_app() -> FastAPI:
                 content={"detail": "請確認患者資料、驗證碼與同意欄位格式。"},
                 headers={"Cache-Control": "no-store, private"},
             )
-        return await request_validation_exception_handler(request, exc)
+        return JSONResponse(status_code=422, content={"detail": "請確認輸入長度與欄位格式。"}, headers={"Cache-Control": "no-store, private"})
 
     return app
 

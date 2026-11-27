@@ -45,10 +45,19 @@ def check_linked_booking(token):
 
 def linked_call(operation, token, *args, submission=True):
     current = check_linked_booking(token)
+    with current.lock:
+        return _linked_call(operation, token, current, args, submission)
+
+
+def _linked_call(operation, token, current, args, submission):
+    if operation == booking.submit_patient and current.status != "awaiting_patient":
+        return booking_call(operation, token, *args)
+    if operation == booking.continue_booking and current.status != "awaiting_confirmation":
+        return booking_call(operation, token, *args)
     linked = current.task_id is not None and current.status not in {"confirmed", "unknown", "needs_official", "rejected"}
     if linked and submission:
         try:
-            if not observe_booking(current.task_id, current.task_version, "submitting"):
+            if not observe_booking(current.task_id, current.task_version, "submitting", booking_token=token, expected_booking_status=current.status):
                 raise HTTPException(status_code=409, detail="個案條件或進度已更新，尚未送出院方，請重新載入。")
         except AGENT_STORAGE_ERRORS:
             raise HTTPException(status_code=503, detail="無法保存任務進度，尚未送出院方。") from None
@@ -57,7 +66,8 @@ def linked_call(operation, token, *args, submission=True):
     finally:
         if current.task_id is not None:
             try:
-                observe_booking(current.task_id, current.task_version, current.status, current.response.receipt_number if current.response else None)
+                if submission:
+                    observe_booking(current.task_id, current.task_version, current.status, current.response.receipt_number if current.response else None, booking_token=token)
             except AGENT_STORAGE_ERRORS:
                 pass
 
@@ -80,7 +90,7 @@ def start_session(request: BookingStartRequest, x_agent_token: str | None = Head
     current = booking.get_session(response.token)
     current.task_id, current.task_version = task_id, task_version
     if task_id is not None:
-        if not observe_booking(task_id, task_version, "awaiting_patient"):
+        if not observe_booking(task_id, task_version, "awaiting_patient", booking_token=response.token):
             booking.close_booking(response.token)
             raise HTTPException(status_code=409, detail="個案條件已更新，請重新載入。")
     return response

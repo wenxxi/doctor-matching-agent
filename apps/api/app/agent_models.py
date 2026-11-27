@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime, timezone
 
-from sqlalchemy import DateTime, ForeignKey, Integer, JSON, String, Text, UniqueConstraint, func
+from sqlalchemy import DateTime, ForeignKey, Integer, JSON, String, Text, UniqueConstraint, Index, func
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.types import Uuid
 
@@ -42,7 +42,8 @@ class AgentTask(Base):
 
 class CaseMessage(Base):
     __tablename__ = "case_messages"
-    __table_args__ = (UniqueConstraint("task_id", "operation_id", "role", name="uq_case_message_operation_role"),)
+    __table_args__ = (UniqueConstraint("task_id", "operation_id", "role", name="uq_case_message_operation_role"),
+                      Index("ix_case_messages_page", "case_id", "created_at", "id"))
 
     id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
     case_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("care_cases.id", ondelete="CASCADE"), index=True)

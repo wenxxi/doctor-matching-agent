@@ -8,6 +8,8 @@ from threading import Lock
 from urllib.parse import urljoin
 from urllib.request import Request, urlopen
 from zoneinfo import ZoneInfo
+from app.services.security import provider_request
+from app.services.parallel import context_submit
 
 from app.schemas import AppointmentsResponse, AppointmentSlotResponse
 
@@ -84,7 +86,7 @@ def fetch_page(url: str, cache_window: int) -> tuple[str, datetime]:
 
 def fetch_live_page(url: str) -> tuple[str, datetime]:
     request = Request(url, headers={"User-Agent": "DoctorMatchingAgent/0.1"})
-    with urlopen(request, timeout=8) as response:
+    with provider_request("cgmh"), urlopen(request, timeout=8) as response:
         html = response.read(2_000_000).decode("utf-8-sig")
     if "看診" not in html or "掛號" not in html:
         raise ValueError("Unexpected hospital page")
@@ -148,7 +150,7 @@ def get_appointments(doctor: dict[str, str]) -> AppointmentsResponse:
         timestamps = []
         unique_slots = {}
         with ThreadPoolExecutor(max_workers=4) as executor:
-            futures = [executor.submit(fetch_page, url, cache_window) for url in urls]
+            futures = [context_submit(executor, fetch_page, url, cache_window) for url in urls]
             for future in futures:
                 try:
                     html, checked_at = future.result()

@@ -4,8 +4,8 @@ services:
     runtime: python
     plan: free
     region: oregon
-    buildCommand: pip install -r apps/api/requirements.txt
-    startCommand: cd apps/api && uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1
+    buildCommand: pip install --require-hashes -r apps/api/requirements.txt
+    startCommand: cd apps/api && uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1 --no-proxy-headers
     healthCheckPath: /health
     envVars:
       - key: AGENT_DATABASE_URL
@@ -16,6 +16,12 @@ services:
         value: https://doctor-matching-agent-web.onrender.com
       - key: OPENAI_MODEL
         value: gpt-4o-mini
+      - key: LLM_DAILY_BUDGET_USD
+        value: "1.00"
+      - key: API_GLOBAL_REQUESTS_PER_MINUTE
+        value: "300"
+      - key: EXPENSIVE_REQUESTS_PER_MINUTE
+        value: "15"
       - key: OPENAI_API_KEY
         sync: false
 
@@ -25,6 +31,8 @@ services:
     buildCommand: cd apps/web && npm ci && npm run build
     staticPublishPath: apps/web/out
     envVars:
+      - key: NODE_VERSION
+        value: "24"
       - key: NEXT_PUBLIC_API_BASE_URL
         value: https://doctor-matching-agent-api.onrender.com
 

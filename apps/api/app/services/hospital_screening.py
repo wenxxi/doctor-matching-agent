@@ -15,6 +15,7 @@ from zoneinfo import ZoneInfo
 import certifi
 
 from app.services.provider_diagnostics import response_evidence
+from app.services.security import provider_request
 
 USER_AGENT = "DoctorMatchingAgent/0.1 (read-only source check)"
 CANDIDATES = {
@@ -95,15 +96,16 @@ class PublicNavigation:
             headers["Referer"] = allowed_url(referer, self.spec["hosts"])
         payload = urlencode(public_selection).encode() if public_selection is not None else None
         request = Request(url, data=payload, headers=headers)
-        try:
-            response = self.opener.open(request, timeout=12)
-        except HTTPError as error:
-            response = error
-        with response:
-            body = response.read(2_000_000)
-            status = response.code
-            evidence = response_evidence(response.headers, body)
-            final_path = urlsplit(response.url).path  # Never persist selection/CSRF tokens from query strings.
+        with provider_request(urlsplit(url).netloc):
+            try:
+                response = self.opener.open(request, timeout=12)
+            except HTTPError as error:
+                response = error
+            with response:
+                body = response.read(2_000_000)
+                status = response.code
+                evidence = response_evidence(response.headers, body)
+                final_path = urlsplit(response.url).path  # Never persist selection/CSRF tokens from query strings.
         return status, body.decode("utf-8-sig", errors="replace"), evidence, final_path
 
 

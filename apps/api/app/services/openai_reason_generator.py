@@ -1,6 +1,8 @@
 import json
 from dataclasses import dataclass
 from typing import Any
+from fastapi import HTTPException
+from app.services.security import create_response
 
 from app.schemas import RecommendedDoctorResponse
 from app.services.concept_extractor import MatchedConcept
@@ -36,7 +38,7 @@ def generate_llm_reasons_with_metadata(
         return ReasonGenerationResult(reasons={})
 
     try:
-        response = get_openai_client().responses.create(
+        response = create_response(get_openai_client(),
             model=get_openai_model(),
             instructions=build_instructions(),
             input=build_input(query, matched_concepts, doctors),
@@ -75,6 +77,8 @@ def generate_llm_reasons_with_metadata(
             input_tokens=response_token_count(response, "input_tokens"),
             output_tokens=response_token_count(response, "output_tokens"),
         )
+    except HTTPException:
+        raise
     except Exception:
         return ReasonGenerationResult(reasons={})
 

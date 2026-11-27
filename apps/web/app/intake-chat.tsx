@@ -10,11 +10,12 @@ const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") || "
 const greeting = "你好，我會幫你整理就醫需求。目前支援林口長庚與台北榮總，想看哪個部位、症狀或科別？也可以一起告訴我醫院、日期與時段。";
 const examples = ["膝蓋運動後會痛，想下週下午看診。", "胃脹氣，吃完飯肚子脹，想看腸胃科。"];
 
-export default function IntakeChat({ onUpdate, disabled, caseDetail, onSend }: {
+export default function IntakeChat({ onUpdate, disabled, caseDetail, onSend, onLoadOlder }: {
   onUpdate: (state: IntakeState | null, ready: boolean) => Promise<void>;
   disabled: boolean;
   caseDetail?: CaseDetail | null;
   onSend?: (message: string) => Promise<void>;
+  onLoadOlder?: () => Promise<void>;
 }) {
   const { locale, t } = useLocale();
   const [state, setState] = useState<IntakeState | null>(null);
@@ -51,7 +52,10 @@ export default function IntakeChat({ onUpdate, disabled, caseDetail, onSend }: {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: content, ...(state ? { state } : {}) }),
       });
-      if (!response.ok) throw new Error("暫時無法更新對話，原本的條件仍保留，請稍後重試。");
+      if (!response.ok) {
+        const failure = await response.json().catch(() => ({}));
+        throw new Error(typeof failure.detail === "string" ? failure.detail : "暫時無法更新對話，原本的條件仍保留，請稍後重試。");
+      }
       const data = await response.json() as IntakeResponse;
       setState(data.state);
       setMessages((previous) => ["重新開始", "清除記憶", "清除對話", "重設條件"].includes(content)
@@ -100,6 +104,7 @@ export default function IntakeChat({ onUpdate, disabled, caseDetail, onSend }: {
         {!caseDetail ? <button type="button" disabled={busy || disabled} onClick={() => void reset()} className="text-xs text-slate-600 underline disabled:opacity-50">{t("清除對話與條件")}</button> : null}
       </div>
       <div ref={transcript} role="log" aria-label={t("就醫需求對話紀錄")} aria-live="polite" aria-relevant="additions" className="max-h-96 space-y-3 overflow-y-auto">
+        {caseDetail?.messages_cursor && onLoadOlder ? <button type="button" disabled={busy || disabled} onClick={() => void onLoadOlder()} className="text-xs text-teal-700 underline">{t("載入較早的對話")}</button> : null}
         {messages.map((message, index) => <div key={index} className={message.role === "assistant" ? "mr-4 rounded-lg bg-slate-100 p-3 text-sm leading-7" : "ml-4 rounded-lg bg-teal-50 p-3 text-sm leading-7 text-teal-950"}>
           <p className="mb-1 text-xs font-semibold text-slate-500">{t(message.role === "assistant" ? "就醫助理" : "你")}</p>
           <p className="whitespace-pre-wrap">{message.role === "assistant" ? t(message.content) : message.content}</p>
@@ -119,6 +124,7 @@ export default function IntakeChat({ onUpdate, disabled, caseDetail, onSend }: {
         {disabled ? <p role="status" className="text-xs text-amber-800">{t("個案正在更新、處理掛號或已結案，請稍候或從上方管理個案。")}</p> : null}
       </form>
       <p className="text-xs leading-6 text-slate-500">{t(caseDetail ? "此對話與條件會保存到選定個案，重新開啟網頁可接續。" : "未建立可追蹤個案時，條件只記在目前頁面，重新整理會重設。")}{t("請勿在對話輸入證號、生日或驗證碼；這些資料請填在掛號表單。")}</p>
+      <p className="text-xs leading-6 text-slate-500">{t("就醫描述會送交語言模型處理。本站已停用模型回應儲存；模型供應商仍可能依安全政策保留日誌。")}</p>
     </section>
   );
 }

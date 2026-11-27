@@ -12,7 +12,7 @@ def get_openai_client() -> OpenAI:
     if not settings.api_key:
         raise OpenAIConfigurationError("OPENAI_API_KEY is not configured")
 
-    return OpenAI(api_key=settings.api_key)
+    return OpenAI(api_key=settings.api_key, timeout=25, max_retries=0)
 
 
 def get_openai_model() -> str:

@@ -1,0 +1,49 @@
+name: Tests and dependency audit
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  api:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: security_test
+          POSTGRES_USER: security_test
+          POSTGRES_PASSWORD: disposable_test_only
+        ports: ["55432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U security_test -d security_test"
+          --health-interval 2s --health-timeout 3s --health-retries 30
+    defaults:
+      run:
+        working-directory: apps/api
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: "3.11"
+      - run: pip install uv==0.11.26
+      - run: uv sync --frozen
+      - run: uv run pytest -q
+        env:
+          SECURITY_TEST_POSTGRES_URL: postgresql+psycopg://security_test:disposable_test_only@127.0.0.1:55432/security_test
+      - run: uv run --with pip-audit pip-audit --path .venv/lib/python3.11/site-packages
+      - run: uv export --frozen --no-dev --no-emit-project --format requirements-txt --no-header --output-file /tmp/requirements.txt --quiet > /dev/null
+      - run: diff requirements.txt /tmp/requirements.txt
+  web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: "24"
+      - run: npm ci
+      - run: npm audit --audit-level=moderate
+      - run: npm test
+      - run: npm run lint
+      - run: npm run build

@@ -5,6 +5,13 @@ export const chineseMessages: Record<string, string> = {
 };
 
 export const englishMessages: Record<string, string> = {
+  "暫用頁面內對話（不建立個案）": "Use a temporary conversation (no saved case)",
+  "載入較早的對話": "Load earlier messages",
+  "個案於最後更新 30 天後自動刪除；既有資料於政策啟用 30 天後才開始清理。刪除個案不會取消院方掛號。": "Cases are deleted 30 days after their last update. Existing cases have a 30-day grace period after this policy starts. Deleting a case does not cancel a hospital appointment.",
+  "就醫描述會送交語言模型處理。本站已停用模型回應儲存；模型供應商仍可能依安全政策保留日誌。": "Your care description is processed by a language model. Model response storage is disabled; the provider may retain logs under its safety policies.",
+  "請求較頻繁或已達今日使用額度，請稍後再試。": "Too many requests or the daily allowance has been reached. Please retry later.",
+  "服務正在處理其他請求，請稍後重試。": "The service is busy. Please retry shortly.",
+  "證號、生日與驗證碼請填在掛號表單，不要放在一般對話或個案名稱。": "Enter identity numbers, birth dates and verification codes in the booking form, not in conversations or case names.",
   "原有就診條件已保留，不會自動改院。": "Your existing preferences are saved. The hospital will not be changed automatically.",
   "台北榮總目前限制本站查詢，暫時無法驗證該院時段；這不代表沒有名額。": "Taipei Veterans currently restricts this site's queries, so appointments cannot be verified. This does not mean appointments are full.",
   "可保留條件稍後重試，或自行選擇改查林口長庚。": "Keep your preferences and retry later, or choose Linkou Chang Gung.",

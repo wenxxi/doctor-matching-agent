@@ -5,7 +5,7 @@ import { useLocale } from "./i18n";
 import { useEffect, useRef, useState } from "react";
 import IntakeChat from "./intake-chat";
 import type { IntakeState } from "./intake-types";
-import { agentRequest, CaseDetail, CaseSummary, taskLabels } from "./agent-types";
+import { agentRequest, AgentRequestError, CaseDetail, CaseSummary, taskLabels } from "./agent-types";
 
 const tokenKey = "doctorAgentAccess";
 const caseKey = "doctorAgentActiveCase";
@@ -58,8 +58,16 @@ export default function AgentWorkspace({ currentCase, onCaseUpdate, onUpdate, di
           const detail = await agentRequest("/cases/" + target.id, savedToken, undefined, undefined, { signal: controller.signal }) as CaseDetail;
           if (active) onCaseUpdate(detail, savedToken);
         }
-      } catch {
+      } catch (error) {
         if (active) {
+          if (error instanceof AgentRequestError && error.status === 401) {
+            window.localStorage.removeItem(tokenKey);
+            window.localStorage.removeItem(caseKey);
+            setToken(null);
+            setCases([]);
+            onCaseUpdate(null, null);
+            return;
+          }
           setConnectionFailed(true);
           setError(controller.signal.aborted ? "服務啟動時間較長，連線等待已逾時。請稍後按「重新連線」。" : "暫時無法載入個案，請檢查網路後按「重新連線」。");
         }
@@ -134,6 +142,15 @@ export default function AgentWorkspace({ currentCase, onCaseUpdate, onUpdate, di
     });
   }
 
+  async function loadOlder() {
+    if (!currentCase?.messages_cursor || !token) return;
+    await action(async () => {
+      const page = await agentRequest("/cases/" + currentCase.case.id + "/messages?before=" + encodeURIComponent(currentCase.messages_cursor! as string), token) as { messages: CaseDetail["messages"]; next_cursor: string | null };
+      const known = new Set(currentCase.messages.map((item) => item.id));
+      onCaseUpdate({ ...currentCase, messages: [...page.messages.filter((item) => !known.has(item.id)), ...currentCase.messages], messages_cursor: page.next_cursor }, token);
+    });
+  }
+
   const blocked = !initialized || disabled || busy || Boolean(token && !currentCase && !temporaryMode) || currentCase?.case.status === "resolved";
   return (
     <div className="space-y-4">
@@ -151,7 +168,7 @@ export default function AgentWorkspace({ currentCase, onCaseUpdate, onUpdate, di
           </div>
           <label className="flex items-start gap-2 text-xs"><input type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} className="mt-1.5" /><span>{t("同意儲存這個個案的健康描述、對話與任務進度，供此瀏覽器日後接續；可刪除個案。請勿填寫證號、生日或驗證碼。")}</span></label>
           <button type="button" disabled={busy || disabled || !consent} onClick={() => void create()} className="rounded bg-teal-700 px-3 py-2 font-semibold text-white disabled:bg-slate-400">{t("建立可追蹤個案")}</button>
-          {token ? <button type="button" disabled={busy || disabled} onClick={() => { setTemporaryMode(true); onCaseUpdate(null, null); }} className="ml-3 text-xs text-teal-700 underline">{t("暫用不儲存的頁面內對話")}</button> : null}
+          {token ? <button type="button" disabled={busy || disabled} onClick={() => { setTemporaryMode(true); onCaseUpdate(null, null); }} className="ml-3 text-xs text-teal-700 underline">{t("暫用頁面內對話（不建立個案）")}</button> : null}
         </> : null}
         {currentCase ? <div className="space-y-2 border-t border-slate-200 pt-3">
           <p className="font-semibold">{currentCase.case.subject_label} · {currentCase.case.title}</p>
@@ -168,7 +185,8 @@ export default function AgentWorkspace({ currentCase, onCaseUpdate, onUpdate, di
         {error ? <p role="alert" className="text-red-700">{t(error)}</p> : null}
         {token ? <p className="text-xs text-slate-500">{t("存取憑證只保存在此瀏覽器，健康描述存於後端資料庫。清除瀏覽器資料會失去存取憑證；目前不支援跨裝置登入。")}</p> : null}
       </section>
-      <IntakeChat key={currentCase?.case.id ?? "temporary"} onUpdate={onUpdate} disabled={blocked} caseDetail={currentCase} onSend={currentCase ? send : undefined} />
+      <p className="text-xs leading-6 text-slate-500">{t("個案於最後更新 30 天後自動刪除；既有資料於政策啟用 30 天後才開始清理。刪除個案不會取消院方掛號。")}</p>
+      <IntakeChat key={currentCase?.case.id ?? "temporary"} onUpdate={onUpdate} disabled={blocked} caseDetail={currentCase} onSend={currentCase ? send : undefined} onLoadOlder={loadOlder} />
     </div>
   );
 }

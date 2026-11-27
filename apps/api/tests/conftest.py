@@ -9,6 +9,24 @@ from app.services import available_doctors
 from app.services import doctor_relevance
 
 
+@pytest.fixture(autouse=True)
+def isolated_security_store(monkeypatch, tmp_path):
+    """Real admission code, disposable counters; never use developer/production DB."""
+    from app.services import agent_storage
+    monkeypatch.setenv("AGENT_DATABASE_URL", f"sqlite:///{tmp_path / 'security.sqlite3'}")
+    monkeypatch.delenv("RENDER", raising=False)
+    monkeypatch.setenv("LLM_PRICED_MODEL", "test-model")
+    monkeypatch.setenv("LLM_INPUT_USD_PER_MILLION", "0.15")
+    monkeypatch.setenv("LLM_OUTPUT_USD_PER_MILLION", "0.60")
+    agent_storage.get_agent_engine.cache_clear()
+    agent_storage.initialize_agent_storage.cache_clear()
+    yield
+    if agent_storage.get_agent_engine.cache_info().currsize:
+        agent_storage.get_agent_engine().dispose()
+    agent_storage.get_agent_engine.cache_clear()
+    agent_storage.initialize_agent_storage.cache_clear()
+
+
 def structured_concept_response(output_text, request, usage=None):
     """Build a current-contract model fixture, retaining the test's chosen IDs."""
     payload = json.loads(output_text)

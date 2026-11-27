@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 from html.parser import HTMLParser
 from http.cookiejar import CookieJar
-from threading import Lock, Timer
+from threading import Lock, RLock, Timer
 from urllib.parse import quote, urlencode, urljoin, urlsplit
 from urllib.request import HTTPCookieProcessor, HTTPRedirectHandler, Request, build_opener
 from uuid import UUID
@@ -17,6 +17,7 @@ from app.booking_schemas import (
 from app.schemas import AppointmentSlotResponse
 from app.services.appointment_agent import verify_checkin_page
 from app.services.appointments import BASE_URL, get_appointments
+from app.services.security import provider_request, SecurityDenied
 
 
 LABELS = {
@@ -60,7 +61,7 @@ class HospitalClient:
             "Referer": self.referer, "Origin": BASE_URL,
             "Content-Type": "application/x-www-form-urlencoded",
         })
-        with self.opener.open(request, timeout=12) as response:
+        with provider_request("cgmh"), self.opener.open(request, timeout=12) as response:
             hospital_url(response.geturl())
             content = response.read(2_000_001)
             if len(content) > 2_000_000:
@@ -217,7 +218,7 @@ class BookingSession:
     form: HospitalForm
     status: str = "awaiting_patient"
     response: BookingStateResponse | None = None
-    lock: Lock = field(default_factory=Lock)
+    lock: Lock = field(default_factory=RLock)
     rounds: int = 0
     step_token: str = ""
     task_id: UUID | None = None
@@ -226,6 +227,7 @@ class BookingSession:
 
 SESSIONS: dict[str, BookingSession] = {}
 SESSIONS_LOCK = Lock()
+STARTING_SESSIONS = 0
 
 
 def get_session(token: str) -> BookingSession:
@@ -238,6 +240,19 @@ def get_session(token: str) -> BookingSession:
 
 
 def start_booking(doctor: dict[str, str], registration_url: str) -> BookingStateResponse:
+    global STARTING_SESSIONS
+    with SESSIONS_LOCK:
+        if len(SESSIONS) + STARTING_SESSIONS >= 100:
+            raise BookingError("目前掛號使用人數較多，請稍後重試。")
+        STARTING_SESSIONS += 1
+    try:
+        return _start_booking(doctor, registration_url)
+    finally:
+        with SESSIONS_LOCK:
+            STARTING_SESSIONS -= 1
+
+
+def _start_booking(doctor: dict[str, str], registration_url: str) -> BookingStateResponse:
     if not doctor["doctor_id"].startswith("CGMH_LINKOU_"):
         raise BookingError("此醫院需在院方頁面完成掛號，本站不收集或送出患者資料。")
     snapshot = get_appointments(doctor)
@@ -367,7 +382,7 @@ def submit_patient(token: str, patient: BookingPatientRequest) -> BookingStateRe
             html = session.client.page(session.form.action, fields)
             session.rounds += 1
             response = finish_response(session, html)
-        except (OSError, ValueError, KeyError, TypeError, BookingError):
+        except (OSError, ValueError, KeyError, TypeError, BookingError, SecurityDenied):
             session.status = "unknown"
             response = BookingStateResponse(status="unknown", message="院方送出結果無法確認。系統不會自動重送，請先至院方掛號查詢確認，避免重複掛號。")
         session.response = response
@@ -399,7 +414,7 @@ def continue_booking(token: str, request: BookingContinueRequest) -> BookingStat
             html = session.client.page(session.form.action, fields)
             session.rounds += 1
             response = finish_response(session, html)
-        except (OSError, ValueError, BookingError):
+        except (OSError, ValueError, BookingError, SecurityDenied):
             session.status = "unknown"
             response = BookingStateResponse(status="unknown", message="送出後未能確認結果。請先至院方掛號查詢確認，系統不會自動重送。")
         session.response = response
@@ -416,5 +431,13 @@ def refresh_captcha(token: str) -> BookingStateResponse:
 
 def close_booking(token: str) -> BookingStateResponse:
     with SESSIONS_LOCK:
-        SESSIONS.pop(token, None)
+        current = SESSIONS.pop(token, None)
+    if current is not None and current.task_id is not None:
+        from app.services.cases import release_booking_claim
+        from app.services.agent_storage import AGENT_STORAGE_ERRORS
+        try:
+            with current.lock:
+                release_booking_claim(current.task_id, current.task_version, token)
+        except AGENT_STORAGE_ERRORS:
+            pass
     return BookingStateResponse(status="closed", message="已清除本站暫存工作階段。這不會取消已向院方完成的掛號。")

@@ -6,6 +6,10 @@ The model can select/reorder/reject candidates, but only with verifiable quotes.
 import json
 import math
 import re
+from functools import lru_cache
+from collections import defaultdict
+from fastapi import HTTPException
+from app.services.security import create_response
 from dataclasses import dataclass, field
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -55,6 +59,16 @@ def tokens(text):
     return (set(re.findall(r"[a-z]{3,}", lower)) | set(re.findall(r"(?=([\u4e00-\u9fff]{2}))", lower))) - stopwords
 
 
+@lru_cache(maxsize=4)
+def lexical_index(rows):
+    """Content-versioned inverted index; never cache patient descriptions."""
+    postings = defaultdict(set)
+    for doctor_id, specialty, department in rows:
+        for term in tokens(specialty + " " + department):
+            postings[term].add(doctor_id)
+    return dict(postings)
+
+
 def retrieve_candidates(query, concepts, department_intent, *, expanded=False, search_terms=(), hospital=None):
     if hospital == "兩院皆可":
         groups = [rank_doctors(concepts, 3, department_intent, candidate_limit=12, hospital=name)
@@ -65,13 +79,15 @@ def retrieve_candidates(query, concepts, department_intent, *, expanded=False, s
     rule_ids = {doctor.doctor_id for doctor in rule_candidates}
     query_tokens = tokens(" ".join(reported_segments(query)) + " " + " ".join(search_terms))
     rows = [row for row in load_doctors() if matches_hospital(row, hospital)]
-    documents = [(row, tokens(row["specialty_raw_zh"] + " " + row["department_zh"])) for row in rows]
-    frequencies = {term: sum(term in terms for _, terms in documents) for term in query_tokens}
-    scored = []
-    for row, terms in documents:
-        score = sum(math.log(1 + len(rows) / (1 + frequencies[term])) for term in query_tokens & terms)
-        if score > 0 and row["doctor_id"] not in rule_ids:
-            scored.append((score, row))
+    postings = lexical_index(tuple((row["doctor_id"], row["specialty_raw_zh"], row["department_zh"]) for row in rows))
+    scores = defaultdict(float)
+    for term in sorted(query_tokens):
+        matching = postings.get(term, ())
+        weight = math.log(1 + len(rows) / (1 + len(matching)))
+        for doctor_id in matching:
+            if doctor_id not in rule_ids:
+                scores[doctor_id] += weight
+    scored = [(scores[row["doctor_id"]], row) for row in rows if scores.get(row["doctor_id"], 0) > 0]
     lexical = [RecommendedDoctorResponse(
         doctor_id=row["doctor_id"], doctor_name_zh=row["doctor_name_zh"], hospital_zh=row["hospital_zh"],
         department_zh=row["department_zh"], subdepartment_zh=row["subdepartment_zh"],
@@ -95,7 +111,7 @@ def review_candidates(query, candidates, rule_ids):
         return ReviewResult(doctors=fallback, clarification_question=None if fallback else "目前沒有足夠來源證據可支持推薦；請補充主要症狀、部位或稍後再試。",
                             trace=[{"node": "review", "message": "使用可稽核的概念規則降級排序；原始文字候選未經模型確認，不直接推薦。"}])
     try:
-        response = get_openai_client().with_options(timeout=25, max_retries=0).responses.create(
+        response = create_response(get_openai_client(),
             model=get_openai_model(), temperature=0, max_output_tokens=2600,
             instructions=(
                 "You assess clinical relevance for doctor matching, not diagnosis. Read the patient's actual description, "
@@ -143,6 +159,8 @@ def review_candidates(query, candidates, rule_ids):
             input_tokens=response_token_count(response, "input_tokens"), output_tokens=response_token_count(response, "output_tokens"),
             model_attempted=True, trace=[{"node": "review", "message": f"語意評估 {len(candidates)} 位候選；{len(accepted)} 位通過患者與醫師專長原文證據檢查。"}],
         )
+    except HTTPException:
+        raise
     except Exception as error:
         return ReviewResult(doctors=fallback, model_attempted=True,
                             error_type=type(error).__name__,

@@ -52,6 +52,12 @@ class CaseDetailResponse(BaseModel):
     case: CaseSummary
     task: AgentTaskResponse
     messages: list[AgentMessageResponse]
+    messages_cursor: UUID | None = None
+
+
+class CaseMessagesPage(BaseModel):
+    messages: list[AgentMessageResponse]
+    next_cursor: UUID | None = None
 
 
 class AgentTurnRequest(BaseModel):

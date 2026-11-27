@@ -48,7 +48,7 @@ class DoctorAvailability(BaseModel):
 
 
 class ConceptExtractionRequest(BaseModel):
-    query: str
+    query: Annotated[str, Field(min_length=1, max_length=2000, pattern=r"\S")]
 
 
 class MatchedConceptResponse(BaseModel):
@@ -165,7 +165,7 @@ class AppointmentPreparationResponse(BaseModel):
 
 
 class RecommendationRequest(BaseModel):
-    query: str = Field(min_length=1, max_length=2000)
+    query: str = Field(min_length=1, max_length=2000, pattern=r"\S")
     hospital: Literal["林口長庚", "台北榮總", "兩院皆可"] = "林口長庚"
     limit: int = 3
     preferences: AppointmentPreparationRequest = Field(

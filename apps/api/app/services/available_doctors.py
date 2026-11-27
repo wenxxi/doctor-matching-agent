@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from app.schemas import AppointmentPreparationRequest, DoctorAvailability, RecommendedDoctorResponse
 from app.services.appointment_agent import prepare_appointment
 from app.services.processed_data import load_doctors
+from app.services.parallel import context_submit
 
 
 @dataclass
@@ -46,7 +47,9 @@ def filter_available_doctors(
     with ThreadPoolExecutor(max_workers=3) as executor:
         for start in range(0, min(len(candidates), 12), 3):
             batch = candidates[start:start + 3]
-            for candidate, preparation in zip(batch, executor.map(verify, batch)):
+            futures = [context_submit(executor, verify, candidate) for candidate in batch]
+            for candidate, future in zip(batch, futures):
+                preparation = future.result()
                 if (preparation is not None and preparation.status in {"awaiting_patient", "official_handoff"}
                         and preparation.selected_slot is not None and preparation.verified_at is not None):
                     selected.append(candidate.model_copy(update={"availability": DoctorAvailability(

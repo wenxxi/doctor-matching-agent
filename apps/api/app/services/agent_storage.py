@@ -58,6 +58,8 @@ def initialize_agent_storage():
     with INITIALIZATION_LOCK:
         for model in (AgentOwner, CareCase, AgentTask, CaseMessage):
             model.__table__.create(engine, checkfirst=True)
+        for index in CaseMessage.__table__.indexes:
+            index.create(engine, checkfirst=True)
         with checkpoint_store() as saver:
             saver.setup()
     return engine
