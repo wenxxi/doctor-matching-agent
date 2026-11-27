@@ -3,7 +3,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.intake_schemas import IntakeResponse, IntakeState
+from app.intake_schemas import IntakePreferences, IntakeResponse, IntakeState
 from app.schemas import AppointmentPreparationRequest, AppointmentPreparationResponse, RecommendationResponse
 
 
@@ -62,6 +62,7 @@ class CaseMessagesPage(BaseModel):
 
 class AgentTurnRequest(BaseModel):
     message: str = Field(min_length=1, max_length=1000)
+    intake_preferences: IntakePreferences | None = None
     operation_id: UUID
     expected_version: int = Field(ge=0)
 

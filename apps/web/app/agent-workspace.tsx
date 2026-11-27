@@ -4,7 +4,7 @@ import { useLocale } from "./i18n";
 
 import { useEffect, useRef, useState } from "react";
 import IntakeChat from "./intake-chat";
-import type { IntakeState } from "./intake-types";
+import type { IntakeState, IntakePreferences, IntakeFeedback } from "./intake-types";
 import { agentRequest, AgentRequestError, CaseDetail, CaseSummary, taskLabels } from "./agent-types";
 
 const tokenKey = "doctorAgentAccess";
@@ -13,7 +13,7 @@ const caseKey = "doctorAgentActiveCase";
 export default function AgentWorkspace({ currentCase, onCaseUpdate, onUpdate, disabled }: {
   currentCase: CaseDetail | null;
   onCaseUpdate: (detail: CaseDetail | null, token: string | null) => void;
-  onUpdate: (state: IntakeState | null, ready: boolean) => Promise<void>;
+  onUpdate: (state: IntakeState | null, ready: boolean) => Promise<IntakeFeedback | void>;
   disabled: boolean;
 }) {
   const { locale, t } = useLocale();
@@ -30,7 +30,7 @@ export default function AgentWorkspace({ currentCase, onCaseUpdate, onUpdate, di
   const [subject, setSubject] = useState("");
   const [consent, setConsent] = useState(false);
   const [temporaryMode, setTemporaryMode] = useState(false);
-  const pending = useRef<{ caseId: string; message: string; id: string; version: number } | null>(null);
+  const pending = useRef<{ caseId: string; message: string; preferences: string; id: string; version: number } | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -114,16 +114,17 @@ export default function AgentWorkspace({ currentCase, onCaseUpdate, onUpdate, di
     });
   }
 
-  async function send(message: string) {
+  async function send(message: string, intakePreferences?: IntakePreferences) {
     if (!currentCase || !token) return;
-    if (!pending.current || pending.current.message !== message || pending.current.caseId !== currentCase.case.id) {
-      pending.current = { caseId: currentCase.case.id, message, id: crypto.randomUUID(), version: currentCase.task.version };
+    const preferences = JSON.stringify(intakePreferences ?? null);
+    if (!pending.current || pending.current.message !== message || pending.current.preferences !== preferences || pending.current.caseId !== currentCase.case.id) {
+      pending.current = { caseId: currentCase.case.id, message, preferences, id: crypto.randomUUID(), version: currentCase.task.version };
     }
     const operation = pending.current;
     setBusy(true);
     try {
       const detail = await agentRequest("/cases/" + currentCase.case.id + "/messages", token, {
-        message, operation_id: operation.id, expected_version: operation.version,
+        message, intake_preferences: intakePreferences, operation_id: operation.id, expected_version: operation.version,
       }) as CaseDetail;
       pending.current = null;
       onCaseUpdate(detail, token);

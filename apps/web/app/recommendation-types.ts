@@ -42,6 +42,7 @@ export type RecommendationResponse = {
   ranking_method?: string;
   assessment_summary?: string | null;
   clarification_question?: string | null;
+  provider_failures?: { http_status?: number }[];
   decision_trace?: { node: string; message: string }[];
   query: string;
   concept_extraction_method: string;
@@ -57,3 +58,16 @@ export type RecommendationResponse = {
   recommended_doctors: RecommendedDoctor[];
   message: string | null;
 };
+
+// Temporary conversations receive the same next-step guidance as saved cases.
+export function recommendationFeedback(result: RecommendationResponse) {
+  if (result.clarification_question) return { reply: result.clarification_question, quick_replies: [] };
+  if (result.recommended_doctors.length) return;
+  if (result.provider_failures?.some((failure) => failure.http_status === 403)) {
+    return { reply: (result.message || "院方限制本站查詢。") + " 原有就診條件已保留，不會自動改院。", quick_replies: ["維持目前條件", "改成林口長庚"] };
+  }
+  return {
+    reply: (result.message || "目前沒有確認到符合條件的醫師門診。") + " 你可以修改就診條件後再查詢；我不會自行放寬條件。",
+    quick_replies: ["時段不限", "日期不限", "維持目前條件"],
+  };
+}

@@ -226,6 +226,21 @@ def intake_turn(request: IntakeRequest) -> IntakeResponse:
     if sensitive(message) or sensitive(state.clinical_query) or sensitive(state.hospital):
         return IntakeResponse(state=IntakeState() if sensitive(state.clinical_query) or sensitive(state.hospital) else state,
                               reply="證號與驗證碼請填在掛號表單，不要放在對話中。這則內容未送交語言模型。")
+    if request.intake_preferences is not None:
+        choices = request.intake_preferences
+        date_from = date_to = None
+        if choices.date_window == "next_week":
+            date_from = today - timedelta(days=today.weekday()) + timedelta(days=7)
+            date_to = date_from + timedelta(days=6)
+        elif choices.date_window == "two_weeks":
+            date_from, date_to = today, today + timedelta(days=13)
+        state = IntakeState.model_validate({
+            **state.model_dump(), **choices.model_dump(exclude={"date_window"}),
+            "date_from": date_from, "date_to": date_to, "date_range_known": True,
+            "both_hospitals_patient_type_confirmed": False,
+        })
+    # Parse free text against the selected choices so an explicit correction in
+    # the same message (e.g. "下午不行") takes precedence over the menu.
     method = "local"
     local_patch = None
     try:

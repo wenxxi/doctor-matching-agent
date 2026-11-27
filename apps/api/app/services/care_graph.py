@@ -17,6 +17,7 @@ class CareGraphState(TypedDict, total=False):
     message: str
     operation_id: str
     intake: dict
+    intake_preferences: dict | None
     intake_response: dict
     recommendation: dict | None
     recommendation_query: str
@@ -33,15 +34,17 @@ def step(state, node, message):
 
 
 def understand(state):
-    response = intake_turn(IntakeRequest(message=state["message"], state=IntakeState.model_validate(state.get("intake", {}))))
+    response = intake_turn(IntakeRequest(message=state["message"], state=IntakeState.model_validate(state.get("intake", {})),
+                                       intake_preferences=state.get("intake_preferences")))
     return {"intake": response.state.model_dump(mode="json"), "intake_response": response.model_dump(mode="json"),
-            "preparation": None, "booking_status": None, "phase": "clarifying",
+            "intake_preferences": None, "preparation": None, "booking_status": None, "phase": "clarifying",
             "trace": step(state, "understand", "讀取此個案條件，整理本輪需求。")}
 
 
 def wait_for_details(state):
     command = interrupt({"phase": "clarifying", "reply": state["intake_response"]["reply"]})
-    return {"message": command["message"], "operation_id": command["operation_id"], "command": command}
+    return {"message": command["message"], "operation_id": command["operation_id"], "command": command,
+            "intake_preferences": command.get("intake_preferences")}
 
 
 def recommend(state):
@@ -64,7 +67,7 @@ def recommend(state):
             response = dict(state["intake_response"])
             provider_blocked = any(item.get("http_status") == 403 for item in result.provider_failures)
             response.update(ready=False, reply=(result.message or "目前沒有確認到符合條件的醫師門診。") + " 你可以修改就診條件後再查詢；我不會自行放寬條件。",
-                            question="availability", quick_replies=["改成上午", "改成下午", "日期不限"])
+                            question="availability", quick_replies=["時段不限", "日期不限", "維持目前條件"])
             if provider_blocked:
                 response.update(reply=(result.message or "院方限制本站查詢。") + " 原有就診條件已保留，不會自動改院。",
                                 question="hospital_availability", quick_replies=["維持目前條件", "改成林口長庚"])
@@ -83,7 +86,8 @@ def recommend(state):
 
 def wait_for_selection(state):
     command = interrupt({"phase": "selecting_doctor", "message": "請選擇醫師安排時段，或繼續修改對話條件。"})
-    return {"command": command, "message": command.get("message", ""), "operation_id": command["operation_id"]}
+    return {"command": command, "message": command.get("message", ""), "operation_id": command["operation_id"],
+            "intake_preferences": command.get("intake_preferences")}
 
 
 def prepare(state):
@@ -103,7 +107,8 @@ def prepare(state):
 def wait_for_patient(state):
     message = "時段已選定，等待至院方完成患者資料及身分驗證；本站未完成掛號。" if (state.get("preparation") or {}).get("booking_mode") == "official_handoff" else "時段已選定，等待患者在獨立掛號表單輸入資料與驗證碼。"
     command = interrupt({"phase": "awaiting_patient", "message": message})
-    return {"command": command, "message": command.get("message", ""), "operation_id": command["operation_id"]}
+    return {"command": command, "message": command.get("message", ""), "operation_id": command["operation_id"],
+            "intake_preferences": command.get("intake_preferences")}
 
 
 def record_outcome(state):

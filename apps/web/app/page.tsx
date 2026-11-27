@@ -9,6 +9,7 @@ import { IntakeState } from "./intake-types";
 import { AgentContext, CaseDetail } from "./agent-types";
 
 import type { MatchedConcept, RecommendedDoctor, RecommendationResponse } from "./recommendation-types";
+import { recommendationFeedback } from "./recommendation-types";
 
 const apiBaseUrl =
   process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ||
@@ -113,6 +114,7 @@ export default function Home() {
 
       const data = (await response.json()) as RecommendationResponse;
       setResult(data);
+      return recommendationFeedback(data);
     } catch (requestError) {
       setResult(null);
       setError(
@@ -120,6 +122,7 @@ export default function Home() {
           ? requestError.message
           : "無法連線到推薦 API。",
       );
+      return { reply: "推薦服務暫時無法完成，條件已保留，請傳送「維持目前條件」重試。", quick_replies: ["維持目前條件"] };
     } finally {
       setIsLoading(false);
     }

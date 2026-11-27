@@ -5,6 +5,13 @@ export const chineseMessages: Record<string, string> = {
 };
 
 export const englishMessages: Record<string, string> = {
+  "你好，請描述想看診的部位或症狀，並在下方選擇就診偏好；日期與時段都可以選不限。資訊不足時我會再詢問你。": "Hello! Describe your symptoms or the affected area and select your care preferences below. Dates and sessions can be unrestricted. I will ask if more information is needed.",
+  "就診偏好（與描述一起送出）": "Care preferences (sent with your description)",
+  "都可以": "Any",
+  "都可以（院方開放日期內）": "Any available date",
+  "可看診時段（可複選）": "Available sessions (select all that apply)",
+  "請至少選一個時段，或選「都可以」。": "Select at least one session, or choose Any.",
+  "若描述中的時間與選單不同，以描述為準。指定日期或星期也可以直接寫在描述中；送出後可用對話調整。": "Times in your description take priority over the menu. You can also specify dates or weekdays in your message and adjust preferences in later messages.",
   "暫用頁面內對話（不建立個案）": "Use a temporary conversation (no saved case)",
   "載入較早的對話": "Load earlier messages",
   "個案於最後更新 30 天後自動刪除；既有資料於政策啟用 30 天後才開始清理。刪除個案不會取消院方掛號。": "Cases are deleted 30 days after their last update. Existing cases have a 30-day grace period after this policy starts. Deleting a case does not cancel a hospital appointment.",

@@ -25,6 +25,56 @@ def ready_state():
                        date_to="2026-12-06", date_range_known=True, sessions=["下午"])
 
 
+def test_initial_menu_and_symptoms_are_processed_in_one_turn():
+    response = intake.intake_turn(IntakeRequest(message="膝蓋疼痛", intake_preferences={
+        "patient_type": "returning", "date_window": "next_week", "sessions": ["下午"],
+    }))
+    assert response.ready
+    assert response.state.patient_type == "returning"
+    assert response.state.date_from == date(2026, 11, 30)
+    assert response.state.date_to == date(2026, 12, 6)
+    assert response.state.sessions == ["下午"]
+
+
+def test_any_choices_do_not_trigger_redundant_date_or_session_questions():
+    response = intake.intake_turn(IntakeRequest(message="膝蓋疼痛", intake_preferences={}))
+    assert response.ready
+    assert response.state.patient_type == "unknown"
+    assert response.state.date_range_known
+    assert response.state.date_from is None and response.state.date_to is None
+    assert response.state.sessions == ["上午", "下午", "夜診"]
+
+
+def test_explicit_text_overrides_menu_and_followup_retains_preferences():
+    response = intake.intake_turn(IntakeRequest(message="膝蓋疼痛，下午不行，下週", intake_preferences={}))
+    assert response.ready
+    assert response.state.sessions == ["上午", "夜診"]
+    assert response.state.date_from == date(2026, 11, 30)
+    followup = turn("週三不行", response.state)
+    assert followup.ready
+    assert followup.state.sessions == response.state.sessions
+    assert followup.state.date_from == response.state.date_from
+    assert 2 not in followup.state.weekdays
+
+
+def test_menu_does_not_bypass_missing_symptoms_or_hospital_eligibility():
+    missing = intake.intake_turn(IntakeRequest(message="你好", intake_preferences={}))
+    assert not missing.ready
+    assert missing.question == "clinical_query"
+    for hospital, question in [("台北榮總", "tpvgh_patient_type"), ("兩院皆可", "both_patient_type")]:
+        response = intake.intake_turn(IntakeRequest(message="膝蓋疼痛", intake_preferences={"hospital": hospital}))
+        assert not response.ready
+        assert response.question == question
+
+
+def test_menu_schema_rejects_empty_sessions_and_clinical_memory_injection():
+    client = TestClient(app)
+    for choices in ({"sessions": []}, {"sessions": ["凌晨"]}, {"clinical_query": "injected-health-text"}):
+        response = client.post("/api/intake/chat", json={"message": "膝蓋疼痛", "intake_preferences": choices})
+        assert response.status_code == 422
+        assert "injected-health-text" not in response.text
+
+
 def test_english_ui_shortcuts_work_without_a_language_model():
     first = turn("My knee hurts after exercise. I would like an afternoon appointment next week.")
     assert first.state.clinical_query

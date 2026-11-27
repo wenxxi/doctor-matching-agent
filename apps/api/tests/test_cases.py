@@ -121,6 +121,39 @@ def test_graph_interrupts_and_resumes_with_persisted_case_memory(client):
     assert len(third["messages"]) == 6
 
 
+def test_initial_menu_persists_through_graph_resume_without_reapplying_it(client):
+    headers = owner(client)
+    case = create(client, headers)
+    first = client.post(f'/api/agent/cases/{case["case"]["id"]}/messages', headers=headers, json={
+        "message": "膝蓋疼痛", "intake_preferences": {"patient_type": "returning", "date_window": "next_week", "sessions": ["下午"]},
+        "operation_id": str(uuid.uuid4()), "expected_version": case["task"]["version"],
+    })
+    assert first.status_code == 200, first.text
+    detail = first.json()
+    assert detail["task"]["status"] == "selecting_doctor"
+    assert detail["task"]["intake"]["sessions"] == ["下午"]
+    changed = message(client, headers, detail, "改成上午").json()
+    followup = message(client, headers, changed, "週三不行").json()
+    assert followup["task"]["intake"]["sessions"] == ["上午"]
+    assert followup["task"]["intake"]["date_from"] == "2026-11-30"
+    assert 2 not in followup["task"]["intake"]["weekdays"]
+
+
+def test_initial_menu_preserves_choices_while_agent_asks_for_missing_information(client):
+    headers = owner(client)
+    case = create(client, headers)
+    response = client.post(f'/api/agent/cases/{case["case"]["id"]}/messages', headers=headers, json={
+        "message": "你好", "intake_preferences": {"patient_type": "returning", "sessions": ["下午"]},
+        "operation_id": str(uuid.uuid4()), "expected_version": case["task"]["version"],
+    })
+    assert response.status_code == 200, response.text
+    detail = response.json()
+    assert detail["task"]["intake_response"]["question"] == "clinical_query"
+    resumed = message(client, headers, detail, "膝蓋疼痛").json()
+    assert resumed["task"]["status"] == "selecting_doctor"
+    assert resumed["task"]["intake"]["sessions"] == ["下午"]
+
+
 def test_condition_changes_recheck_availability_instead_of_reusing_old_doctors(client, monkeypatch):
     import app.routers.recommendations as recommendations
 

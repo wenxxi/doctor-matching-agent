@@ -27,9 +27,20 @@ class IntakeState(BaseModel):
         return self
 
 
+class IntakePreferences(BaseModel):
+    """Fixed choices supplied alongside free text; never accepts clinical memory."""
+    model_config = {"extra": "forbid"}
+
+    hospital: Literal["林口長庚", "台北榮總", "兩院皆可"] = "林口長庚"
+    patient_type: PatientType = "unknown"
+    date_window: Literal["any", "next_week", "two_weeks"] = "any"
+    sessions: list[SessionName] = Field(default_factory=lambda: ["上午", "下午", "夜診"], min_length=1, max_length=3)
+
+
 class IntakeRequest(BaseModel):
     message: str = Field(min_length=1, max_length=1000)
     state: IntakeState = Field(default_factory=IntakeState)
+    intake_preferences: IntakePreferences | None = None
 
 
 class IntakeResponse(BaseModel):

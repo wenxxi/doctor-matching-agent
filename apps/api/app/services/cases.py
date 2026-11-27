@@ -182,6 +182,7 @@ def run_case(session, owner, case_id, request, action="message"):
         command = {"action": action, "operation_id": str(request.operation_id)}
         if action == "message":
             command["message"] = request.message
+            command["intake_preferences"] = request.intake_preferences.model_dump(mode="json") if request.intake_preferences else None
         else:
             command.update(doctor_id=request.doctor_id, preferences=request.preferences.model_dump(mode="json"))
         with checkpoint_store() as saver:
@@ -204,7 +205,8 @@ def run_case(session, owner, case_id, request, action="message"):
                 elif checkpoint.next:
                     values = graph.invoke(Command(resume=command), config)
                 else:
-                    values = graph.invoke({"message": command["message"], "operation_id": str(request.operation_id), "intake": previous_intake, "trace": []}, config)
+                    values = graph.invoke({"message": command["message"], "intake_preferences": command.get("intake_preferences"),
+                                           "operation_id": str(request.operation_id), "intake": previous_intake, "trace": []}, config)
             except HTTPException:
                 # Admission failures must not leave a partly advanced graph that replays
                 # an old message when the user retries with a different operation ID.

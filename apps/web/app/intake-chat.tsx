@@ -3,29 +3,33 @@
 import { useLocale, displayUserMessage } from "./i18n";
 
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { IntakeResponse, IntakeState, patientLabels, weekdayLabels } from "./intake-types";
+import { defaultPreferences, IntakeFeedback, IntakePreferences, IntakeResponse, IntakeState, patientLabels, weekdayLabels } from "./intake-types";
 import type { CaseDetail } from "./agent-types";
 
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") || "http://localhost:8000";
-const greeting = "你好，我會幫你整理就醫需求。目前支援林口長庚與台北榮總，想看哪個部位、症狀或科別？也可以一起告訴我醫院、日期與時段。";
+const greeting = "你好，請描述想看診的部位或症狀，並在下方選擇就診偏好；日期與時段都可以選不限。資訊不足時我會再詢問你。";
 const examples = ["膝蓋運動後會痛，想下週下午看診。", "胃脹氣，吃完飯肚子脹，想看腸胃科。"];
 
 export default function IntakeChat({ onUpdate, disabled, caseDetail, onSend, onLoadOlder }: {
-  onUpdate: (state: IntakeState | null, ready: boolean) => Promise<void>;
+  onUpdate: (state: IntakeState | null, ready: boolean) => Promise<IntakeFeedback | void>;
   disabled: boolean;
   caseDetail?: CaseDetail | null;
-  onSend?: (message: string) => Promise<void>;
+  onSend?: (message: string, preferences?: IntakePreferences) => Promise<void>;
   onLoadOlder?: () => Promise<void>;
 }) {
   const { locale, t } = useLocale();
   const [state, setState] = useState<IntakeState | null>(null);
   const [messages, setMessages] = useState<{ role: "user" | "assistant"; content: string }[]>([{ role: "assistant", content: greeting }]);
   const [input, setInput] = useState("");
+  const [preferences, setPreferences] = useState<IntakePreferences>(defaultPreferences);
   const [quickReplies, setQuickReplies] = useState(examples);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const sending = useRef(false);
   const transcript = useRef<HTMLDivElement>(null);
+  // Send menu choices only on the first turn. Clarification must not reapply
+  // defaults and erase dates or sessions already extracted from that turn.
+  const initialIntake = !messages.some((message) => message.role === "user");
 
   useEffect(() => {
     if (!caseDetail) return;
@@ -38,19 +42,19 @@ export default function IntakeChat({ onUpdate, disabled, caseDetail, onSend, onL
 
   async function send(message: string) {
     const content = message.trim();
-    if (!content || sending.current || disabled) return;
+    if (!content || sending.current || disabled || (initialIntake && !preferences.sessions.length)) return;
     sending.current = true;
     setBusy(true);
     setError(null);
     try {
       if (onSend) {
-        await onSend(content);
+        await onSend(content, initialIntake ? preferences : undefined);
         setInput("");
         return;
       }
       const response = await fetch(apiBaseUrl + "/api/intake/chat", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: content, ...(state ? { state } : {}) }),
+        body: JSON.stringify({ message: content, ...(state ? { state } : {}), ...(initialIntake ? { intake_preferences: preferences } : {}) }),
       });
       if (!response.ok) {
         const failure = await response.json().catch(() => ({}));
@@ -58,12 +62,12 @@ export default function IntakeChat({ onUpdate, disabled, caseDetail, onSend, onL
       }
       const data = await response.json() as IntakeResponse;
       setState(data.state);
+      const feedback = await onUpdate(data.state, data.ready);
       setMessages((previous) => ["重新開始", "清除記憶", "清除對話", "重設條件"].includes(content)
         ? [{ role: "assistant", content: data.reply }]
-        : [...previous, { role: "user", content }, { role: "assistant", content: data.reply }]);
-      setQuickReplies(data.quick_replies);
+        : [...previous, { role: "user", content }, { role: "assistant", content: feedback?.reply ?? data.reply }]);
+      setQuickReplies(feedback?.quick_replies ?? data.quick_replies);
       setInput("");
-      await onUpdate(data.state, data.ready);
       requestAnimationFrame(() => transcript.current?.scrollTo({ top: transcript.current.scrollHeight, behavior: "smooth" }));
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : "暫時無法更新對話，請重試。");
@@ -81,6 +85,7 @@ export default function IntakeChat({ onUpdate, disabled, caseDetail, onSend, onL
   async function reset() {
     if (busy || disabled) return;
     setState(null);
+    setPreferences(defaultPreferences);
     setMessages([{ role: "assistant", content: greeting }]);
     setQuickReplies(examples);
     setInput("");
@@ -93,7 +98,7 @@ export default function IntakeChat({ onUpdate, disabled, caseDetail, onSend, onL
     ["醫院", state.hospital],
     ["初複診", state.patient_type ? t(patientLabels[state.patient_type]) : t("待確認")],
     ["日期", state.date_range_known ? state.date_from || state.date_to ? (state.date_from || t("即日起")) + " ～ " + (state.date_to || t("院方開放範圍")) : t("不限（院方開放範圍內）") : t("待確認")],
-    ["時段", state.sessions?.map(t).join(locale === "en" ? ", " : "、") || t("待確認")],
+    ["時段", state.sessions?.length === 3 ? t("都可以") : state.sessions?.map(t).join(locale === "en" ? ", " : "、") || t("待確認")],
     ["星期", state.weekdays.length === 7 ? t("不限") : state.weekdays.length ? state.weekdays.map((day) => t("週") + t(weekdayLabels[day])).join(locale === "en" ? ", " : "、") : t("沒有可選星期，請調整")],
   ] : [];
 
@@ -114,12 +119,33 @@ export default function IntakeChat({ onUpdate, disabled, caseDetail, onSend, onL
         {summary.map(([label, value]) => <div key={label} className="contents"><dt className="font-semibold text-teal-900">{t(label)}</dt><dd className="min-w-0 break-words">{t(value)}</dd></div>)}
       </dl> : null}
       <form onSubmit={submit} className="space-y-3">
+        {initialIntake ? <fieldset disabled={busy || disabled} className="space-y-3 rounded-md border border-slate-200 p-3">
+          <legend className="px-1 text-sm font-semibold">{t("就診偏好（與描述一起送出）")}</legend>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <label className="text-xs">{t("醫院")}<select aria-label={t("醫院")} value={preferences.hospital} onChange={(event) => setPreferences({ ...preferences, hospital: event.target.value as IntakePreferences["hospital"] })} className="mt-1 w-full rounded border border-slate-300 bg-white p-2">
+              {["林口長庚", "台北榮總", "兩院皆可"].map((value) => <option key={value} value={value}>{t(value)}</option>)}
+            </select></label>
+            <label className="text-xs">{t("初複診")}<select aria-label={t("初複診")} value={preferences.patient_type} onChange={(event) => setPreferences({ ...preferences, patient_type: event.target.value as IntakePreferences["patient_type"] })} className="mt-1 w-full rounded border border-slate-300 bg-white p-2">
+              {Object.entries(patientLabels).map(([value, label]) => <option key={value} value={value}>{t(label)}</option>)}
+            </select></label>
+            <label className="text-xs">{t("日期")}<select aria-label={t("日期")} value={preferences.date_window} onChange={(event) => setPreferences({ ...preferences, date_window: event.target.value as IntakePreferences["date_window"] })} className="mt-1 w-full rounded border border-slate-300 bg-white p-2">
+              <option value="any">{t("都可以（院方開放日期內）")}</option><option value="next_week">{t("下週")}</option><option value="two_weeks">{t("兩週內")}</option>
+            </select></label>
+          </div>
+          <fieldset className="flex flex-wrap gap-3">
+            <legend className="mb-2 text-xs">{t("可看診時段（可複選）")}</legend>
+            <label className="flex items-center gap-1 text-sm"><input type="checkbox" checked={preferences.sessions.length === 3} onChange={() => setPreferences({ ...preferences, sessions: ["上午", "下午", "夜診"] })} />{t("都可以")}</label>
+            {(["上午", "下午", "夜診"] as const).map((session) => <label key={session} className="flex items-center gap-1 text-sm"><input type="checkbox" checked={preferences.sessions.includes(session)} onChange={(event) => setPreferences({ ...preferences, sessions: event.target.checked ? [...preferences.sessions, session] : preferences.sessions.filter((value) => value !== session) })} />{t(session)}</label>)}
+          </fieldset>
+          {!preferences.sessions.length ? <p role="alert" className="text-xs text-red-700">{t("請至少選一個時段，或選「都可以」。")}</p> : null}
+          <p className="text-xs leading-6 text-slate-500">{t("若描述中的時間與選單不同，以描述為準。指定日期或星期也可以直接寫在描述中；送出後可用對話調整。")}</p>
+        </fieldset> : null}
         <label htmlFor="conversation-message" className="text-sm font-semibold">{t("描述需求或補充條件")}</label>
         <textarea id="conversation-message" value={input} onChange={(event) => setInput(event.target.value)} disabled={busy || disabled} maxLength={1000} rows={3} className="w-full resize-y rounded-md border border-slate-300 px-3 py-2 text-sm leading-7 focus:border-teal-600 focus:outline-none disabled:bg-slate-100" placeholder={t("例如：我是複診，下週下午都可以，但週三不行。")} />
         <div className="flex flex-wrap gap-2">
-          {quickReplies.map((reply) => <button key={reply} type="button" disabled={busy || disabled} onClick={() => void send(t(reply))} className="rounded-md border border-teal-200 px-3 py-2 text-left text-xs text-teal-800 disabled:opacity-50">{t(reply)}</button>)}
+          {quickReplies.map((reply) => <button key={reply} type="button" disabled={busy || disabled || (initialIntake && !preferences.sessions.length)} onClick={() => { if (initialIntake) setInput(t(reply)); else void send(t(reply)); }} className="rounded-md border border-teal-200 px-3 py-2 text-left text-xs text-teal-800 disabled:opacity-50">{t(reply)}</button>)}
         </div>
-        <button type="submit" disabled={busy || disabled || !input.trim()} className="rounded-md bg-teal-700 px-4 py-2 text-sm font-semibold text-white disabled:bg-slate-400">{t(busy ? "正在整理需求與更新推薦…" : "傳送")}</button>
+        <button type="submit" disabled={busy || disabled || !input.trim() || (initialIntake && !preferences.sessions.length)} className="rounded-md bg-teal-700 px-4 py-2 text-sm font-semibold text-white disabled:bg-slate-400">{t(busy ? "正在整理需求與更新推薦…" : "傳送")}</button>
         {error ? <p role="alert" className="text-sm text-red-700">{t(error)}</p> : null}
         {disabled ? <p role="status" className="text-xs text-amber-800">{t("個案正在更新、處理掛號或已結案，請稍候或從上方管理個案。")}</p> : null}
       </form>

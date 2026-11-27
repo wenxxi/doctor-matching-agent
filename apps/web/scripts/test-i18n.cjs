@@ -13,6 +13,25 @@ for (const extension of ['.ts', '.tsx']) {
   };
 }
 const { translate, displayUserMessage } = require('../app/i18n.tsx');
+const { recommendationFeedback } = require('../app/recommendation-types.ts');
+
+test('temporary chat asks for details or availability changes without changing preferences', () => {
+  const empty = { recommended_doctors: [], message: '目前沒有符合條件的門診。' };
+  assert.deepEqual(recommendationFeedback({ ...empty, clarification_question: '哪個部位不舒服？' }), { reply: '哪個部位不舒服？', quick_replies: [] });
+  const noSlots = recommendationFeedback(empty);
+  assert.match(noSlots.reply, /不會自行放寬/);
+  assert.ok(noSlots.quick_replies.includes('時段不限'));
+  const blocked = recommendationFeedback({ ...empty, message: '院方限制本站查詢。', provider_failures: [{ http_status: 403 }] });
+  assert.match(blocked.reply, /不會自動改院/);
+  assert.ok(!blocked.quick_replies.includes('時段不限'));
+  assert.equal(recommendationFeedback({ recommended_doctors: [{}] }), undefined);
+});
+
+test('initial preference menu labels are translated', () => {
+  for (const label of ['都可以', '就診偏好（與描述一起送出）', '都可以（院方開放日期內）', '可看診時段（可複選）']) {
+    assert.doesNotMatch(translate(label, 'en'), /[\u4e00-\u9fff]/);
+  }
+});
 
 test('shows doctor names in generated preparation messages while preserving user text', () => {
   assert.equal(displayUserMessage('請助理安排莊雅慧醫師的門診時段。', 'en'), 'Please arrange an appointment with Dr. 莊雅慧.');
