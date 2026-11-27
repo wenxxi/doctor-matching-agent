@@ -238,6 +238,8 @@ def get_session(token: str) -> BookingSession:
 
 
 def start_booking(doctor: dict[str, str], registration_url: str) -> BookingStateResponse:
+    if not doctor["doctor_id"].startswith("CGMH_LINKOU_"):
+        raise BookingError("此醫院需在院方頁面完成掛號，本站不收集或送出患者資料。")
     snapshot = get_appointments(doctor)
     slot = next((item for item in snapshot.slots if item.registration_url == registration_url), None)
     if slot is None:

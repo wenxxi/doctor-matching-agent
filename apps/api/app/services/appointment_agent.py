@@ -61,6 +61,9 @@ def verify_checkin_page(html: str, slot: AppointmentSlotResponse, doctor_name: s
 def prepare_appointment(
     doctor: dict[str, str], request: AppointmentPreparationRequest,
 ) -> AppointmentPreparationResponse:
+    if doctor["doctor_id"].startswith("TPVGH_MAIN_"):
+        from app.services.tpvgh import prepare
+        return prepare(doctor, request)
     result = AppointmentPreparationResponse(
         doctor_id=doctor["doctor_id"], status="unavailable",
         message="暫時無法查詢院方時段，請稍後重試。",

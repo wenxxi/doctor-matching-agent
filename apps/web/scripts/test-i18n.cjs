@@ -33,6 +33,13 @@ test('retains doctor names and dates while translating status text', () => {
   assert.equal(translate('已確認2099-10-19 下午的院方患者資料頁可開啟。', 'en'), 'Verified the hospital patient form for 2099-10-19, Afternoon.');
 });
 
+test('translates hospital eligibility and handoff without claiming a booking', () => {
+  const question = translate('已更新這次條件。榮總需要確認是否曾在該院看診，才能查詢正確資格的時段。這次是全院初診或複診？若不確定，可先改找林口長庚。', 'en');
+  assert.match(question, /first or returning visit/);
+  assert.doesNotMatch(question, /[\u4e00-\u9fff]/);
+  assert.match(translate('請在院方頁面選取上列日期與時段。點擊連結不代表掛號成功，名額以院方送出時為準。', 'en'), /does not book/);
+});
+
 test('leaves unknown source content and canonical values intact', () => {
   for (const value of ['CGMH_LINKOU_TEST', 'returning', 'TEST123', 'constructor', '__proto__', '患者自行填寫的個案名稱。']) {
     assert.equal(translate(value, 'en'), value);

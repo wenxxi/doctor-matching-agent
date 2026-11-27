@@ -63,6 +63,9 @@ def parse_links(html: str) -> list[tuple[str, str, str]]:
 
 
 def registration_url_for(doctor: dict[str, str]) -> str | None:
+    if doctor["doctor_id"].startswith("TPVGH_MAIN_"):
+        from app.services.tpvgh import timetable_url
+        return timetable_url(doctor)
     if doctor["doctor_id"].startswith("CGMH_LINKOU_"):
         return REGISTRATION_URL
     return None
@@ -118,6 +121,9 @@ def parse_slots(html: str, doctor_name: str, today: str) -> list[AppointmentSlot
 
 
 def get_appointments(doctor: dict[str, str]) -> AppointmentsResponse:
+    if doctor["doctor_id"].startswith("TPVGH_MAIN_"):
+        from app.services.tpvgh import get_appointments as tpvgh_appointments
+        return tpvgh_appointments(doctor)
     registration_url = registration_url_for(doctor)
     result = AppointmentsResponse(
         doctor_id=doctor["doctor_id"], status="unsupported", registration_url=registration_url,

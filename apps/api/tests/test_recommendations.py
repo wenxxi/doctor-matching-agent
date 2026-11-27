@@ -1,5 +1,6 @@
 from types import SimpleNamespace
 import pytest
+from conftest import structured_concept_response
 
 from fastapi.testclient import TestClient
 
@@ -21,12 +22,15 @@ class FakeResponses:
         self.output_text = output_text
 
     def create(self, **kwargs):
-        return SimpleNamespace(output_text=self.output_text, usage=None)
+        return structured_concept_response(self.output_text, kwargs)
 
 
 class FakeClient:
     def __init__(self, output_text: str) -> None:
         self.responses = FakeResponses(output_text)
+
+    def with_options(self, **kwargs):
+        return self
 
 
 def clear_openai_settings(monkeypatch):

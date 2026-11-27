@@ -1,6 +1,7 @@
 from collections import defaultdict
 
 from app.services.appointments import registration_url_for
+from app.services.hospitals import matches_hospital
 from app.schemas import (
     MatchedConceptResponse,
     RankingDebugResponse,
@@ -101,6 +102,7 @@ def rank_doctors(
     department_intent: DepartmentIntent | None = None,
     *,
     candidate_limit: int | None = None,
+    hospital: str | None = None,
 ) -> list[RecommendedDoctorResponse]:
     if not matched_concepts:
         return []
@@ -109,7 +111,7 @@ def rank_doctors(
     if candidate_limit is not None:
         limit = max(limit, min(candidate_limit, 12))
     matched_by_id = {concept.concept_id: concept for concept in matched_concepts}
-    doctors_by_id = {doctor["doctor_id"]: doctor for doctor in load_doctors()}
+    doctors_by_id = {doctor["doctor_id"]: doctor for doctor in load_doctors() if matches_hospital(doctor, hospital)}
     rows_by_doctor: dict[str, list[dict[str, str]]] = defaultdict(list)
 
     for row in load_doctor_concept_map():
@@ -271,6 +273,8 @@ def to_concept_response(concept: MatchedConcept) -> MatchedConceptResponse:
         canonical_name_en=concept.canonical_name_en,
         category=concept.category,
         matched_terms=list(concept.matched_terms),
+        assertion=concept.assertion,
+        patient_evidence=concept.patient_evidence,
     )
 
 

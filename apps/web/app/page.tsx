@@ -97,6 +97,7 @@ export default function Home() {
         },
         body: JSON.stringify({
           query: state.clinical_query,
+          hospital: state.hospital === "兩院皆可" ? "兩院皆可" : /榮總|北榮/.test(state.hospital) ? "台北榮總" : "林口長庚",
           limit: 3,
           preferences: {
             patient_type: state.patient_type ?? "unknown",
@@ -133,7 +134,7 @@ export default function Home() {
             <p className="text-sm font-semibold text-teal-700">{t("你的就醫與掛號助理")}</p>
             <h1 className="mt-2 text-3xl font-bold tracking-normal sm:text-5xl">{t("Doctor Matching Agent")}</h1>
           </div>
-          <p className="max-w-3xl text-base leading-7 text-slate-600">{t("透過對話整理症狀與就診條件，找到相關醫師，再由掛號助理協助安排門診。目前支援林口長庚。")}</p>
+          <p className="max-w-3xl text-base leading-7 text-slate-600">{t("透過對話整理症狀與就診條件，找到相關醫師，再由掛號助理協助安排門診。目前支援林口長庚與台北榮總。")}</p>
         </div>
       </section>
 
@@ -159,6 +160,18 @@ export default function Home() {
               {t(result.message)}
             </div>
           ) : null}
+
+          {result?.ranking_method ? <p className="text-xs text-slate-600">{t(
+            result.ranking_method === "needs_clarification" ? "需要先補充醫療描述，暫不推薦醫師。" :
+            result.ranking_method === "evidence_review" ? "推薦已比對患者描述與醫師原始專長證據。" :
+            result.ranking_method === "mixed_evidence_and_rules" ? "部分候選採用規則降級排序；請核對醫師專長。" :
+            "目前使用規則降級排序；語意評估尚未確認所有候選。"
+          )}</p> : null}
+
+          {result?.decision_trace?.length ? <details className="rounded-md border border-slate-200 bg-white p-3 text-xs text-slate-600">
+            <summary className="cursor-pointer font-semibold text-teal-700">{t("查看推薦評估紀錄")}</summary>
+            <ol className="mt-2 list-inside list-decimal space-y-1">{result.decision_trace.map((step, index) => <li key={index}>{t(step.message)}</li>)}</ol>
+          </details> : null}
 
           <ConceptPanel
             concepts={result?.matched_concepts ?? []}
@@ -246,6 +259,7 @@ function ConceptPanel({
               <p className="text-sm font-semibold text-teal-950">
                 {locale === "en" ? concept.canonical_name_en : concept.canonical_name_zh}
               </p>
+              {concept.assertion === "suspected" && concept.category === "disease_or_condition" ? <p className="text-xs text-slate-600">{t("可能相關的概念，尚未確診")}</p> : null}
               {showDebug ? (
                 <p className="mt-1 text-xs text-teal-800">
                   {concept.concept_id}
@@ -315,8 +329,12 @@ function DoctorPanel({
             ) : null}
 
             {locale === "en" ? <p className="mt-4 rounded-md border border-teal-200 bg-teal-50 p-3 text-sm leading-7 text-teal-950">
-              Matched expertise: {doctor.matched_concepts.map((concept) => concept.canonical_name_en).join(", ")}
+              {doctor.matched_concepts.length ? "Matched expertise: " + doctor.matched_concepts.map((concept) => concept.canonical_name_en).join(", ") : "Matched using the doctor's original specialty description."}
             </p> : null}
+
+            {doctor.specialty_evidence ? <blockquote className="mt-3 border-l-2 border-teal-500 pl-3 text-sm text-slate-700">
+              <span className="font-semibold">{t("醫師專長原文證據：")}</span>{doctor.specialty_evidence}
+            </blockquote> : null}
 
             {doctor.availability ? <div className="mt-3 rounded-md bg-teal-50 p-3 text-sm text-teal-900">
               <p className="font-semibold">{t("已確認符合條件：")}{doctor.availability.selected_slot.date} {t(doctor.availability.selected_slot.session)}</p>

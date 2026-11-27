@@ -7,7 +7,7 @@ import { IntakeResponse, IntakeState, patientLabels, weekdayLabels } from "./int
 import type { CaseDetail } from "./agent-types";
 
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") || "http://localhost:8000";
-const greeting = "你好，我會幫你整理就醫需求。目前支援林口長庚，想看哪個部位、症狀或科別？也可以一起告訴我方便的日期與時段。";
+const greeting = "你好，我會幫你整理就醫需求。目前支援林口長庚與台北榮總，想看哪個部位、症狀或科別？也可以一起告訴我醫院、日期與時段。";
 const examples = ["膝蓋運動後會痛，想下週下午看診。", "胃脹氣，吃完飯肚子脹，想看腸胃科。"];
 
 export default function IntakeChat({ onUpdate, disabled, caseDetail, onSend }: {

@@ -38,6 +38,8 @@ class AppointmentSlotResponse(BaseModel):
     session: str
     eligibility: str
     registration_url: str
+    provider_slot_id: str | None = None
+    booking_mode: Literal["embedded", "official_handoff"] = "embedded"
 
 
 class DoctorAvailability(BaseModel):
@@ -55,6 +57,8 @@ class MatchedConceptResponse(BaseModel):
     canonical_name_en: str
     category: str
     matched_terms: list[str]
+    assertion: str = "reported"
+    patient_evidence: str | None = None
 
 
 class RankingDebugResponse(BaseModel):
@@ -80,6 +84,8 @@ class RecommendedDoctorResponse(BaseModel):
     ranking_debug: RankingDebugResponse | None = None
     llm_reason_zh: str | None = None
     availability: DoctorAvailability | None = None
+    specialty_evidence: str | None = None
+    relevance_summary: str | None = None
 
 
 class RecommendationResponse(BaseModel):
@@ -96,6 +102,10 @@ class RecommendationResponse(BaseModel):
     matched_concepts: list[MatchedConceptResponse]
     recommended_doctors: list[RecommendedDoctorResponse]
     message: str | None = None
+    ranking_method: str = "rule_fallback"
+    assessment_summary: str | None = None
+    clarification_question: str | None = None
+    decision_trace: list[dict[str, str]] = Field(default_factory=list)
 
 
 class ConceptExtractionResponse(BaseModel):
@@ -138,7 +148,8 @@ class AppointmentPreparationRequest(BaseModel):
 
 class AppointmentPreparationResponse(BaseModel):
     doctor_id: str
-    status: Literal["awaiting_patient", "no_match", "unavailable", "retry_needed"]
+    status: Literal["awaiting_patient", "official_handoff", "no_match", "unavailable", "retry_needed"]
+    booking_mode: Literal["embedded", "official_handoff"] = "embedded"
     selected_slot: AppointmentSlotResponse | None = None
     verified_at: datetime | None = None
     candidate_count: int = 0
@@ -148,7 +159,8 @@ class AppointmentPreparationResponse(BaseModel):
 
 
 class RecommendationRequest(BaseModel):
-    query: str
+    query: str = Field(min_length=1, max_length=2000)
+    hospital: Literal["林口長庚", "台北榮總", "兩院皆可"] = "林口長庚"
     limit: int = 3
     preferences: AppointmentPreparationRequest = Field(
         default_factory=lambda: AppointmentPreparationRequest(patient_type="unknown"),

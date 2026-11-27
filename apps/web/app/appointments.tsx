@@ -47,6 +47,7 @@ export default function AppointmentPanel({ doctor, preferences, onBookingBusy, a
   const [weekdays, setWeekdays] = useState(preferences?.weekdays ?? [0, 1, 2, 3, 4, 5, 6]);
   const [patientType, setPatientType] = useState<string>(preferences?.patient_type ?? "unknown");
   const [bookingBusy, setBookingBusy] = useState(false);
+  const officialHandoff = doctor.doctor_id.startsWith("TPVGH_MAIN_");
 
   useEffect(() => { onBookingBusy(doctor.doctor_id, bookingBusy); }, [doctor.doctor_id, bookingBusy, onBookingBusy]);
   useEffect(() => () => { onBookingBusy(doctor.doctor_id, false); }, [doctor.doctor_id, onBookingBusy]);
@@ -103,12 +104,12 @@ export default function AppointmentPanel({ doctor, preferences, onBookingBusy, a
   return (
     <section aria-label={`${doctor.doctor_name_zh} ${t("掛號助理")}`} className="mt-4 space-y-3 border-t border-slate-200 pt-4 text-sm leading-6 text-slate-700">
       <h4 className="font-semibold text-slate-950">{t("掛號助理")}</h4>
-      <p>{t("告訴我就診條件，我會查時段、挑選最早符合的門診，確認院方資料頁後，讓你直接在這裡填寫資料與驗證碼。")}</p>
+      <p>{t(officialHandoff ? "榮總由助理核對可選時段，再由你至院方選取日期並完成身分驗證；本站不會送出榮總掛號。" : "告訴我就診條件，我會查時段、挑選最早符合的門診，確認院方資料頁後，讓你直接在這裡填寫資料與驗證碼。")}</p>
       {preferences ? <p className="text-xs text-teal-800">{t("已套用對話中確認的條件；你也可以單獨調整這張醫師卡片。")}</p> : null}
       <form onSubmit={prepare} className="space-y-3">
         <fieldset disabled={isLoading || Boolean(selected) || !canPrepare} className="grid gap-3 sm:grid-cols-2 disabled:opacity-60">
           <label>{t("患者類型")}<select value={patientType} onChange={(event) => setPatientType(event.target.value)} className={inputClass}>
-            <option value="unknown">{t("不確定（排除初診限定時段）")}</option><option value="first_visit">{t("全院初診（從未在林口長庚看診）")}</option><option value="department_first">{t("科初診（半年內未看過該科）")}</option><option value="returning">{t("複診")}</option>
+            <option value="unknown">{t("不確定（排除初診限定時段）")}</option><option value="first_visit">{t("全院初診（從未在這家醫院看診）")}</option>{!officialHandoff ? <option value="department_first">{t("科初診（半年內未看過該科）")}</option> : null}<option value="returning">{t("複診")}</option>
           </select></label>
           <div><p>{t("可看診時段")}</p><div className="mt-2 flex flex-wrap gap-3">
             {["上午", "下午", "夜診"].map((name) => <label key={name} className="inline-flex items-center gap-1"><input type="checkbox" checked={sessions.includes(name)} onChange={(event) => setSessions(event.target.checked ? [...sessions, name] : sessions.filter((item) => item !== name))} />{t(name)}</label>)}
@@ -123,11 +124,11 @@ export default function AppointmentPanel({ doctor, preferences, onBookingBusy, a
       </form>
       <div aria-live="polite" className="space-y-2">
         {error ? <p role="alert" className="text-red-700">{t(error)}</p> : null}
-        {preparation ? <><ol className="list-inside list-decimal text-xs text-slate-600">{preparation.steps.map((step, index) => <li key={index}>{step}</li>)}</ol><p>{t(preparation.message)}</p></> : null}
+        {preparation ? <><ol className="list-inside list-decimal text-xs text-slate-600">{preparation.steps.map((step, index) => <li key={index}>{t(step)}</li>)}</ol><p>{t(preparation.message)}</p></> : null}
       </div>
       {selected ? (
         <>
-          <BookingForm key={selected.registration_url} doctorId={doctor.doctor_id} doctorName={doctor.doctor_name_zh} slot={selected} onBusyChange={setBookingBusy} agentContext={agentContext} onCaseUpdate={onCaseUpdate} />
+          {selected.booking_mode === "official_handoff" ? <div className="rounded border border-teal-200 bg-teal-50 p-3"><p>{selected.date} {t(selected.session)} · {doctor.doctor_name_zh}</p><p>{t("請在院方頁面選取上列日期與時段。點擊連結不代表掛號成功，名額以院方送出時為準。")}</p><a href={selected.registration_url} target="_blank" rel="noopener noreferrer" className="font-semibold text-teal-800 underline">{t("前往這位醫師的院方掛號頁完成驗證")}</a></div> : <BookingForm key={selected.registration_url} doctorId={doctor.doctor_id} doctorName={doctor.doctor_name_zh} slot={selected} onBusyChange={setBookingBusy} agentContext={agentContext} onCaseUpdate={onCaseUpdate} />}
           <button type="button" disabled={bookingBusy} onClick={() => { setSelected(null); setPreparation(null); }} className="text-xs text-slate-600 underline disabled:opacity-50">{t("關閉此表單、重新選時段（不會取消院方已完成的掛號）")}</button>
         </>
       ) : null}
@@ -137,7 +138,7 @@ export default function AppointmentPanel({ doctor, preferences, onBookingBusy, a
         {result ? <p>{t(result.message)}</p> : null}
         {result?.checked_at ? <p className="text-xs">{t("查詢時間：")}{new Date(result.checked_at).toLocaleString(locale, { timeZone: "Asia/Taipei" })}{t("（台北時間；快取約 2 分鐘）")}</p> : null}
         <ul className="mt-3 max-h-80 space-y-2 overflow-y-auto">
-          {result?.slots.map((slot) => <li key={slot.registration_url} className="rounded border border-slate-200 p-3">
+          {result?.slots.map((slot) => <li key={slot.provider_slot_id ?? slot.registration_url} className="rounded border border-slate-200 p-3">
             <p className="font-semibold">{slot.date} {t(slot.session)}</p><p>{t(slot.eligibility)}</p>
             <button type="button" disabled={Boolean(selected) || !canPrepare || isLoading} onClick={() => void queryAppointments(true, slot)} className="font-semibold text-teal-700 disabled:opacity-50">{t("確認時段並填寫掛號資料")}</button>
           </li>)}

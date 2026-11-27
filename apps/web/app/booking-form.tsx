@@ -10,6 +10,8 @@ export type AppointmentSlot = {
   session: string;
   eligibility: string;
   registration_url: string;
+  provider_slot_id?: string | null;
+  booking_mode?: "embedded" | "official_handoff";
 };
 
 type BookingField = {

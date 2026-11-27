@@ -1,4 +1,5 @@
 from types import SimpleNamespace
+from conftest import structured_concept_response
 
 from fastapi.testclient import TestClient
 
@@ -19,12 +20,15 @@ class FakeResponses:
     def create(self, **kwargs):
         if isinstance(self.output_text, Exception):
             raise self.output_text
-        return SimpleNamespace(output_text=self.output_text, usage=self.usage)
+        return structured_concept_response(self.output_text, kwargs, self.usage)
 
 
 class FakeClient:
     def __init__(self, output_text: str | Exception, usage=None) -> None:
         self.responses = FakeResponses(output_text, usage)
+
+    def with_options(self, **kwargs):
+        return self
 
 
 def clear_settings_cache() -> None:

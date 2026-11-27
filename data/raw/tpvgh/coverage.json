@@ -1,0 +1,301 @@
+[
+  {
+    "canonical_department": "骨科部",
+    "profiles": 32,
+    "failures": [
+      {
+        "profile_id": "1600",
+        "error_type": "ValueError"
+      }
+    ]
+  },
+  {
+    "canonical_department": "神經內科",
+    "profiles": 36,
+    "failures": [
+      {
+        "profile_id": "701",
+        "error_type": "ValueError"
+      }
+    ]
+  },
+  {
+    "canonical_department": "神經外科",
+    "profiles": 23,
+    "failures": [
+      {
+        "profile_id": "1038",
+        "error_type": "ValueError"
+      },
+      {
+        "profile_id": "1314",
+        "error_type": "ValueError"
+      },
+      {
+        "profile_id": "971",
+        "error_type": "ValueError"
+      }
+    ]
+  },
+  {
+    "canonical_department": "心臟內科",
+    "profiles": 48,
+    "failures": []
+  },
+  {
+    "canonical_department": "胸腔內科",
+    "profiles": 32,
+    "failures": []
+  },
+  {
+    "canonical_department": "胃腸肝膽科",
+    "profiles": 39,
+    "failures": [
+      {
+        "profile_id": "1101",
+        "error_type": "ValueError"
+      },
+      {
+        "profile_id": "1103",
+        "error_type": "ValueError"
+      },
+      {
+        "profile_id": "1221",
+        "error_type": "ValueError"
+      }
+    ]
+  },
+  {
+    "canonical_department": "新陳代謝科",
+    "profiles": 14,
+    "failures": [
+      {
+        "profile_id": "1124",
+        "error_type": "ValueError"
+      }
+    ]
+  },
+  {
+    "canonical_department": "腎臟科",
+    "profiles": 13,
+    "failures": []
+  },
+  {
+    "canonical_department": "風濕免疫科",
+    "profiles": 13,
+    "failures": []
+  },
+  {
+    "canonical_department": "感染醫學科",
+    "profiles": 12,
+    "failures": []
+  },
+  {
+    "canonical_department": "血液科",
+    "profiles": 12,
+    "failures": []
+  },
+  {
+    "canonical_department": "腫瘤科",
+    "profiles": 18,
+    "failures": [
+      {
+        "profile_id": "1644",
+        "error_type": "ValueError"
+      },
+      {
+        "profile_id": "1645",
+        "error_type": "ValueError"
+      }
+    ]
+  },
+  {
+    "canonical_department": "一般外科",
+    "profiles": 26,
+    "failures": []
+  },
+  {
+    "canonical_department": "大腸直腸肛門外科",
+    "profiles": 14,
+    "failures": []
+  },
+  {
+    "canonical_department": "胸腔外科",
+    "profiles": 10,
+    "failures": []
+  },
+  {
+    "canonical_department": "心臟血管外科",
+    "profiles": 13,
+    "failures": []
+  },
+  {
+    "canonical_department": "泌尿科",
+    "profiles": 18,
+    "failures": []
+  },
+  {
+    "canonical_department": "兒科",
+    "profiles": 38,
+    "failures": []
+  },
+  {
+    "canonical_department": "眼科",
+    "profiles": 23,
+    "failures": [
+      {
+        "profile_id": "1495",
+        "error_type": "ValueError"
+      }
+    ]
+  },
+  {
+    "canonical_department": "耳鼻喉頭頸外科",
+    "profiles": 22,
+    "failures": [
+      {
+        "profile_id": "968",
+        "error_type": "ValueError"
+      }
+    ]
+  },
+  {
+    "canonical_department": "皮膚科",
+    "profiles": 11,
+    "failures": []
+  },
+  {
+    "canonical_department": "精神科",
+    "profiles": 43,
+    "failures": [
+      {
+        "profile_id": "1569",
+        "error_type": "ValueError"
+      },
+      {
+        "profile_id": "1570",
+        "error_type": "ValueError"
+      },
+      {
+        "profile_id": "1571",
+        "error_type": "ValueError"
+      },
+      {
+        "profile_id": "1572",
+        "error_type": "ValueError"
+      }
+    ]
+  },
+  {
+    "canonical_department": "復健科",
+    "profiles": 9,
+    "failures": []
+  },
+  {
+    "canonical_department": "家庭醫學科",
+    "profiles": 25,
+    "failures": [
+      {
+        "profile_id": "1070",
+        "error_type": "ValueError"
+      },
+      {
+        "profile_id": "1301",
+        "error_type": "ValueError"
+      },
+      {
+        "profile_id": "1302",
+        "error_type": "ValueError"
+      },
+      {
+        "profile_id": "1305",
+        "error_type": "ValueError"
+      },
+      {
+        "profile_id": "1306",
+        "error_type": "ValueError"
+      },
+      {
+        "profile_id": "1474",
+        "error_type": "ValueError"
+      },
+      {
+        "profile_id": "1475",
+        "error_type": "ValueError"
+      },
+      {
+        "profile_id": "1476",
+        "error_type": "ValueError"
+      },
+      {
+        "profile_id": "1477",
+        "error_type": "ValueError"
+      },
+      {
+        "profile_id": "1478",
+        "error_type": "ValueError"
+      },
+      {
+        "profile_id": "1479",
+        "error_type": "ValueError"
+      },
+      {
+        "profile_id": "1487",
+        "error_type": "ValueError"
+      },
+      {
+        "profile_id": "1604",
+        "error_type": "ValueError"
+      },
+      {
+        "profile_id": "1605",
+        "error_type": "ValueError"
+      },
+      {
+        "profile_id": "1606",
+        "error_type": "ValueError"
+      },
+      {
+        "profile_id": "1607",
+        "error_type": "ValueError"
+      },
+      {
+        "profile_id": "1608",
+        "error_type": "ValueError"
+      },
+      {
+        "profile_id": "1610",
+        "error_type": "ValueError"
+      }
+    ]
+  },
+  {
+    "canonical_department": "高齡醫學科",
+    "profiles": 10,
+    "failures": []
+  },
+  {
+    "canonical_department": "肝臟移植外科",
+    "profiles": 5,
+    "failures": [
+      {
+        "profile_id": "1192",
+        "error_type": "NoLiverSpecialtyEvidence"
+      },
+      {
+        "profile_id": "1430",
+        "error_type": "ValueError"
+      }
+    ]
+  },
+  {
+    "canonical_department": "婦產科",
+    "profiles": 20,
+    "failures": []
+  },
+  {
+    "canonical_department": "整形外科",
+    "profiles": 13,
+    "failures": []
+  }
+]

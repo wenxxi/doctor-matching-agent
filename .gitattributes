@@ -1,0 +1,2 @@
+# CSV exports use standard CRLF records for spreadsheet compatibility.
+*.csv whitespace=cr-at-eol

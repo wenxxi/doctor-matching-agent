@@ -47,7 +47,7 @@ export type AgentContext = {
 };
 
 export const taskLabels: Record<string, string> = {
-  clarifying: "等待補充條件", selecting_doctor: "等待選擇醫師", awaiting_patient: "等待患者資料與驗證碼",
+  clarifying: "等待補充條件", selecting_doctor: "等待選擇醫師", awaiting_patient: "等待患者完成掛號步驟",
   completed: "已取得院方成功回覆", needs_verification: "掛號結果需人工確認",
   human_required: "需至院方處理", closed: "已結案",
 };

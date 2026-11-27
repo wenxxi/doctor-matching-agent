@@ -2,6 +2,7 @@ import json
 from types import SimpleNamespace
 
 import pytest
+from conftest import structured_concept_response
 
 import app.services.concept_extractor as concept_extractor_module
 import app.services.openai_concept_extractor as openai_extractor_module
@@ -25,12 +26,15 @@ class FakeResponses:
         self.calls.append(kwargs)
         if isinstance(self.output_text, Exception):
             raise self.output_text
-        return SimpleNamespace(output_text=self.output_text, usage=self.usage)
+        return structured_concept_response(self.output_text, kwargs, self.usage)
 
 
 class FakeClient:
     def __init__(self, output_text: str | Exception, usage=None) -> None:
         self.responses = FakeResponses(output_text, usage)
+
+    def with_options(self, **kwargs):
+        return self
 
 
 def clear_settings_cache() -> None:

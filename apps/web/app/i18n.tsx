@@ -10,6 +10,14 @@ export function translate(text: string | null | undefined, locale: Locale): stri
   if (locale === "zh-TW") return Object.prototype.hasOwnProperty.call(chineseMessages, text) ? chineseMessages[text] : text;
   if (Object.prototype.hasOwnProperty.call(englishMessages, text)) return englishMessages[text];
   const prefixes = ["已更新這次條件。", "我還需要確認一項資訊。", "已清除這次對話的條件。"];
+  const review = text.match(/^語意評估 (\d+) 位候選；(\d+) 位通過患者與醫師專長原文證據檢查。$/);
+  if (review) return `Reviewed ${review[1]} candidates; ${review[2]} passed patient and original specialty evidence checks.`;
+  const recall = text.match(/^概念與原始專長文字召回 (\d+) 位候選；文字相似度不直接決定推薦。$/);
+  if (recall) return `Retrieved ${recall[1]} candidates using concepts and specialty text. Text similarity does not determine recommendations.`;
+  const capacity = text.match(/^確認 (\d+) 位醫師具有符合條件的可掛號患者資料頁；未保留名額。$/);
+  if (capacity) return `Verified matching patient forms for ${capacity[1]} doctor(s). No appointment is reserved.`;
+  const interpretation = text.match(/^以 (.+) 理解患者描述；得到 (\d+) 個可稽核概念，保留疑似／歷史狀態。$/);
+  if (interpretation) return `Interpreted the description with ${interpretation[1]}; retained ${interpretation[2]} auditable concepts with uncertainty and history preserved.`;
   for (const prefix of prefixes) {
     if (text.startsWith(prefix)) return translate(prefix, locale) + translate(text.slice(prefix.length), locale);
   }

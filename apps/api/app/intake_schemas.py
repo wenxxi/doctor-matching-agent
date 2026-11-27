@@ -12,6 +12,7 @@ Weekday = Annotated[int, Field(ge=0, le=6)]
 class IntakeState(BaseModel):
     clinical_query: str = Field(default="", max_length=2000)
     hospital: str = Field(default="林口長庚", max_length=60)
+    both_hospitals_patient_type_confirmed: bool = False
     patient_type: PatientType | None = None
     date_from: date | None = None
     date_to: date | None = None

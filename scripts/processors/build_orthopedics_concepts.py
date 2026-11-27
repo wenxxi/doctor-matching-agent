@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import csv
+import shutil
 import re
 from collections import defaultdict
 from pathlib import Path
@@ -1808,6 +1809,10 @@ def read_raw_doctors():
                         "source_url": source_url,
                     }
                 )
+    tpvgh_source = ROOT_DIR / "data/raw/tpvgh/doctors.csv"
+    if tpvgh_source.exists():
+        with tpvgh_source.open(newline="", encoding="utf-8-sig") as stream:
+            rows.extend(csv.DictReader(stream))
     return rows
 
 
@@ -1843,7 +1848,13 @@ def build_rule_table():
     return rules
 
 
-def doctor_scope(doctor_id):
+def doctor_scope(doctor_id, department_zh=None):
+    # Medical concepts belong to a canonical department, not a hospital ID.
+    # Retain the ID fallback for existing callers and preserve every CGMH ID.
+    if department_zh:
+        for dataset in DATASETS:
+            if dataset["department_zh"] == department_zh:
+                return dataset["id_prefix"].replace("CGMH_LINKOU_", "", 1)
     for dataset in DATASETS:
         prefix = dataset["id_prefix"].replace("CGMH_LINKOU_", "", 1)
         if doctor_id.startswith(f"{dataset['id_prefix']}_"):
@@ -1859,7 +1870,7 @@ def build_doctor_concept_map(doctors):
     for doctor in doctors:
         raw = doctor["specialty_raw_zh"]
         raw_norm = normalize_text(raw)
-        scope = doctor_scope(doctor["doctor_id"])
+        scope = doctor_scope(doctor["doctor_id"], doctor.get("department_zh"))
         for rule in rules:
             concept_scope = rule["concept_id"].split("_", 1)[0]
             if concept_scope != scope:
@@ -1928,6 +1939,9 @@ def main():
     write_csv(DOCTORS_NORMALIZED_CSV, doctors, DOCTOR_COLUMNS)
     write_csv(MEDICAL_CONCEPTS_CSV, concepts, CONCEPT_COLUMNS)
     write_csv(DOCTOR_CONCEPT_MAP_CSV, mappings, MAP_COLUMNS)
+    metadata_source = ROOT_DIR / "data/raw/tpvgh/provider_metadata.json"
+    if metadata_source.exists():
+        shutil.copyfile(metadata_source, PROCESSED_DIR / "provider_metadata.json")
     print_quality_checks(doctors, concepts, mappings)
 
 

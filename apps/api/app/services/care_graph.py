@@ -9,6 +9,7 @@ from app.routers.recommendations import recommend_doctors
 from app.services.appointment_agent import prepare_appointment
 from app.services.intake import intake_turn
 from app.services.processed_data import load_doctors
+from app.services.hospitals import ALIASES
 
 
 class CareGraphState(TypedDict, total=False):
@@ -52,9 +53,20 @@ def recommend(state):
             sessions=intake.get("sessions") or ["上午", "下午", "夜診"],
             weekdays=intake.get("weekdays", list(range(7))),
         )
-        result = recommend_doctors(RecommendationRequest(query=query, preferences=preferences))
+        result = recommend_doctors(RecommendationRequest(query=query, preferences=preferences, hospital=ALIASES.get(intake.get("hospital"), intake.get("hospital", "林口長庚"))))
+        if result.clarification_question:
+            response = dict(state["intake_response"])
+            response.update(ready=False, reply=result.clarification_question, question="clinical_query", quick_replies=[])
+            return {"recommendation": None, "intake_response": response, "phase": "clarifying",
+                    "trace": (step(state, "recommend", "目前醫療描述不足，先追問而不強制配對醫師。") + result.decision_trace)[-50:]}
+        if not result.recommended_doctors:
+            response = dict(state["intake_response"])
+            response.update(ready=False, reply=(result.message or "目前沒有確認到符合條件的醫師門診。") + " 你可以修改就診條件後再查詢；我不會自行放寬條件。",
+                            question="availability", quick_replies=["改成上午", "改成下午", "日期不限"])
+            return {"recommendation": result.model_dump(mode="json"), "intake_response": response, "phase": "clarifying",
+                    "trace": (step(state, "recommend", "已查找替代候選仍無合適門診，詢問是否調整條件，不要求選擇不存在的醫師。") + result.decision_trace)[-50:]}
         return {"recommendation": result.model_dump(mode="json"), "recommendation_query": query,
-                "phase": "selecting_doctor", "trace": step(state, "recommend", "已依目前就醫條件查詢時段，只推薦院方患者資料頁可確認的醫師。")}
+                "phase": "selecting_doctor", "trace": (step(state, "recommend", "已依目前就醫條件查詢時段，只推薦院方患者資料頁可確認的醫師。") + result.decision_trace)[-50:]}
     except Exception:
         response = dict(state["intake_response"])
         response.update(ready=False, reply="推薦服務暫時無法完成，條件已保留，請傳送「維持目前條件」重試。")
@@ -82,7 +94,8 @@ def prepare(state):
 
 
 def wait_for_patient(state):
-    command = interrupt({"phase": "awaiting_patient", "message": "時段已選定，等待患者在獨立掛號表單輸入資料與驗證碼。"})
+    message = "時段已選定，等待至院方完成患者資料及身分驗證；本站未完成掛號。" if (state.get("preparation") or {}).get("booking_mode") == "official_handoff" else "時段已選定，等待患者在獨立掛號表單輸入資料與驗證碼。"
+    command = interrupt({"phase": "awaiting_patient", "message": message})
     return {"command": command, "message": command.get("message", ""), "operation_id": command["operation_id"]}
 
 
@@ -108,7 +121,7 @@ def build_care_graph(checkpointer):
     graph.add_edge(START, "understand")
     graph.add_conditional_edges("understand", lambda state: "recommend" if state["intake_response"]["ready"] else "wait_for_details", ["recommend", "wait_for_details"])
     graph.add_edge("wait_for_details", "understand")
-    graph.add_conditional_edges("recommend", lambda state: "wait_for_selection" if state.get("recommendation") is not None else "wait_for_details", ["wait_for_selection", "wait_for_details"])
+    graph.add_conditional_edges("recommend", lambda state: "wait_for_selection" if state.get("recommendation") is not None and state["phase"] == "selecting_doctor" else "wait_for_details", ["wait_for_selection", "wait_for_details"])
     graph.add_conditional_edges("wait_for_selection", command_route, ["prepare", "understand"])
     graph.add_conditional_edges("prepare", lambda state: "wait_for_patient" if state["phase"] == "awaiting_patient" else "wait_for_selection", ["wait_for_patient", "wait_for_selection"])
     graph.add_conditional_edges("wait_for_patient", command_route, ["record_outcome", "prepare", "understand"])

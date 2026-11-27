@@ -1,4 +1,6 @@
 export type MatchedConcept = {
+  assertion?: string;
+  patient_evidence?: string | null;
   concept_id: string;
   canonical_name_zh: string;
   canonical_name_en: string;
@@ -28,6 +30,8 @@ export type RecommendedDoctor = {
   reasons: string[];
   ranking_debug: RankingDebug | null;
   llm_reason_zh: string | null;
+  specialty_evidence?: string | null;
+  relevance_summary?: string | null;
   availability: {
     selected_slot: { date: string; session: string; eligibility: string; registration_url: string };
     verified_at: string;
@@ -35,6 +39,10 @@ export type RecommendedDoctor = {
 };
 
 export type RecommendationResponse = {
+  ranking_method?: string;
+  assessment_summary?: string | null;
+  clarification_question?: string | null;
+  decision_trace?: { node: string; message: string }[];
   query: string;
   concept_extraction_method: string;
   fallback_used: boolean;

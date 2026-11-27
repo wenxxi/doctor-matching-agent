@@ -5,6 +5,7 @@ description = "FastAPI backend for Doctor Matching Agent"
 requires-python = ">=3.11"
 dependencies = [
     "alembic>=1.13.0",
+    "certifi>=2024.2.2",
     "fastapi>=0.115.0",
     "langgraph>=1.0.0,<2.0.0",
     "langgraph-checkpoint-postgres>=3.0.0",

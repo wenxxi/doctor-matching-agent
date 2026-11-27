@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from app.services.concept_extractor import MatchedConcept, normalize_text
+from app.services.clinical_text import reported_segments
 
 
 CONCEPT_PREFIX_TO_DEPARTMENT = {
@@ -225,7 +226,7 @@ def detect_department_intent(
     query: str,
     matched_concepts: list[MatchedConcept],
 ) -> DepartmentIntent:
-    normalized_query = normalize_text(query)
+    normalized_query = normalize_text(" ".join(reported_segments(query)))
     scores = {department: 0 for department in DEPARTMENT_KEYWORDS}
 
     if not is_ambiguous_department_question(normalized_query):

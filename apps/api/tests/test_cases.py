@@ -143,6 +143,24 @@ def test_condition_changes_recheck_availability_instead_of_reusing_old_doctors(c
     assert updated["task"]["recommendation"]["recommended_doctors"][0]["availability"]["selected_slot"]["session"] == "上午"
 
 
+def test_no_verified_slots_returns_to_clarification_instead_of_empty_doctor_selection(client, monkeypatch):
+    from app.routers import recommendations
+
+    monkeypatch.setattr(recommendations, "filter_available_doctors", lambda *args: ([], False))
+    headers = owner(client)
+    case = create(client, headers)
+    response = message(client, headers, case, "我是複診，膝蓋疼痛，下週下午")
+    assert response.status_code == 200
+    task = response.json()["task"]
+    assert task["status"] == "clarifying"
+    assert task["intake_response"]["question"] == "availability"
+    assert task["intake"]["sessions"] == ["下午"]
+    assert any(item["node"] == "broaden" for item in task["trace"])
+    with checkpoint_store() as saver:
+        checkpoint = care_graph.build_care_graph(saver).get_state({"configurable": {"thread_id": task["id"]}})
+        assert checkpoint.next == ("wait_for_details",)
+
+
 def test_database_restart_does_not_lose_checkpoints_or_memory(client, database):
     headers = owner(client)
     case = ready_case(client, headers)

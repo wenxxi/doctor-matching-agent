@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 from app.settings import get_openai_settings
 from app.services.processed_data import load_medical_concepts
+from app.services.clinical_text import reported_segments, term_in_segment
 
 
 @dataclass(frozen=True)
@@ -12,6 +13,8 @@ class MatchedConcept:
     canonical_name_en: str
     category: str
     matched_terms: tuple[str, ...]
+    assertion: str = "reported"
+    patient_evidence: str | None = None
 
 
 @dataclass(frozen=True)
@@ -22,6 +25,11 @@ class ConceptExtractionResult:
     candidate_concepts_count: int | None = None
     input_tokens: int | None = None
     output_tokens: int | None = None
+    confidence: float | None = None
+    clarification_question: str | None = None
+    assessment_summary: str | None = None
+    semantic_complete: bool = False
+    search_terms: tuple[str, ...] = ()
 
 
 class ConceptExtractor:
@@ -44,7 +52,8 @@ class KeywordConceptExtractor(ConceptExtractor):
     extractor_name = "keyword"
 
     def extract_concepts(self, query: str) -> list[MatchedConcept]:
-        normalized_query = normalize_text(query)
+        segments = reported_segments(query)
+        normalized_query = normalize_text(" ".join(segments))
         if not normalized_query:
             return []
 
@@ -57,7 +66,7 @@ class KeywordConceptExtractor(ConceptExtractor):
                     for term in terms
                     if term
                     and len(normalize_text(term)) >= 2
-                    and normalize_text(term) in normalized_query
+                    and any(term_in_segment(term, segment) for segment in segments)
                 },
                 key=lambda term: (-len(term), term),
             )
@@ -69,6 +78,8 @@ class KeywordConceptExtractor(ConceptExtractor):
                         canonical_name_en=concept["canonical_name_en"],
                         category=concept["category"],
                         matched_terms=tuple(matched_terms),
+                        patient_evidence=next((segment for segment in segments if any(term_in_segment(term, segment) for term in matched_terms)), None),
+                        assertion="suspected" if re.search(r"可能|擔心|懷疑|\b(?:possible|worried|suspect)\b", query, re.I) else "reported",
                     )
                 )
 
@@ -111,7 +122,7 @@ class FallbackConceptExtractor(ConceptExtractor):
                 output_tokens=result.output_tokens,
             )
 
-        if primary_result.concepts:
+        if primary_result.concepts or primary_result.semantic_complete:
             return primary_result
 
         fallback_result = self.fallback.extract_with_metadata(query)
@@ -137,9 +148,10 @@ def normalize_text(value: str) -> str:
 
 
 def concept_terms(concept: dict[str, str]) -> list[str]:
-    terms = [concept["canonical_name_zh"]]
+    terms = [concept["canonical_name_zh"], concept.get("canonical_name_en", "")]
     terms.extend(split_terms(concept.get("synonyms_zh", "")))
     terms.extend(split_terms(concept.get("lay_terms_zh", "")))
+    terms.extend(split_terms(concept.get("synonyms_en", "")))
     return [term for term in terms if term]
 
 

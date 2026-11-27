@@ -9,7 +9,7 @@ This scaffold includes:
 - PostgreSQL 16 with pgvector in `infra/docker-compose.yml`
 - Basic health check endpoint
 - Alembic migrations and a sample PostgreSQL doctor data layer
-- CSV-backed MVP doctor recommendation endpoint with optional GPT-4o-mini concept extraction and explanation writing
+- CSV-backed recommendations with optional semantic concept extraction and source-evidence doctor review
 
 The app includes opt-in case memory and LangGraph task orchestration. Embeddings, account login, and direct GPT doctor search are not implemented yet.
 
@@ -28,7 +28,7 @@ Render 免費後端閒置後首次請求可能需要較長時間啟動。部署�
 網站右上角提供繁體中文／English 切換，以獨立的 `doctorAgentLanguage` 儲存語言偏好。切換只更新畫面，不重建個案、不變更掛號 enum 值，也不發出掛號請求；輸入中的資料會保留。介面、已知系統訊息、時段與科別名稱提供英文，醫療概念使用資料集中的英文名稱；醫師姓名、使用者對話原文與未有對照的院方欄位保留原文。英文快捷回覆具有本機解析對照；一般自由輸入沿用既有模型／本機解析流程。
 
 - 例如先說「膝蓋疼痛，想下週下午看診」，再回答「我是複診」；後續說「週三不行」時，保留原症狀、日期與下午偏好，只排除星期三。「改成上午」則只改時段。
-- 支援明確的「日期不限」「時段不限」「不確定初複診」，不會反覆追問已確認的項目。要求其他醫院時會說明目前僅支援林口長庚，不直接套用錯誤院區。
+- 可指定「改成林口長庚」「改成台北榮總」「兩院皆可」。切換醫院會重新確認初複診，不沿用另一家醫院的就醫史。榮總需要確認全院初診或複診；兩院資格不同時先分院搜尋。
 - `POST /api/intake/chat` 接收 `message` 與上一輪回傳的 `state`，回傳更新後條件、下一個必要問題、快捷回答與 `ready`。相對日期以台北日期計算。
 - 有 OpenAI 設定時使用結構化條件擷取，明確日期與星期編輯由本地程式校正；未設定或模型失敗時採本地解析。不明確或衝突的條件會要求澄清，不直接視為已接受。
 - 未建立個案時，對話與條件只存於目前網頁的記憶體，重新整理或清除對話會重設。勾選同意並建立可追蹤個案後，對話、條件與任務會保存到後端資料庫；localStorage 僅保存匿名存取憑證與選定個案 ID，不保存健康描述。有 API 設定時，症狀與條件仍會送交模型解析，請勿在對話填入掛號證號、生日或驗證碼。
@@ -64,14 +64,25 @@ flowchart TD
     C --> D{條件完整？}
     D -->|否| E[interrupt：等待補充]
     E -->|新訊息| C
-    D -->|是| F[既有醫師推薦服務]
-    F --> G[interrupt：等待選醫師]
+    D -->|是| F[語意概念與逐筆輸入證據]
+    F --> R[概念與原始專長召回，按醫院限制]
+    R --> V[模型評估與重排，核對雙方原文引用]
+    V --> Q{資訊與專長證據足夠？}
+    Q -->|否| E
+    Q -->|是| S[院別 adapter 核對時段與患者頁]
+    S --> T{符合條件候選足夠？}
+    T -->|否且尚未擴大| R2[擴大候選一次，保留所有硬限制]
+    R2 --> V
+    T -->|無符合門診| E
+    T -->|是或已完成擴大| G[interrupt：等待選醫師]
     G -->|修改條件| C
     G -->|選定醫師| H[既有時段查詢與頁面確認服務]
     H --> I{找到時段？}
     I -->|否| G
     I -->|是| J[interrupt：等待患者資料]
-    J --> K[獨立短期掛號表單：人工輸入驗證碼並確認]
+    J --> BTYPE{醫院掛號能力}
+    BTYPE -->|長庚| K[獨立短期掛號表單：人工輸入驗證碼並確認]
+    BTYPE -->|榮總| OFF[開啟該醫師官網，使用者選日期並完成驗證]
     K --> L{院方結果}
     L -->|確認成功| M[記錄序號並完成任務]
     L -->|不明或特殊流程| N[停止操作，交由使用者確認]
@@ -83,11 +94,33 @@ flowchart TD
 
 Render PostgreSQL 設定與本機測試方式見 [DEPLOYMENT.md](DEPLOYMENT.md)。
 
+## 推薦推理與跨院資料
+
+- 模型依實際中英文描述理解概念，區分否定、家族病史與患者本人，並提供逐筆引用與 reported／suspected／historical 狀態。成功的模型追問不會被關鍵字 fallback 推翻；從症狀推得的疾病概念會保留未確診標示。
+- 概念映射與 IDF 加權原始專長文字用於召回；不是只靠 embedding 或固定對照決定結果。模型可重排、排除醫師，但醫師 ID、患者引用及該醫師專長引用必須通過程式核對。引用存在不代表臨床相關性已被證明，仍需人工品質評估。
+- 每批最多 12 位候選；符合時段者不足時擴大一次，總計最多 24 位，不自行更改醫院、日期、星期、時段與資格。模型失敗明確標示規則降級；未經模型評估的純文字候選不直接推薦。
+- 共用 `doctors_normalized.csv`、`medical_concepts.csv` 與 `doctor_concept_map.csv`。目前為長庚 809 筆、榮總 592 筆醫師科別資料（591 位榮總醫師），433 個共用概念。推薦讀取 CSV；PostgreSQL 保存個案、訊息、任務及 checkpoints。
+- 榮總對應 28 科，排除急診與放射；沒有把「急診外傷」直接視為長庚「外傷急症外科」。36 份缺少可解析專長的簡介、1 份沒有肝臟專長的移植外科資料未納入；8 筆缺少掛號識別碼的專長資料不能通過時段驗證。完整涵蓋見 [科別報告](docs/evaluation/hospital-coverage.csv)。
+- 榮總官方 profile ID 形成穩定醫師 ID；掛號識別碼、來源科別與取得日期保存在 `provider_metadata.json`。既有長庚醫師 ID 與映射保留不變。原始資料來源：臺北榮民總醫院[醫師查詢](https://www.vghtpe.gov.tw/docsearch.action)，依[政府網站資料開放宣告](https://www.vghtpe.gov.tw/Fpage.action?fid=2573)標示出處，不代表院方認可本服務。
+- 榮總 adapter 唯讀核對醫師、可選 radio、日期、時段、初複診型態與患者表單。取得時段後，使用者必須至該醫師官網選取相同日期並完成驗證；不在本站收集或代送榮總患者資料、不會因點連結就記為掛號完成。
+
+重新擷取與檢查（專案根目錄）：
+
+```bash
+cd apps/api
+uv run python ../../scripts/crawlers/tpvgh_doctors.py
+uv run python ../../scripts/evaluation/evaluate_hospital.py --data-dir ../../data/staging/tpvgh --all-departments --output ../../docs/evaluation/tpvgh-all-departments-live.json
+cd ../..
+python3 scripts/processors/promote_hospital_data.py --source data/staging/tpvgh
+```
+
+先檢視 `data/staging/tpvgh/coverage.json` 與唯讀評估報告再匯入。擷取最多兩個併發 GET，遇安全驗證則停止該來源，不解驗證碼或關閉 TLS 驗證。教學與決策見 [中文架構導讀](docs/learning/agent-hospital-integration.html)、[實作紀錄](docs/integration-worklog.md)。測試報告使用合成描述，沒有建立真實掛號；工程回歸不等於臨床有效性認證。
+
 ## 林口長庚掛號整合
 
 推薦醫師卡片提供「掛號助理」：依日期範圍、星期、上午／下午／夜診與初複診條件查詢四週門診，選出最早符合的時段，重新讀取院方患者資料頁確認；候選頁面失效時最多改查三個時段，不會自行放寬條件。
 
-顯示卡片前會先檢查最多 12 位相關候選醫師，以每批 3 位查詢；僅保留至少一個符合條件且患者資料頁已確認的醫師，最多顯示 3 位。額滿、資格不符、沒有符合時段或無法確認的醫師會排除，並由後續相關候選遞補。卡片附已確認時段與確認時間；確認不代表保留名額，安排及送出時仍會重新驗證。院方暫時無法連線時不會顯示未驗證醫師冒充可掛號。
+顯示卡片前先檢查最多 12 位相關候選醫師，以每批 3 位查詢；符合者不足時可再召回一批，合計最多 24 位，最多顯示 3 位已確認有符合條件時段的醫師。額滿、資格不符、沒有符合時段或無法確認的醫師會排除。卡片附已確認時段與確認時間；確認不代表保留名額，安排及送出時仍會重新驗證。院方暫時無法連線時不會顯示未驗證醫師冒充可掛號。
 
 使用者可在本站填寫證號、生日與院方驗證碼，明確同意後由後端維持獨立院方 Cookie 與表單權杖，先進行患者驗證，再送出掛號表單。院方若回傳可辨識的後續表單，會在本站要求使用者補充或再次確認。圖片驗證碼由使用者自行輸入，不會自動辨識或繞過。
 

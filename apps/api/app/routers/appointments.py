@@ -19,7 +19,17 @@ def doctor_appointments(doctor_id: str) -> AppointmentsResponse:
 
 @router.post("/{doctor_id}/appointments/search", response_model=AppointmentsResponse)
 def search_doctor_appointments(doctor_id: str, request: AppointmentPreparationRequest) -> AppointmentsResponse:
-    snapshot = doctor_appointments(doctor_id)
+    doctor = next((row for row in load_doctors() if row["doctor_id"] == doctor_id), None)
+    if doctor is None:
+        raise HTTPException(status_code=404, detail="Doctor not found")
+    if doctor_id.startswith("TPVGH_MAIN_"):
+        from app.services.tpvgh import get_appointments as tpvgh_appointments
+        if request.patient_type not in {"first_visit", "returning"}:
+            return AppointmentsResponse(doctor_id=doctor_id, slots=[], status="no_slots", registration_url=None,
+                schedule_urls=[], checked_at=None, message="榮總需要先確認全院初診或複診，請調整患者類型。")
+        snapshot = tpvgh_appointments(doctor, request.patient_type)
+    else:
+        snapshot = get_appointments(doctor)
     snapshot.slots = [slot for slot in snapshot.slots if matches_preferences(slot, request)]
     if snapshot.status == "available" and not snapshot.slots:
         snapshot.status = "no_slots"

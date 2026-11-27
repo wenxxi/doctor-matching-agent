@@ -27,7 +27,7 @@ def filter_available_doctors(
         for start in range(0, min(len(candidates), 12), 3):
             batch = candidates[start:start + 3]
             for candidate, preparation in zip(batch, executor.map(verify, batch)):
-                if (preparation is not None and preparation.status == "awaiting_patient"
+                if (preparation is not None and preparation.status in {"awaiting_patient", "official_handoff"}
                         and preparation.selected_slot is not None and preparation.verified_at is not None):
                     selected.append(candidate.model_copy(update={"availability": DoctorAvailability(
                         selected_slot=preparation.selected_slot, verified_at=preparation.verified_at,
