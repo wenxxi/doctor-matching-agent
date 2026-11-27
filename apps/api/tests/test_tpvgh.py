@@ -11,6 +11,7 @@ from app.services import intake
 from app.intake_schemas import IntakeRequest
 from app.intake_schemas import IntakeState
 from datetime import date
+from urllib.error import HTTPError
 
 
 DOCTOR = {"doctor_id": "TPVGH_MAIN_ORTHO_T807", "doctor_name_zh": "蔡尚聞", "department_zh": "骨科部", "hospital_zh": "臺北榮民總醫院"}
@@ -90,3 +91,14 @@ def test_both_hospitals_have_recall_space_before_model_review(monkeypatch):
     expanded, _ = doctor_relevance.retrieve_candidates("膝蓋痛", [], None, hospital="兩院皆可", expanded=True)
     assert {row.hospital_zh for row in initial} == {"林口長庚", "台北榮總"}
     assert {row.doctor_id for row in initial}.isdisjoint(row.doctor_id for row in expanded)
+
+
+def test_provider_http_failure_is_classified_without_exposing_upstream_details(monkeypatch):
+    monkeypatch.setattr(tpvgh, "load_provider_metadata", lambda: {DOCTOR["doctor_id"]: {"registration_doctor_id": "DOC2207G"}})
+    def denied(url):
+        raise HTTPError(url, 403, "private upstream detail", {}, None)
+    monkeypatch.setattr(tpvgh, "public_page", denied)
+    result = tpvgh.get_appointments(DOCTOR)
+    assert result.status == "unavailable" and result.slots == []
+    assert result.failure_code == "provider_http_error" and result.provider_http_status == 403
+    assert "private upstream detail" not in result.model_dump_json()

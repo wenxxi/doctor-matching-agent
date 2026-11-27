@@ -126,6 +126,8 @@ class AppointmentsResponse(BaseModel):
     checked_at: datetime | None
     slots: list[AppointmentSlotResponse]
     message: str
+    failure_code: str | None = None
+    provider_http_status: int | None = None
 
 
 class AppointmentPreparationRequest(BaseModel):

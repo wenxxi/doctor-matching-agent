@@ -4,10 +4,12 @@ from functools import lru_cache
 from html.parser import HTMLParser
 import re
 import ssl
+import logging
 from threading import Lock
 from time import time
 from urllib.parse import urlencode, urlsplit
 from urllib.request import Request, urlopen
+from urllib.error import HTTPError, URLError
 from zoneinfo import ZoneInfo
 
 import certifi
@@ -18,6 +20,7 @@ from app.services.processed_data import load_provider_metadata
 PROFILE_BASE = "https://www.vghtpe.gov.tw/"
 REG_BASE = "https://www6.vghtpe.gov.tw/reg/"
 LOCKS = tuple(Lock() for _ in range(32))
+logger = logging.getLogger(__name__)
 
 
 class Markup(HTMLParser):
@@ -146,8 +149,18 @@ def get_appointments(doctor, patient_type="returning", fresh=False):
         result.checked_at = checked
         result.status = "available" if result.slots else "no_slots"
         result.message = "榮總公開門診表目前可選的時段；需至院方選取日期並完成身分驗證，尚未保留名額。" if result.slots else "院方未顯示這位醫師可選的門診，可能額滿、休診或尚未開放。"
-    except (OSError, ValueError):
-        pass
+    except HTTPError as error:
+        result.failure_code = "provider_http_error"
+        result.provider_http_status = error.code
+    except URLError as error:
+        result.failure_code = "provider_tls_error" if isinstance(error.reason, ssl.SSLCertVerificationError) else "provider_network_error"
+    except TimeoutError:
+        result.failure_code = "provider_timeout"
+    except (OSError, ValueError) as error:
+        result.failure_code = "provider_format_error" if isinstance(error, ValueError) else "provider_network_error"
+    if result.failure_code:
+        # No URL, query, credentials, patient data, or raw upstream exception text.
+        logger.warning("TPVGH read-only check failed: code=%s http_status=%s", result.failure_code, result.provider_http_status)
     return result
 
 
